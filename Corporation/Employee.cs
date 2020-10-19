@@ -8,12 +8,12 @@ namespace Corporation
 {
     abstract class Employee
     {
-        //public static Dictionary<uint, Employee> GetPersonById; //???
+        //--------Статические члены --------------
         static uint lastId;
 
         static Employee()
         {
-           // GetPersonById = new Dictionary<uint, Employee>();
+           
             lastId = 0;
         }
 
@@ -22,7 +22,7 @@ namespace Corporation
             return ++lastId;
         }
 
-        //public abstract void SetSalary();
+        //---------------------------------------
 
         /// <summary>
         /// Имя
@@ -75,6 +75,11 @@ namespace Corporation
             Employee.lastId++;
             //this.salary = 0;
             
+        }
+
+        public override string ToString()
+        {
+            return $"{this.Id, 5}\t{this.FirstName, -10}{this.LastName, -15}{this.Position, -15}{this.Salary(), 10: $### ##0.00}"; 
         }
 
         /// <summary>

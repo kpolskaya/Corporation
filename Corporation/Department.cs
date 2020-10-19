@@ -3,15 +3,22 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Corporation
-{
+{   public enum BossLevel : byte
+        {
+            Head = 0,
+            Deputy = 1
+        }
+
+
     class Department
     {
-       //------------------------------         
+       //--------Статические члены-----         
         static uint lastId;
         
 
@@ -28,12 +35,7 @@ namespace Corporation
         }
         //-------------------------------
         
-        public enum BossLevel : byte
-        {
-            Head = 0,
-            Deputy = 1
-        }
-
+        
 
         public string Name { get; }
         public uint Id { get { return id; } }
@@ -103,6 +105,78 @@ namespace Corporation
             return salary > 1300m ? salary : 1300m;
         }
 
+        public override string ToString()
+        {
+            return $"{this.Id, 4} {this.Name}";
+        }
+
+        /// <summary>
+        /// Рекурсивно выводит структуру департаментов
+        /// </summary>
+        /// <param name="tier">Отступ, с которого нужно начинать печать</param>
+        public void PrintHierarchy(int tier)
+        {
+            string indent = "";
+            for (int i = 0; i < tier; i++)
+            {
+                indent += "\t";
+            }
+            Console.WriteLine(indent + this);
+            tier++;
+            foreach (var item in this.Childs)
+            {
+                item.PrintHierarchy(tier);
+            }
+
+        }
+
+        public void PrintStaffHierarchy(int tier)
+        {
+            string indent = "";
+            for (int i = 0; i < tier; i++)
+            {
+                indent += "\t";
+            }
+            Console.WriteLine(indent + this);
+            PrintDepartmentPanel(tier);
+            tier++;
+            foreach (var item in this.Childs)
+            {
+                item.PrintStaffHierarchy(tier);
+            }
+
+        }
+
+        public void PrintDepartmentPanel(int tier)
+        {
+            string indent = "  ";
+            for (int i = 0; i < tier; i++)
+            {
+                indent += "\t";
+            }
+
+            //много повторяющегося кода - нужно что-то с этим делать. Сортировка? Что-то еще? 
+            foreach (var item in this.Panel)
+            {
+                if (item.GetType() == typeof(Boss) && ((Boss)item).Lvl == BossLevel.Head)
+                    Console.WriteLine(indent + item);
+            }
+            foreach (var item in this.Panel)
+            {
+                if (item.GetType() == typeof(Boss) && ((Boss)item).Lvl == BossLevel.Deputy)
+                    Console.WriteLine(indent + item);
+            }
+            foreach (var item in this.Panel)
+            {
+                if (item.GetType() == typeof(Worker))
+                    Console.WriteLine(indent + item);
+            }
+            foreach (var item in this.Panel)
+            {
+                if (item.GetType() == typeof(Intern))
+                    Console.WriteLine(indent + item);
+            }
+        }
 
         /// <summary>
         /// Вся зарплата только этого департамента
@@ -128,7 +202,7 @@ namespace Corporation
             decimal salary = 0;
             foreach (var item in this.Panel)
             {
-                if (item.GetType() == typeof(Boss) && ((Boss)item).Lvl <= lvl)
+                if (item.GetType() == typeof(Boss) && ((Boss)item).Lvl <= lvl) //из-за нестрогого неравенства происходит незапланированное рекурсивное обращение к методу ToalSalary
                    
                     salary += item.Salary();
             }

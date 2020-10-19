@@ -9,13 +9,13 @@ namespace Corporation
 {
     class Boss : Employee
     {
-        public Department.BossLevel Lvl { get { return this.lvl; } }
+        public BossLevel Lvl { get { return this.lvl; } }
 
 
-        public Boss(string FirstName, string LastName, string Position, Department Department, uint Age, Department.BossLevel Lvl)
+        public Boss(string FirstName, string LastName, string Position, Department Department, uint Age, BossLevel Lvl)
         : base(FirstName, LastName, Position, Department, Age)
         {
-            if ((Lvl == Department.BossLevel.Head && Department.HeadIsVacant) || (Lvl == Department.BossLevel.Deputy && Department.DeputyIsVacant))
+            if ((Lvl == BossLevel.Head && Department.HeadIsVacant) || (Lvl == BossLevel.Deputy && Department.DeputyIsVacant))
             {
                 this.lvl = Lvl;
 
@@ -32,7 +32,7 @@ namespace Corporation
         }
 
 
-        private Department.BossLevel lvl;
+        private BossLevel lvl;
     }
 
 
