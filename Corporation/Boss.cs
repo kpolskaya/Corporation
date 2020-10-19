@@ -15,13 +15,13 @@ namespace Corporation
         public Boss(string FirstName, string LastName, string Position, Department Department, uint Age, Department.BossLevel Lvl)
         : base(FirstName, LastName, Position, Department, Age)
         {
-            if ((Lvl == Department.BossLevel.Head && Department.HeadIsVacant) ||(Lvl == Department.BossLevel.Deputy && Department.DeputyIsVacant))
+            if ((Lvl == Department.BossLevel.Head && Department.HeadIsVacant) || (Lvl == Department.BossLevel.Deputy && Department.DeputyIsVacant))
             {
                 this.lvl = Lvl;
-                
+
             }
-            
-            else throw new Exception("Должность {Lvl} занята");
+
+            else throw new Exception($"Должность {Lvl} занята");
         }
 
 
