@@ -32,7 +32,7 @@ namespace Corporation
         }
 
 
-        private BossLevel lvl;
+        public BossLevel lvl; //TODO свойство
     }
 
 

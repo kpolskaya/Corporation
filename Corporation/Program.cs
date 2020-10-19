@@ -25,7 +25,7 @@ namespace Corporation
 
 
             div.Panel.Add(new Boss("Александр", "Подовинников", "Самый Главный", div, 57, BossLevel.Head));
-            div.Panel.Add(new Boss("Иван", "Лузер", "Зам. Главного", div, 30, BossLevel.Deputy));
+            div.Panel.Add(new Boss("Фёдор", "Попович", "Зам. Главного", div, 30, BossLevel.Deputy));
             
             div.Panel.Add(new Worker("Иван", "Лузер", "Девелопер", div, 30, 180));
             div.Panel.Add(new Worker("Степан", "Хренов", "Девелопер", div, 29, 180));
