@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,15 +15,20 @@ namespace Corporation
         public Boss(string FirstName, string LastName, string Position, Department Department, uint Age, Department.BossLevel Lvl)
         : base(FirstName, LastName, Position, Department, Age)
         {
-            this.lvl = Lvl;
-            SetSalary(Department);
+            if ((Lvl == Department.BossLevel.Head && Department.HeadIsVacant) ||(Lvl == Department.BossLevel.Deputy && Department.DeputyIsVacant))
+            {
+                this.lvl = Lvl;
+                
+            }
+            
+            else throw new Exception("Должность {Lvl} занята");
         }
 
 
                 
-        public void SetSalary( Department department)
+        public override decimal Salary()
         {
-            this.salary = department.BossSalary(this.lvl); 
+            return this.Department.BossSalary(this.lvl); 
         }
 
 

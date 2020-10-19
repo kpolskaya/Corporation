@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,17 +11,17 @@ namespace Corporation
     {
         static void Main(string[] args)
         {
-            //Department div = new Department("New Dept");
+            Department div = new Department("Администрация", Department.BossLevel.Deputy);
 
-            //Division.GetDepartmentById.Add(div.Id, div);
+            div.Childs.Add(new Department("АХО", Department.BossLevel.Head));
 
-            //Worker wo = new Worker("Alex", "Po", "BigBoss", 1, 25, 40);
+            Console.WriteLine($"новый департамент {div.Id} | {div.Name} ");
+            foreach (var item in div.Childs)
+            {
+                Console.WriteLine($"      + новый департамент {item.Id} | {item.Name} ");
+            }
 
-            //Employee.GetPersonById.Add(wo.Id, wo);
-
-            //Console.WriteLine($"новый департамент {Division.GetDepartmentById[div.Id].Id} | {Division.GetDepartmentById[div.Id].Name} ");
-            //Console.WriteLine($"новый paботник { Employee.GetPersonById[wo.Id].Id} | { Employee.GetPersonById[wo.Id].FirstName} ");
-            //Console.ReadKey();
+            Console.ReadKey();
         }
     }
 }

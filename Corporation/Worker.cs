@@ -13,12 +13,12 @@ namespace Corporation
 
         {
             this.hours = Hours;
-            SetSalary();
+           
         }
 
-        public  void SetSalary()
+        public override decimal Salary()
         {
-            this.salary = this.hours * 12;
+            return this.hours * 12;
         }
         private uint hours;
 

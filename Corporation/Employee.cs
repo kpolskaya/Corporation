@@ -42,13 +42,7 @@ namespace Corporation
         /// <summary>
         /// Отдел
         /// </summary>
-        public uint Department { get; set; }
-
-        /// <summary>
-        /// Оплата труда
-        /// </summary>
-        public decimal Salary { get { return salary; } }
-
+        public Department Department { get; set; }
 
         /// <summary>
         /// Табельный номер
@@ -75,20 +69,26 @@ namespace Corporation
             this.FirstName = FirstName;
             this.LastName = LastName;
             this.Position = Position;
-            this.Department = Department.Id;
+            this.Department = Department;
             this.age = Age;
             this.id = Employee.NextId();
             Employee.lastId++;
-            this.salary = 0;
+            //this.salary = 0;
             
         }
+
+        /// <summary>
+        /// Оплата труда
+        /// </summary>
+        public abstract decimal Salary();
+
 
         //public Division GetDepartment()
         //{ }
 
         protected uint age;
         protected uint id;
-        protected decimal salary;
+        //protected decimal salary;
 
 
     }

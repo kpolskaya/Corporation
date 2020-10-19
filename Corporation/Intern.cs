@@ -9,12 +9,12 @@ namespace Corporation
     class Intern : Employee
     {
         public Intern(string FirstName, string LastName, string Position, Department Department, uint Age)
-        : base(FirstName, LastName, Position, Department, Age) 
+        : base(FirstName, LastName, Position, Department, Age)
         {
-            SetSalary();
+           
         }
 
 
-        public void SetSalary() { this.salary = 500; }
+        public override decimal Salary() { return 500; }
     }
 }
