@@ -104,7 +104,8 @@ namespace Corporation
 
             if (lvl == BossLevel.Head)
             {
-                subBossSalary = BossSalary(BossLevel.Deputy);
+                subBossSalary = BossSalary(BossLevel.Deputy); // а если нету зама? может быть вообще не положен, а может быть вакансия! 
+                                                                //Закомментированый код - корректнее (но он не работает)
 
                 //sBase = this.Panel.First((a) =>
                 //{
@@ -119,7 +120,7 @@ namespace Corporation
 
             foreach (var item in this.Childs)
             {
-                subBossSalary = item.BossSalary(BossLevel.Head);
+                subBossSalary = item.BossSalary(BossLevel.Head); // опять же может быть вакансия!
                 sBase += subBossSalary * (1m + 1m / 0.15m);
             }
 
@@ -246,6 +247,7 @@ namespace Corporation
 
         //    return salary;
         //}
+
 
         private uint id;
         //private List<Department> childs;
