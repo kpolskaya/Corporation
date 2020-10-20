@@ -76,16 +76,17 @@ namespace Corporation
             //this.salary = 0;
             
         }
-
-        public override string ToString()
-        {
-            return $"{this.Id, 5}\t{this.FirstName, -10}{this.LastName, -15}{this.Position, -15}{this.Salary(), 10: $### ##0.00}"; 
-        }
+               
 
         /// <summary>
         /// Оплата труда
         /// </summary>
         public abstract decimal Salary();
+
+        public override string ToString()
+        {
+            return $"{this.Id,5}\t{this.FirstName,-10}{this.LastName,-15}{this.Position,-15}{this.Salary(),10: $### ##0.00}";
+        }
 
 
         //public Division GetDepartment()

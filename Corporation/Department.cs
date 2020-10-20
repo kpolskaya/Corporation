@@ -63,34 +63,22 @@ namespace Corporation
         
 
 
-        //public void AddDepartmentToChilds(uint ChildId)
-        //{
-        //    this.childs.Add(ChildId);
-        //}
-
-
-        //public void AddEmploeeToPanel(uint EmId)
-        //{
-        //    this.panel.Add(EmId);
-        //}
-
-
-        /// <summary>
-        /// Считает всю зарплату департамента и всех дочерних департаментов
-        /// </summary>
-        /// <returns></returns>
-        //public decimal TotalSalary()
-        //{
-        //    decimal total = this.Salary(); 
-        //    if (this.Childs.Count > 0)
-        //    {
-        //        foreach (var item in Childs)
-        //        {
-        //            total += item.TotalSalary();
-        //        }
-        //    }
-        //    return total;
-        //}
+                                    /// <summary>
+                                    /// Считает всю зарплату департамента и всех дочерних департаментов
+                                    /// </summary>
+                                    /// <returns></returns>
+                                    //public decimal TotalSalary()
+                                    //{
+                                    //    decimal total = this.Salary(); 
+                                    //    if (this.Childs.Count > 0)
+                                    //    {
+                                    //        foreach (var item in Childs)
+                                    //        {
+                                    //            total += item.TotalSalary();
+                                    //        }
+                                    //    }
+                                    //    return total;
+                                    //}
 
        /// <summary>
        /// Считает, какая зарплата должна быть установлена начальнику исходя из зарплаты подчиненных по всей иерархии
@@ -99,32 +87,38 @@ namespace Corporation
        /// <returns></returns>
         public decimal BossSalary( BossLevel lvl)
         {
-            decimal subBossSalary = 0;
+            decimal salary = BossSalaryBase(lvl) * 0.15m;
+
+            return salary > 1300m ? salary : 1300m;
+        }
+        
+        
+        public decimal BossSalaryBase (BossLevel lvl)
+        {
             decimal sBase = 0;
 
-            if (lvl == BossLevel.Head)
+            if (lvl == BossLevel.Head && this.MinBossLevel == BossLevel.Deputy)
             {
-                subBossSalary = BossSalary(BossLevel.Deputy); // а если нету зама? может быть вообще не положен, а может быть вакансия! 
-                                                                //Закомментированый код - корректнее (но он не работает)
+                sBase += this.BossSalary(BossLevel.Deputy); // если вакансия - все равно учитываем эту зарплату 
+
 
                 //sBase = this.Panel.First((a) =>
                 //{
                 //    return (a.GetType() == typeof(Boss) && ((Boss)a).lvl == BossLevel.Deputy);
                 //}).Salary();
 
-                sBase += subBossSalary * (1m + 1 / 0.15m); // это неправильно, потому что есть минимум 1300 !!!
-                return sBase * 0.15m;
+               
             }
             
-            sBase += this.SubalternSalary(); //TODO
+            sBase += this.SubalternSalary(); 
 
             foreach (var item in this.Childs)
             {
-                subBossSalary = item.BossSalary(BossLevel.Head); // опять же может быть вакансия!
-                sBase += subBossSalary * (1m + 1m / 0.15m);
+                sBase += (item.BossSalaryBase(BossLevel.Head) + item.BossSalary(BossLevel.Head)); 
+               
             }
 
-            return sBase * 0.15m;
+            return sBase;
 
             //salary = (TotalSalary() - SalaryOfEqualOrHigherLvl(lvl)) * 0.15m; //для операций с decimal, чтобы не было проблем с типами, нужно приводить все явно!!!
 
@@ -137,7 +131,7 @@ namespace Corporation
 
             foreach (var item in this.Panel)
             {
-                if (item.GetType() == typeof(Worker) || item.GetType() == typeof(Intern)) // TODO If not Boss
+                if (item.GetType() != typeof(Boss)) //  If not Boss
                     salary += item.Salary();
             }
             return salary;
@@ -197,22 +191,22 @@ namespace Corporation
             foreach (var item in this.Panel)
             {
                 if (item.GetType() == typeof(Boss) && ((Boss)item).Lvl == BossLevel.Head)
-                    Console.WriteLine(indent + item);
+                    Console.WriteLine(indent + (Boss)item);
             }
             foreach (var item in this.Panel)
             {
                 if (item.GetType() == typeof(Boss) && ((Boss)item).Lvl == BossLevel.Deputy)
-                    Console.WriteLine(indent + item);
+                    Console.WriteLine(indent + (Boss)item);
             }
             foreach (var item in this.Panel)
             {
                 if (item.GetType() == typeof(Worker))
-                    Console.WriteLine(indent + item);
+                    Console.WriteLine(indent + (Worker)item);
             }
             foreach (var item in this.Panel)
             {
                 if (item.GetType() == typeof(Intern))
-                    Console.WriteLine(indent + item);
+                    Console.WriteLine(indent + (Intern)item);
             }
         }
 
@@ -220,15 +214,15 @@ namespace Corporation
         /// Вся зарплата только этого департамента
         /// </summary>
         /// <returns></returns>
-        private decimal Salary()  //SubalternSalary + BossSalary?
-        {
-            decimal salary = 0;
-            foreach (var item in this.Panel)
-            {
-                salary += item.Salary();
-            }
-            return salary;
-        }
+        //private decimal Salary()  //SubalternSalary + BossSalary?
+        //{
+        //    decimal salary = 0;
+        //    foreach (var item in this.Panel)
+        //    {
+        //        salary += item.Salary();
+        //    }
+        //    return salary;
+        //}
 
         /// <summary>
         /// Зарплата начальников департамента равного уровня или выше
@@ -241,7 +235,7 @@ namespace Corporation
         //    foreach (var item in this.Panel)
         //    {
         //        if (item.GetType() == typeof(Boss) && ((Boss)item).Lvl <= lvl) //из-за нестрогого неравенства происходит незапланированное рекурсивное обращение к методу ToalSalary
-                   
+
         //            salary += item.Salary();
         //    }
 

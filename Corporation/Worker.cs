@@ -20,6 +20,12 @@ namespace Corporation
         {
             return this.hours * 12;
         }
+
+        //public override string ToString()
+        //{
+        //    return $"{this.Id,5}\t{this.FirstName,-10}{this.LastName,-15}{this.Position,-15}{this.Salary(),10: $### ##0.00}";
+        //}
+
         private uint hours;
 
     }
