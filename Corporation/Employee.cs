@@ -10,11 +10,18 @@ namespace Corporation
     {
         //--------Статические члены --------------
         static uint lastId;
+        public static decimal minBossSalary;
+        public static decimal hourRate;
+        public static decimal internSalary;
+        public static decimal bossSalaryProportion;
 
         static Employee()
         {
-           
             lastId = 0;
+            minBossSalary = 1300m;
+            hourRate = 12m;
+            internSalary = 500;
+            bossSalaryProportion = 0.15m;
         }
 
         public static uint NextId()
@@ -42,18 +49,18 @@ namespace Corporation
         /// <summary>
         /// Отдел
         /// </summary>
-        public Department Department { get; set; }
+        public Department Department { get; protected set; }
 
         /// <summary>
         /// Табельный номер
         /// </summary>
-        public uint Id { get { return id; } }
+        public uint Id { get; protected set; }
 
 
         /// <summary>
         /// Возраст
         /// </summary>
-        public uint Age { get { return age; } }
+        public uint Age { get; protected set; }
 
         /// <summary>
         /// Создание сотрудника со всеми полями
@@ -70,11 +77,9 @@ namespace Corporation
             this.LastName = LastName;
             this.Position = Position;
             this.Department = Department;
-            this.age = Age;
-            this.id = Employee.NextId();
-            Employee.lastId++;
-            //this.salary = 0;
-            
+            this.Age = Age;
+            this.Id = Employee.NextId();
+                        
         }
                
 
@@ -87,16 +92,7 @@ namespace Corporation
         {
             return $"{this.Id,5}\t{this.FirstName,-10}{this.LastName,-15}{this.Position,-15}{this.Salary(),10: $### ##0.00}";
         }
-
-
-        //public Division GetDepartment()
-        //{ }
-
-        protected uint age;
-        protected uint id;
-        //protected decimal salary;
-
-
+       
     }
 
 

@@ -15,36 +15,30 @@ namespace Corporation
             Deputy = 1
         }
 
-
     class Department
     {
        //--------Статические члены-----         
         static uint lastId;
-        
 
         static Department()
         {
             lastId = 0;
         }
 
-        
-
         static uint NextId()
         {
             return ++lastId;
         }
         //-------------------------------
-        
-        
 
         public string Name { get; }
-        public uint Id { get { return id; } }
+        public uint Id { get; private set; }
 
-        public BossLevel MinBossLevel { get { return this.minBossLevel; } }
+        public BossLevel MinBossLevel { get; private set; }
 
-        public bool HeadIsVacant { get { return this.headIsVacant; } }
+        //public bool HeadIsVacant { get; set; }
         
-        public bool DeputyIsVacant { get { return this.deputyIsVacant; } }
+        //public bool DeputyIsVacant { get; set; }
 
         public ObservableCollection<Department> Childs { get; set; }
 
@@ -53,10 +47,10 @@ namespace Corporation
         public Department(string Name, BossLevel MinBossLevel)
         {
             this.Name = Name;
-            this.id = Department.NextId();
-            this.minBossLevel = MinBossLevel;
-            this.headIsVacant = true;
-            this.deputyIsVacant = this.minBossLevel == 0 ? false : true;
+            this.Id = Department.NextId();
+            this.MinBossLevel = MinBossLevel;
+            //this.HeadIsVacant = true;
+            //this.DeputyIsVacant = this.MinBossLevel == BossLevel.Head ? false : true;
             this.Childs = new ObservableCollection<Department>();
             this.Panel = new ObservableCollection<Employee>();
         }
@@ -111,7 +105,7 @@ namespace Corporation
                 indent += "\t";
             }
 
-            //много повторяющегося кода - нужно что-то с этим делать. Сортировка? Что-то еще? 
+            //много повторяющегося кода - можно сделать сортировку по позиции и выводить одним циклом
             foreach (var item in this.Panel)
             {
                 if (item.GetType() == typeof(Boss) && ((Boss)item).Lvl == BossLevel.Head)
@@ -134,13 +128,42 @@ namespace Corporation
             }
         }
 
+        public decimal BossSalary(BossLevel lvl)
+        {
+            decimal salaryBasis = SubalternSalary();
+
+            if (lvl < this.MinBossLevel) // чем меньше числовое значение уровня, тем круче босс
+            {
+                for (BossLevel l = lvl + 1; l <= this.MinBossLevel; l++)
+                {
+                    salaryBasis += this.Panel.First((a) => {
+                        return (a.GetType() == typeof(Boss) && ((Boss)a).Lvl == l);
+                    }).Salary();                                                        // Предполагается, что в департаменте должен быть только один босс каждого уровня,
+                                                                                        // или надо поставить foreach. Что будет, если ни одного не найдется? Херня будет.
+                                                                                        // TODO !!!
+                }
+            }
+
+            foreach (var item in this.Childs)
+            {
+                salaryBasis += item.TotalSalary();
+            }
+
+            return salaryBasis * Employee.bossSalaryProportion > Employee.minBossSalary ? 
+                   salaryBasis * Employee.bossSalaryProportion : Employee.minBossSalary;
+        }
+
         /// <summary>
         /// Считает всю зарплату департамента и всех дочерних департаментов
         /// </summary>
         /// <returns></returns>
         public decimal TotalSalary()
         {
-            decimal total = this.Salary();
+            decimal total = 0;
+            foreach (var item in this.Panel)
+            {
+                total += item.Salary();
+            }
             if (this.Childs.Count > 0)
             {
                 foreach (var item in Childs)
@@ -151,67 +174,8 @@ namespace Corporation
             return total;
         }
 
-                                            /// <summary>
-                                            /// Считает, какая зарплата должна быть установлена начальнику исходя из зарплаты подчиненных по всей иерархии
-                                            /// </summary>
-                                            /// <param name="lvl"></param>
-                                            /// <returns></returns>
-                                            //public decimal BossSalary( BossLevel lvl)
-                                            //{
-                                            //    decimal salary = BossSalaryBase(lvl) * 0.15m;
-
-                                            //    return salary > 1300m ? salary : 1300m;
-                                            //}
-
-
-                                            //public decimal BossSalaryBase (BossLevel lvl)
-                                            //{
-                                            //    decimal sBase = 0;
-
-                                            //    if (lvl == BossLevel.Head && this.MinBossLevel == BossLevel.Deputy)
-                                            //    {
-                                            //        sBase += this.BossSalary(BossLevel.Deputy); // если вакансия - все равно учитываем эту зарплату 
-
-
-                                            //        //sBase = this.Panel.First((a) =>
-                                            //        //{
-                                            //        //    return (a.GetType() == typeof(Boss) && ((Boss)a).lvl == BossLevel.Deputy);
-                                            //        //}).Salary();
-
-
-                                            //    }
-
-                                            //    sBase += this.SubalternSalary(); 
-
-                                            //    foreach (var item in this.Childs)
-                                            //    {
-                                            //        sBase += (item.BossSalaryBase(BossLevel.Head) + item.BossSalary(BossLevel.Head)); 
-
-                                            //    }
-
-                                            //    return sBase;
-
-                                            //salary = (TotalSalary() - SalaryOfEqualOrHigherLvl(lvl)) * 0.15m; //для операций с decimal, чтобы не было проблем с типами, нужно приводить все явно!!!
-
-                                            //return salary > 1300m ? salary : 1300m;
-                                            //}
-
-                                            //public decimal SubalternSalary()
-                                            //{
-                                            //    decimal salary = 0;
-
-                                            //    foreach (var item in this.Panel)
-                                            //    {
-                                            //        if (item.GetType() != typeof(Boss)) //  If not Boss
-                                            //            salary += item.Salary();
-                                            //    }
-                                            //    return salary;
-                                            //}
-
-       
-
         /// <summary>
-        /// Вся зарплата только этого департамента ниже заданного уровня босса
+        /// Вся зарплата только этого департамента ниже босса
         /// </summary>
         /// <returns></returns>
         private decimal SubalternSalary()  
@@ -224,32 +188,6 @@ namespace Corporation
             }
             return salary;
         }
-
-        /// <summary>
-        /// Зарплата начальников департамента равного уровня или выше
-        /// </summary>
-        /// <param name="lvl"></param>
-        /// <returns></returns>
-        private decimal SalaryOfEqualOrHigherLvl(BossLevel lvl) // 0 -высший уровень, 1 - ниже и так далее
-        {
-            decimal salary = 0;
-            foreach (var item in this.Panel)
-            {
-                if (item.GetType() == typeof(Boss) && ((Boss)item).Lvl <= lvl) //из-за нестрогого неравенства происходит незапланированное рекурсивное обращение к методу ToalSalary
-
-                    salary += item.Salary();
-            }
-
-            return salary;
-        }
-
-
-        private uint id;
-        //private List<Department> childs;
-        //private List<Employee> panel;
-        private BossLevel minBossLevel;
-        private bool headIsVacant;
-        private bool deputyIsVacant;
-        
+                
     }
 }

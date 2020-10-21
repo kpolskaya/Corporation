@@ -26,14 +26,15 @@ namespace Corporation
 
             div.Panel.Add(new Boss("Александр", "Подовинников", "Самый Главный", div, 57, BossLevel.Head));
             div.Panel.Add(new Boss("Фёдор", "Попович-Зам", "Зам. Главного", div, 30, BossLevel.Deputy));
-            
+
             //div.Panel.Add(new Worker("Иван", "Лузер", "Девелопер", div, 30, 180));
             //div.Panel.Add(new Worker("Степан", "Хренов", "Девелопер", div, 29, 180));
             //div.Panel.Add(new Intern("Николай", "Патрушев", "Кодер", div, 29));
             div.Childs[0].Panel.Add(new Boss("Петр", "AховНачальник", "Главный", div.Childs[0], 57, BossLevel.Head));
             div.Childs[0].Panel.Add(new Worker("Петр", "АховКодеров", "Кодер", div.Childs[0], 57, 1000));
             div.Childs[2].Childs[2].Childs[0].Panel.Add(new Boss("Петр", "Петров", "Главный", div.Childs[2].Childs[2].Childs[0], 57, BossLevel.Head));
-            div.Childs[2].Childs[2].Childs[0].Panel.Add(new Worker("Петр", "Петров", "Кодер", div.Childs[2].Childs[2].Childs[0], 57, 500));
+            div.Childs[2].Childs[2].Childs[0].Panel.Add(new Worker("Петр", "Петров", "Кодер", div.Childs[2].Childs[2].Childs[0], 57, 700));
+            div.Childs[2].Panel.Add(new Boss("Петр", "Заводов", "Большой начальник", div.Childs[2], 57, BossLevel.Head));
 
 
             //Console.WriteLine($"{div.Panel[0].LastName}   {div.Panel[0].Salary()}");
