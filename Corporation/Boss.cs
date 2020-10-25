@@ -15,15 +15,8 @@ namespace Corporation
         public Boss(string FirstName, string LastName, string Position, Department Department, uint Age, BossLevel Lvl)
         : base(FirstName, LastName, Position, Department, Age)
         {
-            //if ((Lvl == BossLevel.Head && Department.HeadIsVacant) || (Lvl == BossLevel.Deputy && Department.DeputyIsVacant))
-            //{
             this.Lvl = Lvl;
-            //    //TODO сбросить флаг вакансии босса
-            //}
-
-            //else throw new Exception($"Должность {Lvl} занята");
         }
-
 
         public override decimal Salary()
         {
@@ -31,6 +24,5 @@ namespace Corporation
         }
 
     }
-
 
 }

@@ -17,28 +17,24 @@ namespace Corporation
 
     class Department
     {
-       //--------Статические члены-----         
         static uint lastId;
+        static Random Randomize;
 
         static Department()
         {
             lastId = 0;
+            Randomize = new Random();
         }
 
         static uint NextId()
         {
             return ++lastId;
         }
-        //-------------------------------
 
         public string Name { get; }
         public uint Id { get; private set; }
 
         public BossLevel MinBossLevel { get; private set; }
-
-        //public bool HeadIsVacant { get; set; }
-        
-        //public bool DeputyIsVacant { get; set; }
 
         public ObservableCollection<Department> Childs { get; set; }
 
@@ -49,15 +45,42 @@ namespace Corporation
             this.Name = Name;
             this.Id = Department.NextId();
             this.MinBossLevel = MinBossLevel;
-            //this.HeadIsVacant = true;
-            //this.DeputyIsVacant = this.MinBossLevel == BossLevel.Head ? false : true;
             this.Childs = new ObservableCollection<Department>();
             this.Panel = new ObservableCollection<Employee>();
         }
 
         public override string ToString()
         {
-            return $"{this.Id,4} {this.Name}";
+            return $"{this.Id, 4 : 0000} {this.Name}";
+        }
+
+        public void CreateRandomChilds(int maxChilds, int maxDepth, int maxStaff, int tier)
+        {
+            for (int i = 0; i < Randomize.Next(maxChilds+1); i++)
+            {
+                this.Childs.Add(new Department($"Отдел_{tier}_{this.Id}_{i + 1}", BossLevel.Head));
+                this.Childs[i].Panel.Add(new Boss(Guid.NewGuid().ToString().Substring(0, 5), Guid.NewGuid().ToString().Substring(0, 8), "Начальник", this.Childs[i], (uint)Randomize.Next(20, 66), BossLevel.Head));
+
+                for (int j = 0; j < Randomize.Next(2,maxStaff+1); j++)
+                {
+                    switch (Randomize.Next(0,2))
+                    {
+                        case 0 :
+                            this.Childs[i].Panel.Add(new Worker(Guid.NewGuid().ToString().Substring(0, 5), Guid.NewGuid().ToString().Substring(0, 8), "Специалист", this.Childs[i], (uint)Randomize.Next(20, 46), 190));
+                            break;
+                        case 1:
+                            this.Childs[i].Panel.Add(new Intern(Guid.NewGuid().ToString().Substring(0, 5), Guid.NewGuid().ToString().Substring(0, 8), "Стажер", this.Childs[i], (uint)Randomize.Next(18, 21)));
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                if (maxDepth > 1)
+                    this.Childs[i].CreateRandomChilds(maxChilds - tier - 1, maxDepth - 1, maxStaff, tier + 1);
+                
+            }
         }
 
         /// <summary>
@@ -77,7 +100,6 @@ namespace Corporation
             {
                 item.PrintHierarchy(tier);
             }
-
         }
 
         public void PrintStaffHierarchy(int tier)
@@ -94,7 +116,6 @@ namespace Corporation
             {
                 item.PrintStaffHierarchy(tier);
             }
-
         }
 
         public void PrintDepartmentPanel(int tier)
@@ -126,23 +147,21 @@ namespace Corporation
                 if (item.GetType() == typeof(Intern))
                     Console.WriteLine(indent + (Intern)item);
             }
+            Console.WriteLine();
         }
 
         public decimal BossSalary(BossLevel lvl)
         {
-            decimal salaryBasis = SubalternSalary();
+            decimal salaryBasis = SubalternSalary( lvl); //DONE переделать SubalternSalary() чтобы принимала параметр босса и убрать туда блок кода ниже
 
-            if (lvl < this.MinBossLevel) // чем меньше числовое значение уровня, тем круче босс
-            {
-                for (BossLevel l = lvl + 1; l <= this.MinBossLevel; l++)
-                {
-                    salaryBasis += this.Panel.First((a) => {
-                        return (a.GetType() == typeof(Boss) && ((Boss)a).Lvl == l);
-                    }).Salary();                                                        // Предполагается, что в департаменте должен быть только один босс каждого уровня,
-                                                                                        // или надо поставить foreach. Что будет, если ни одного не найдется? Херня будет.
-                                                                                        // TODO !!!
-                }
-            }
+            //if (lvl < this.MinBossLevel) // чем меньше числовое значение уровня, тем круче босс -> да, если считаем зарплату для босса главнее, чем возможен в этом департаменте
+            //{
+            //    foreach (var item in this.Panel)
+            //    {
+            //        if (item.GetType() == typeof(Boss) && ((Boss)item).Lvl > lvl)
+            //            salaryBasis += item.Salary();
+            //    }
+            //}
 
             foreach (var item in this.Childs)
             {
@@ -175,19 +194,18 @@ namespace Corporation
         }
 
         /// <summary>
-        /// Вся зарплата только этого департамента ниже босса
+        /// Вся зарплата только этого департамента ниже босса указанного уровня
         /// </summary>
         /// <returns></returns>
-        private decimal SubalternSalary()  
+        private decimal SubalternSalary( BossLevel lvl)  
         {
             decimal salary = 0;
             foreach (var item in this.Panel)
             {
-                if (item.GetType() != typeof(Boss))
+                if (item.GetType() != typeof(Boss) || ((Boss)item).Lvl > lvl)
                 salary += item.Salary();
             }
             return salary;
         }
-                
     }
 }

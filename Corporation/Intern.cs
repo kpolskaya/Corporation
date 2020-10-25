@@ -14,10 +14,8 @@ namespace Corporation
            
         }
 
-
         public override decimal Salary() { return internSalary; }
 
-        
     }
 
 }

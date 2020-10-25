@@ -8,21 +8,20 @@ namespace Corporation
 {
     class Worker : Employee
     {
+
+        public uint Hours { get; set; }
+
         public Worker(string FirstName, string LastName, string Position, Department Department, uint Age, uint Hours)
         : base(FirstName, LastName, Position, Department, Age)
 
         {
-            this.hours = Hours;
-           
+            this.Hours = Hours;
         }
 
         public override decimal Salary()
         {
-            return this.hours * hourRate;
+            return this.Hours * hourRate;
         }
-
-        
-        private uint hours;
 
     }
 }

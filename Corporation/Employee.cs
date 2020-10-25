@@ -8,7 +8,6 @@ namespace Corporation
 {
     abstract class Employee
     {
-        //--------Статические члены --------------
         static uint lastId;
         public static decimal minBossSalary;
         public static decimal hourRate;
@@ -28,8 +27,6 @@ namespace Corporation
         {
             return ++lastId;
         }
-
-        //---------------------------------------
 
         /// <summary>
         /// Имя
@@ -81,8 +78,7 @@ namespace Corporation
             this.Id = Employee.NextId();
                         
         }
-               
-
+ 
         /// <summary>
         /// Оплата труда
         /// </summary>
@@ -90,14 +86,9 @@ namespace Corporation
 
         public override string ToString()
         {
-            return $"{this.Id,5}\t{this.FirstName,-10}{this.LastName,-15}{this.Position,-15}{this.Salary(),10: $### ##0.00}";
+            return $"{this.Id, 5 : 00000}\t{this.FirstName,-10}{this.LastName,-15}{this.Position,-15}\t{this.Salary(), 10: $### ##0.00}";
         }
        
     }
-
-
-
-
-
 
 }
