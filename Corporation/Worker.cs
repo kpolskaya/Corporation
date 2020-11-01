@@ -11,7 +11,7 @@ namespace Corporation
 
         public uint Hours { get; set; }
 
-        public Worker(string FirstName, string LastName, string Position, Department Department, uint Age, uint Hours)
+        public Worker(string FirstName, string LastName, Level Position, Department Department, uint Age, uint Hours)
         : base(FirstName, LastName, Position, Department, Age)
 
         {

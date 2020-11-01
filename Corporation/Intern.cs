@@ -8,7 +8,7 @@ namespace Corporation
 {
     class Intern : Employee
     {
-        public Intern(string FirstName, string LastName, string Position, Department Department, uint Age)
+        public Intern(string FirstName, string LastName, Level Position, Department Department, uint Age)
         : base(FirstName, LastName, Position, Department, Age)
         {
            

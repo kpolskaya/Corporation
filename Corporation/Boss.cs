@@ -9,18 +9,18 @@ namespace Corporation
 {
     class Boss : Employee
     {
-        public BossLevel Lvl { get; private set; }
+        //public BossLevel Lvl { get; private set; }
 
 
-        public Boss(string FirstName, string LastName, string Position, Department Department, uint Age, BossLevel Lvl)
+        public Boss(string FirstName, string LastName, Level Position, Department Department, uint Age)
         : base(FirstName, LastName, Position, Department, Age)
         {
-            this.Lvl = Lvl;
+            
         }
 
         public override decimal Salary()
         {
-            return this.Department.BossSalary(this.Lvl); 
+            return this.Department.BossSalary(this.Position); 
         }
 
     }
