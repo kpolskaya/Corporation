@@ -21,9 +21,9 @@ namespace Corporation
         {
             DbPath = @"db.xml";
             //Randomize = new Random();
-            maxChilds = 10;
-            maxDepth = 4;
-            maxStaff = 6;
+            maxChilds = 10;    //10;
+            maxDepth = 4;  //4;
+            maxStaff = 8;  //6;
         }
    
         public Department Board { get; set; }
@@ -38,17 +38,18 @@ namespace Corporation
         {
             this.Board.Panel.Add(new Boss("Лев", "Мышкин", Level.CEO, this.Board, 27));
             this.Board.Panel.Add(new Boss("Ипполит", "Терентьев", Level.CTO, this.Board, 20));
-            this.Board.CreateRandomChilds(maxChilds, maxDepth, maxStaff, 1);
+            if (maxDepth > 0)
+                this.Board.CreateRandomChilds(maxChilds, maxDepth, maxStaff, 1);
         }
 
         public void SerializeDb()
         {
             string jsonString = "";
-            
 
-
-
-            jsonString += JsonConvert.SerializeObject(Board, Formatting.Indented);
+            jsonString += JsonConvert.SerializeObject(Board, Formatting.Indented, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
 
             //JObject o = JObject.FromObject(Board);
             //jsonString += o.ToString();

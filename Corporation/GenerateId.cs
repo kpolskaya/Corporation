@@ -7,21 +7,24 @@ using System.Threading.Tasks;
 
 namespace Corporation
 {
-    public sealed class Uid
+    /// <summary>
+    /// Генератор уникальных ID в singleton классе
+    /// </summary>
+    public sealed class GenerateId
     {
-        static Uid()
+        static GenerateId()
         {
 
         }
 
-        private Uid()
+        private GenerateId()
         {
 
         }
 
-        private static readonly Uid id = new Uid();
+        private static readonly GenerateId id = new GenerateId();
 
-        public static uint GetId()
+        public static uint Next()
         {
             return ++id.Value;
         }
@@ -29,7 +32,8 @@ namespace Corporation
         public static void InitId(uint Value)
         {
             
-            id.Value = Value;
+            if (Value > id.Value)
+                id.Value = Value;
         }
 
 

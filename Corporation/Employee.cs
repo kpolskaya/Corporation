@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace Corporation
 {
-    public enum BossLevel : byte
-    {
-        Head = 0,
-        Deputy = 1
-    }
-
+   
     public enum Level : byte
     {
         Intern = 0,
@@ -23,13 +18,13 @@ namespace Corporation
 
     abstract class Employee
     {
-        //static uint lastId;
+        
         public static decimal minBossSalary;
         public static decimal hourRate;
         public static decimal internSalary;
         public static decimal bossSalaryProportion;
 
-        static Employee()
+        static Employee() // TODO запретить создание работников с несоответствующей типу позицией!
         {
             //lastId = 0;
             minBossSalary = 1300m;
@@ -38,11 +33,7 @@ namespace Corporation
             bossSalaryProportion = 0.15m;
         }
 
-        //public static uint NextId()
-        //{
-        //    return ++lastId;
-        //}
-
+       
         /// <summary>
         /// Имя
         /// </summary>
@@ -90,10 +81,10 @@ namespace Corporation
             this.Position = Position;
             this.Department = Department;
             this.Age = Age;
-            this.Id = Uid.GetId();
+            this.Id = GenerateId.Next();
                         
         }
- 
+                 
         /// <summary>
         /// Оплата труда
         /// </summary>
@@ -101,7 +92,7 @@ namespace Corporation
 
         public override string ToString()
         {
-            return $"{this.Id, 5 : 00000}\t{this.FirstName,-10}{this.LastName,-15}{this.Position.ToString(),-15}\t{this.Salary(), 10: $### ##0.00}";
+            return $"{this.Id, 5 : 00000}\t{this.FirstName,-10}{this.LastName,-15}{this.Age, 3}\t{this.Position.ToString(),-15}\t{this.Salary(), 10: $### ##0.00}";
         }
        
     }

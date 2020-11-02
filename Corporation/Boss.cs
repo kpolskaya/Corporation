@@ -9,9 +9,7 @@ namespace Corporation
 {
     class Boss : Employee
     {
-        //public BossLevel Lvl { get; private set; }
-
-
+        
         public Boss(string FirstName, string LastName, Level Position, Department Department, uint Age)
         : base(FirstName, LastName, Position, Department, Age)
         {

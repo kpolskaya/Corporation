@@ -15,20 +15,10 @@ namespace Corporation
             Repository company = new Repository();
 
             company.Board.PrintStaffHierarchy(0);
+            Console.ReadKey();
 
+            company.SerializeDb();
 
-            //Console.ReadKey();
-            //company.SerializeDb();
-
-            //Console.WriteLine(Uid.GetId());
-            //Console.WriteLine(Uid.GetId());
-            //Uid.InitId(100);
-            //Console.WriteLine(Uid.GetId());
-            //Uid.InitId(1000);
-            //Console.WriteLine(Uid.GetId());
-            
-            
-            
             Console.ReadKey();
             
             
