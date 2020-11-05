@@ -56,11 +56,44 @@ namespace Corporation
         public void RestoreChildren(IList<JToken> children)
         {
             Department child;
+            Level position;
             int i = 0; // итератор списка дочерних департаментов TODO переделать foreach на нормальный for
             
             foreach (var item in children)
             {
                 child = new Department(item.Value<uint>("Id"), item.Value<string>("Name"));
+
+                foreach (var person in item["Panel"]) // так можно было?
+                {
+                    position = (Level)person.Value<byte>("Position");
+                    switch (position)
+                    {
+                        case Level.Intern:
+                            child.Panel.Add(new Intern(person.Value<uint>("Id"), person.Value<string>("FirstName"),
+                                person.Value<string>("LastName"), position, child, person.Value<uint>("Age")));
+                            break;
+                        case Level.Worker:
+                            child.Panel.Add(new Worker(person.Value<uint>("Id"), person.Value<string>("FirstName"),
+                                person.Value<string>("LastName"), position, child, person.Value<uint>("Age"), person.Value<uint>("Hours")));
+                            break;
+                        case Level.CPO:
+                            child.Panel.Add(new Boss(person.Value<uint>("Id"), person.Value<string>("FirstName"),
+                               person.Value<string>("LastName"), position, child, person.Value<uint>("Age")));
+                            break;
+                        case Level.CTO:
+                            child.Panel.Add(new Boss(person.Value<uint>("Id"), person.Value<string>("FirstName"),
+                               person.Value<string>("LastName"), position, child, person.Value<uint>("Age")));
+                            break;
+                        case Level.CEO:
+                            child.Panel.Add(new Boss(person.Value<uint>("Id"), person.Value<string>("FirstName"),
+                               person.Value<string>("LastName"), position, child, person.Value<uint>("Age")));
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
                 IList<JToken> grandChildren = children[i++]["Children"].Children().ToList();
                 child.RestoreChildren(grandChildren);
                 this.Children.Add(child);

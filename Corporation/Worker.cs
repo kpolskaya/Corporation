@@ -20,7 +20,7 @@ namespace Corporation
         }
         
         [JsonConstructor]
-        public Worker(uint Id, string FirstName, string LastName, Level Position, Department Department, uint Age)
+        public Worker(uint Id, string FirstName, string LastName, Level Position, Department Department, uint Age, uint Hours)
             : base(FirstName, LastName, Position, Department, Age)
         {
             this.Id = Id;
