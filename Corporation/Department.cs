@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,7 +24,7 @@ namespace Corporation
         public uint Id { get; private set; }
 
 
-        public ObservableCollection<Department> Childs { get; set; }
+        public ObservableCollection<Department> Children { get; set; }
 
         public ObservableCollection<Employee> Panel { get; set; }
 
@@ -33,7 +34,7 @@ namespace Corporation
             this.Name = Name;
             this.Id = GenerateId.Next();
             
-            this.Childs = new ObservableCollection<Department>();
+            this.Children = new ObservableCollection<Department>();
             this.Panel = new ObservableCollection<Employee>();
         }
         [JsonConstructor]
@@ -42,7 +43,7 @@ namespace Corporation
             this.Name = Name;
             this.Id = Id;
             GenerateId.InitId(Id);
-            this.Childs = new ObservableCollection<Department>();
+            this.Children = new ObservableCollection<Department>();
             this.Panel = new ObservableCollection<Employee>();
         }
 
@@ -52,22 +53,36 @@ namespace Corporation
             return $"{this.Id, 4 : 0000} {this.Name}";
         }
 
-        public void CreateRandomChilds(int maxChilds, int maxDepth, int maxStaff, int tier)
+        public void RestoreChildren(IList<JToken> children)
+        {
+            Department child;
+            int i = 0; // итератор списка дочерних департаментов TODO переделать foreach на нормальный for
+            
+            foreach (var item in children)
+            {
+                child = new Department(item.Value<uint>("Id"), item.Value<string>("Name"));
+                IList<JToken> grandChildren = children[i++]["Children"].Children().ToList();
+                child.RestoreChildren(grandChildren);
+                this.Children.Add(child);
+            }
+        }
+
+        public void CreateRandomChildren(int maxChilds, int maxDepth, int maxStaff, int tier)
         {
             for (int i = 0; i < Randomize.Next(maxChilds < 0 ? 0 : maxChilds+1); i++)
             {
-                this.Childs.Add(new Department($"Отдел {tier}-{this.Id}-{i + 1}"));
-                this.Childs[i].Panel.Add(new Boss(Guid.NewGuid().ToString().Substring(0, 5), Guid.NewGuid().ToString().Substring(0, 8), Level.CPO, this.Childs[i], (uint)Randomize.Next(20, 66)));
+                this.Children.Add(new Department($"Отдел {tier}-{this.Id}-{i + 1}"));
+                this.Children[i].Panel.Add(new Boss(Guid.NewGuid().ToString().Substring(0, 5), Guid.NewGuid().ToString().Substring(0, 8), Level.CPO, this.Children[i], (uint)Randomize.Next(20, 66)));
 
                 for (int j = 0; j < Randomize.Next(2, maxStaff < 1 ? 2 : maxStaff +1); j++)
                 {
                     switch (Randomize.Next(0,2))
                     {
                         case 0 :
-                            this.Childs[i].Panel.Add(new Worker(Guid.NewGuid().ToString().Substring(0, 5), Guid.NewGuid().ToString().Substring(0, 8), Level.Worker, this.Childs[i], (uint)Randomize.Next(20, 46), 190));
+                            this.Children[i].Panel.Add(new Worker(Guid.NewGuid().ToString().Substring(0, 5), Guid.NewGuid().ToString().Substring(0, 8), Level.Worker, this.Children[i], (uint)Randomize.Next(20, 46), 190));
                             break;
                         case 1:
-                            this.Childs[i].Panel.Add(new Intern(Guid.NewGuid().ToString().Substring(0, 5), Guid.NewGuid().ToString().Substring(0, 8), Level.Intern, this.Childs[i], (uint)Randomize.Next(18, 21)));
+                            this.Children[i].Panel.Add(new Intern(Guid.NewGuid().ToString().Substring(0, 5), Guid.NewGuid().ToString().Substring(0, 8), Level.Intern, this.Children[i], (uint)Randomize.Next(18, 21)));
                             break;
 
                         default:
@@ -76,7 +91,7 @@ namespace Corporation
                 }
 
                 if (maxDepth > 1)
-                    this.Childs[i].CreateRandomChilds(maxChilds - tier - 1, maxDepth - 1, maxStaff, tier + 1);
+                    this.Children[i].CreateRandomChildren(maxChilds - tier - 1, maxDepth - 1, maxStaff, tier + 1);
             }
         }
 
@@ -93,7 +108,7 @@ namespace Corporation
             }
             Console.WriteLine(indent + this);
             tier++;
-            foreach (var item in this.Childs)
+            foreach (var item in this.Children)
             {
                 item.PrintHierarchy(tier);
             }
@@ -109,7 +124,7 @@ namespace Corporation
             Console.WriteLine(indent + this);
             PrintDepartmentPanel(tier);
             tier++;
-            foreach (var item in this.Childs)
+            foreach (var item in this.Children)
             {
                 item.PrintStaffHierarchy(tier);
             }
@@ -138,7 +153,7 @@ namespace Corporation
         {
             decimal salaryBasis = SubalternSalary(lvl); 
 
-            foreach (var item in this.Childs)
+            foreach (var item in this.Children)
             {
                 salaryBasis += item.TotalSalary();
             }
@@ -158,9 +173,9 @@ namespace Corporation
             {
                 total += item.Salary();
             }
-            if (this.Childs.Count > 0)
+            if (this.Children.Count > 0)
             {
-                foreach (var item in Childs)
+                foreach (var item in Children)
                 {
                     total += item.TotalSalary();
                 }

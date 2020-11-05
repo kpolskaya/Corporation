@@ -12,12 +12,14 @@ namespace Corporation
         static void Main(string[] args)
         {
 
-            Repository company = new Repository();
+            Repository company = new Repository(10, 4, 8);
 
             company.Board.PrintStaffHierarchy(0);
-            Console.ReadKey();
-
+           
             company.SerializeDb();
+
+            Repository clone = new Repository();
+            clone.Board.PrintStaffHierarchy(0);
 
             Console.ReadKey();
             

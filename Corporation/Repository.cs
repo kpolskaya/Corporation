@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.IO;
 
 
 namespace Corporation
@@ -12,34 +13,30 @@ namespace Corporation
     class Repository
     {
         static string DbPath;
-        //static Random Randomize;
-        static int maxChilds;
-        static int maxDepth;
-        static int maxStaff;
+       
+        static readonly int FirstTier;
 
         static Repository()
         {
-            DbPath = @"db.xml";
-            //Randomize = new Random();
-            maxChilds = 10;    //10;
-            maxDepth = 4;  //4;
-            maxStaff = 8;  //6;
+            DbPath = @"db.json";
+            FirstTier = 1;
         }
    
         public Department Board { get; set; }
 
-        public Repository()
+        public Repository(int MaxChildren, int MaxDepth, int MaxStaff)
         {
+            
             this.Board = new Department("Дирекция");
-            CreateRandomCorp();
+            CreateRandomCorp(MaxChildren, MaxDepth, MaxStaff);
         }
 
-        private void CreateRandomCorp()
+        private void CreateRandomCorp(int maxChildren, int maxDepth, int maxStaff)
         {
             this.Board.Panel.Add(new Boss("Лев", "Мышкин", Level.CEO, this.Board, 27));
             this.Board.Panel.Add(new Boss("Ипполит", "Терентьев", Level.CTO, this.Board, 20));
             if (maxDepth > 0)
-                this.Board.CreateRandomChilds(maxChilds, maxDepth, maxStaff, 1);
+                this.Board.CreateRandomChildren(maxChildren, maxDepth, maxStaff, FirstTier);
         }
 
         public void SerializeDb()
@@ -51,11 +48,29 @@ namespace Corporation
                 TypeNameHandling = TypeNameHandling.Auto
             });
 
-            //JObject o = JObject.FromObject(Board);
-            //jsonString += o.ToString();
-            Console.WriteLine(jsonString);
+
+            File.WriteAllText(DbPath, jsonString, Encoding.UTF8);
+            
         }
 
-                      
+        public Repository()
+        {
+            string jsonString = File.ReadAllText(DbPath, Encoding.UTF8);
+            JObject o = JObject.Parse(jsonString);
+
+            this.Board = new Department(o.Value<uint>("Id"), o.Value<string>("Name"));
+
+            IList<JToken> panel = o["Panel"].Children().ToList();
+            foreach (var item in panel) 
+            {
+                this.Board.Panel.Add(new Boss(item.Value<uint>("Id"), item.Value<string>("FirstName"), item.Value<string>("LastName"), 
+                    (Level)item.Value<byte>("Position"), this.Board, item.Value<uint>("Age")));
+            }
+
+            IList<JToken> grandChildren = o["Children"].Children().ToList();
+            this.Board.RestoreChildren(grandChildren);
+
+        }
+
     }
     }
