@@ -41,16 +41,10 @@ namespace Corporation
 
         public void SerializeDb()
         {
-            string jsonString = "";
-
-            jsonString += JsonConvert.SerializeObject(Board, Formatting.Indented, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Auto
-            });
-
+            
+            string jsonString = JsonConvert.SerializeObject(Board, Formatting.Indented); //DONE - убрать TypeNameHandling т.к. все вручную
 
             File.WriteAllText(DbPath, jsonString, Encoding.UTF8);
-            
         }
 
         public Repository()

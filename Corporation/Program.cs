@@ -12,7 +12,7 @@ namespace Corporation
         static void Main(string[] args)
         {
 
-            Repository company = new Repository(10, 4, 8);
+            Repository company = new Repository(6, 5, 8);
 
             company.Board.PrintStaffHierarchy(0);
            

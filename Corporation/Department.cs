@@ -23,11 +23,9 @@ namespace Corporation
         public string Name { get; }
         public uint Id { get; private set; }
 
+        public ObservableCollection<Department> Children { get; private set; }
 
-        public ObservableCollection<Department> Children { get; set; }
-
-        public ObservableCollection<Employee> Panel { get; set; }
-
+        public ObservableCollection<Employee> Panel { get; private set; }
         
         public Department(string Name)
         {
@@ -53,12 +51,51 @@ namespace Corporation
             return $"{this.Id, 4 : 0000} {this.Name}";
         }
 
+        public void Recruit(string firstName, string lastName, Level position, uint age)
+        {
+            uint initialHours = 190; //TODO - в константы?
+
+            switch (position)
+            {
+                case Level.Intern:
+                    this.Panel.Add(new Intern(firstName, lastName, position, this, age));
+                    break;
+                case Level.Worker:
+                    this.Panel.Add(new Worker(firstName, lastName, position, this, age, initialHours));
+                    break;
+                case Level.CPO:
+                    this.Panel.Add(new Boss(firstName, lastName, position, this, age));
+                    break;
+                case Level.CTO:
+                    this.Panel.Add(new Boss(firstName, lastName, position, this, age));
+                    break;
+                case Level.CEO:
+                    this.Panel.Add(new Boss(firstName, lastName, position, this, age));
+                    break;
+                default:
+                    throw new Exception("Неизвестная должность");
+                    break;
+            }
+
+        }
+
+        public void Dismiss(uint id)
+        {
+            try
+            {
+                this.Panel.Remove(this.Panel.First(e => e.Id == id));
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public void RestoreChildren(IList<JToken> children)
         {
             Department child;
             Level position;
-            int i = 0; // итератор списка дочерних департаментов TODO переделать foreach на нормальный for
-            
+           
             foreach (var item in children)
             {
                 child = new Department(item.Value<uint>("Id"), item.Value<string>("Name"));
@@ -89,12 +126,11 @@ namespace Corporation
                                person.Value<string>("LastName"), position, child, person.Value<uint>("Age")));
                             break;
                         default:
+                            throw new Exception("Неизвестная должность");
                             break;
                     }
-
                 }
-
-                IList<JToken> grandChildren = children[i++]["Children"].Children().ToList();
+                IList<JToken> grandChildren = item["Children"].Children().ToList(); //children[i++]
                 child.RestoreChildren(grandChildren);
                 this.Children.Add(child);
             }
@@ -105,17 +141,23 @@ namespace Corporation
             for (int i = 0; i < Randomize.Next(maxChilds < 0 ? 0 : maxChilds+1); i++)
             {
                 this.Children.Add(new Department($"Отдел {tier}-{this.Id}-{i + 1}"));
-                this.Children[i].Panel.Add(new Boss(Guid.NewGuid().ToString().Substring(0, 5), Guid.NewGuid().ToString().Substring(0, 8), Level.CPO, this.Children[i], (uint)Randomize.Next(20, 66)));
+                this.Children[i].Panel.Add(new Boss(Guid.NewGuid().ToString().Substring(0, 5), 
+                    Guid.NewGuid().ToString().Substring(0, 8), Level.CPO, this.Children[i], 
+                    (uint)Randomize.Next(20, 66)));
 
                 for (int j = 0; j < Randomize.Next(2, maxStaff < 1 ? 2 : maxStaff +1); j++)
                 {
-                    switch (Randomize.Next(0,2))
+                    switch (Randomize.Next(0,2)) //Переделать с Recruit?
                     {
                         case 0 :
-                            this.Children[i].Panel.Add(new Worker(Guid.NewGuid().ToString().Substring(0, 5), Guid.NewGuid().ToString().Substring(0, 8), Level.Worker, this.Children[i], (uint)Randomize.Next(20, 46), 190));
+                            this.Children[i].Panel.Add(new Worker(Guid.NewGuid().ToString().Substring(0, 5), 
+                                Guid.NewGuid().ToString().Substring(0, 8), Level.Worker, this.Children[i], 
+                                (uint)Randomize.Next(20, 46), 190)); //TODO - 190 в константы?
                             break;
                         case 1:
-                            this.Children[i].Panel.Add(new Intern(Guid.NewGuid().ToString().Substring(0, 5), Guid.NewGuid().ToString().Substring(0, 8), Level.Intern, this.Children[i], (uint)Randomize.Next(18, 21)));
+                            this.Children[i].Panel.Add(new Intern(Guid.NewGuid().ToString().Substring(0, 5), 
+                                Guid.NewGuid().ToString().Substring(0, 8), Level.Intern, this.Children[i], 
+                                (uint)Randomize.Next(18, 21)));
                             break;
 
                         default:

@@ -13,17 +13,20 @@ namespace Corporation
         public uint Hours { get; set; }
 
         public Worker(string FirstName, string LastName, Level Position, Department Department, uint Age, uint Hours)
-        : base(FirstName, LastName, Position, Department, Age)
+        : base(FirstName, LastName, Position, Age)
 
         {
+            this.department = Department;
             this.Hours = Hours;
+            this.Id = GenerateId.Next();
         }
         
         [JsonConstructor]
         public Worker(uint Id, string FirstName, string LastName, Level Position, Department Department, uint Age, uint Hours)
-            : base(FirstName, LastName, Position, Department, Age)
+            : base(FirstName, LastName, Position, Age)
         {
             this.Id = Id;
+            this.department = Department;
             GenerateId.InitId(Id);
             this.Hours = Hours;
         }
@@ -32,6 +35,9 @@ namespace Corporation
         {
             return this.Hours * hourRate;
         }
+
+        private Department department;
+
 
     }
 }
