@@ -33,7 +33,7 @@ namespace Corporation
 
         private void CreateRandomCorp(int maxChildren, int maxDepth, int maxStaff)
         {
-            this.Board.Panel.Add(new Boss("Лев", "Мышкин", Level.CEO, this.Board, 27));
+            this.Board.Panel.Add(new Boss("Лев", "Мышкин", Level.CEO, this.Board, 27)); // Как запретить добавлять кого угодно без валидации?
             this.Board.Panel.Add(new Boss("Ипполит", "Терентьев", Level.CTO, this.Board, 20));
             if (maxDepth > 0)
                 this.Board.CreateRandomChildren(maxChildren, maxDepth, maxStaff, FirstTier);

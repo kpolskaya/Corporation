@@ -12,27 +12,24 @@ namespace Corporation
     {
         
         public Boss(string FirstName, string LastName, Level Position, Department Department, uint Age)
-        : base(FirstName, LastName, Position, Age)
+        : base(FirstName, LastName, Position, Department, Age)
         {
-            this.department = Department;
             this.Id = GenerateId.Next();
         }
 
         [JsonConstructor]
         public Boss(uint Id, string FirstName, string LastName, Level Position, Department Department, uint Age)
-            : base(FirstName, LastName, Position, Age)
+            : base(FirstName, LastName, Position, Department, Age)
         {
             this.Id = Id;
-            this.department = Department;
             GenerateId.InitId(Id);
         }
 
         public override decimal Salary()
         {
-            return this.department.BossSalary(this.Position); 
+            return this.Department.BossSalary(this.Position); 
         }
 
-        private Department department;
     }
 
 }

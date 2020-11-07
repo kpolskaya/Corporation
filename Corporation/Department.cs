@@ -20,12 +20,12 @@ namespace Corporation
             Randomize = new Random();
         }
 
-        public string Name { get; }
+        public string Name { get; private set; }
         public uint Id { get; private set; }
 
-        public ObservableCollection<Department> Children { get; private set; }
+        public ObservableCollection<Department> Children { get; set; }
 
-        public ObservableCollection<Employee> Panel { get; private set; }
+        public ObservableCollection<Employee> Panel { get; private set; } //почему работает Add??? сделать поле и свойство без сеттера? 
         
         public Department(string Name)
         {
@@ -53,15 +53,13 @@ namespace Corporation
 
         public void Recruit(string firstName, string lastName, Level position, uint age)
         {
-            uint initialHours = 190; //TODO - в константы?
-
             switch (position)
             {
                 case Level.Intern:
                     this.Panel.Add(new Intern(firstName, lastName, position, this, age));
                     break;
                 case Level.Worker:
-                    this.Panel.Add(new Worker(firstName, lastName, position, this, age, initialHours));
+                    this.Panel.Add(new Worker(firstName, lastName, position, this, age, Employee.initialHours));
                     break;
                 case Level.CPO:
                     this.Panel.Add(new Boss(firstName, lastName, position, this, age));
@@ -76,9 +74,8 @@ namespace Corporation
                     throw new Exception("Неизвестная должность");
                     break;
             }
-
         }
-
+               
         public void Dismiss(uint id)
         {
             try
@@ -141,30 +138,18 @@ namespace Corporation
             for (int i = 0; i < Randomize.Next(maxChilds < 0 ? 0 : maxChilds+1); i++)
             {
                 this.Children.Add(new Department($"Отдел {tier}-{this.Id}-{i + 1}"));
-                this.Children[i].Panel.Add(new Boss(Guid.NewGuid().ToString().Substring(0, 5), 
-                    Guid.NewGuid().ToString().Substring(0, 8), Level.CPO, this.Children[i], 
-                    (uint)Randomize.Next(20, 66)));
-
+                
+                this.Children[i].Recruit(Guid.NewGuid().ToString().Substring(0, 5),
+                    Guid.NewGuid().ToString().Substring(0, 8), Level.CPO, (uint)Randomize.Next(20, 66));
+               
                 for (int j = 0; j < Randomize.Next(2, maxStaff < 1 ? 2 : maxStaff +1); j++)
                 {
-                    switch (Randomize.Next(0,2)) //Переделать с Recruit?
-                    {
-                        case 0 :
-                            this.Children[i].Panel.Add(new Worker(Guid.NewGuid().ToString().Substring(0, 5), 
-                                Guid.NewGuid().ToString().Substring(0, 8), Level.Worker, this.Children[i], 
-                                (uint)Randomize.Next(20, 46), 190)); //TODO - 190 в константы?
-                            break;
-                        case 1:
-                            this.Children[i].Panel.Add(new Intern(Guid.NewGuid().ToString().Substring(0, 5), 
-                                Guid.NewGuid().ToString().Substring(0, 8), Level.Intern, this.Children[i], 
-                                (uint)Randomize.Next(18, 21)));
-                            break;
+                    Level randomLevel = (Level)Randomize.Next(0, (int)Level.Worker + 1);
+                    uint randomAge = (uint)Randomize.Next(18, 23 * ((int)randomLevel + 1));
 
-                        default:
-                            break;
-                    }
+                    this.Children[i].Recruit(Guid.NewGuid().ToString().Substring(0, 5), 
+                        Guid.NewGuid().ToString().Substring(0, 8), randomLevel, randomAge);
                 }
-
                 if (maxDepth > 1)
                     this.Children[i].CreateRandomChildren(maxChilds - tier - 1, maxDepth - 1, maxStaff, tier + 1);
             }
@@ -212,7 +197,6 @@ namespace Corporation
             {
                 indent += "\t";
             }
-
             var sortedPanel = from p in this.Panel
                               orderby p.Position descending
                               select p;
@@ -220,7 +204,6 @@ namespace Corporation
             {
                 Console.WriteLine(indent + p);
             }
-
             Console.WriteLine();
         }
 
@@ -271,7 +254,6 @@ namespace Corporation
                 if (item.Position < lvl)
                     salary += item.Salary();
             }
-            
             return salary;
         }
     }
