@@ -19,7 +19,15 @@ namespace Corporation
             company.SerializeDb();
 
             Repository clone = new Repository();
-            clone.Board.PrintStaffHierarchy(0);
+            foreach (var item in clone.Board.Children)
+            {
+                foreach (var p in item.Staff)
+                {
+                    Console.WriteLine(p);
+                }
+            }
+
+            //clone.Board.PrintStaffHierarchy(0);
 
             Console.ReadKey();
             

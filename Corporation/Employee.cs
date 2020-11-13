@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace Corporation
         CEO = 80
     }
 
-    abstract class Employee
+    public abstract class Employee
     {
         public static decimal minBossSalary;
         public static decimal hourRate;
@@ -49,9 +50,10 @@ namespace Corporation
         public Level Position { get; protected set; }
 
         /// <summary>
-        /// Отдел
+        /// Отдел (не сериализуемое свойство - для исключения циклической ссылки)
         /// </summary>
-        protected Department Department { get; set; } //поле должно быть закрытым, иначе jsonconverter будет уходить в вечный цикл!
+        [JsonIgnore]
+        public Department Department { get; private set; } 
 
         /// <summary>
         /// Табельный номер

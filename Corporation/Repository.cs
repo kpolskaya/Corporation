@@ -10,7 +10,7 @@ using System.IO;
 
 namespace Corporation
 {
-    class Repository
+    public class Repository
     {
         static string DbPath;
        
@@ -33,8 +33,8 @@ namespace Corporation
 
         private void CreateRandomCorp(int maxChildren, int maxDepth, int maxStaff)
         {
-            this.Board.Panel.Add(new Boss("Лев", "Мышкин", Level.CEO, this.Board, 27)); // Как запретить добавлять кого угодно без валидации?
-            this.Board.Panel.Add(new Boss("Ипполит", "Терентьев", Level.CTO, this.Board, 20));
+            this.Board.AddEmployee(new Boss("Лев", "Мышкин", Level.CEO, this.Board, 27)); // Как запретить добавлять кого угодно без валидации?
+            this.Board.AddEmployee(new Boss("Ипполит", "Терентьев", Level.CTO, this.Board, 20));
             if (maxDepth > 0)
                 this.Board.CreateRandomChildren(maxChildren, maxDepth, maxStaff, FirstTier);
         }
@@ -54,10 +54,10 @@ namespace Corporation
 
             this.Board = new Department(o.Value<uint>("Id"), o.Value<string>("Name"));
 
-            IList<JToken> panel = o["Panel"].Children().ToList();
+            IList<JToken> panel = o["Staff"].Children().ToList();
             foreach (var item in panel) 
             {
-                this.Board.Panel.Add(new Boss(item.Value<uint>("Id"), item.Value<string>("FirstName"), item.Value<string>("LastName"), 
+                this.Board.AddEmployee(new Boss(item.Value<uint>("Id"), item.Value<string>("FirstName"), item.Value<string>("LastName"), 
                     (Level)item.Value<byte>("Position"), this.Board, item.Value<uint>("Age")));
             }
 

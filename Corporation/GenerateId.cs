@@ -26,17 +26,17 @@ namespace Corporation
 
         public static uint Next()
         {
-            return ++id.Value;
+            return ++id.lastValue;
         }
 
         public static void InitId(uint Value)
         {
             
-            if (Value > id.Value)
-                id.Value = Value;
+            if (Value > id.lastValue)
+                id.lastValue = Value;
         }
 
 
-        public uint Value;
+        private uint lastValue;
     }
 }
