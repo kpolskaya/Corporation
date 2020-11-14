@@ -37,6 +37,7 @@ namespace WpfCorp.ViewModel
         public ReadOnlyCollection<DepartmentViewModel> Children { get { return children; } }
 
         public string Name { get { return this.department.Name; } }
+        public string Id { get { return this.department.Id.ToString(); } }
 
        /// <summary>
        /// Читает и устанавливает триггер объекта в соответствии с  

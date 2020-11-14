@@ -16,13 +16,21 @@ namespace WpfCorp.ViewModel
     public class CorporationViewModel
     {
         DepartmentViewModel board;
+        ReadOnlyCollection<DepartmentViewModel> firstTier;
 
         public CorporationViewModel(Department Board)
         {
             this.board = new DepartmentViewModel (Board);
+            this.firstTier = new ReadOnlyCollection<DepartmentViewModel>(
+                new DepartmentViewModel[]
+                {
+                    this.board
+                }
+                );
+            
         }
 
-        DepartmentViewModel Board { get { return board; } }
-
+        public DepartmentViewModel Board { get { return board; } }
+        public ReadOnlyCollection<DepartmentViewModel> FirstTier { get { return firstTier; } }
     }
 }

@@ -28,7 +28,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <TreeView ItemsSource="{Binding Board}" Grid.Column="0">
+            <TreeView ItemsSource="{Binding FirstTier}" Grid.Column="0">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
@@ -44,7 +44,11 @@
 
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                        <TextBlock Text="{Binding Name}"/>
+                        <WrapPanel>
+                            <TextBlock Text="{Binding Id}" Margin="3" />
+                            <TextBlock Text="{Binding Name}" Margin="3"/>
+                        </WrapPanel>
+                        
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>

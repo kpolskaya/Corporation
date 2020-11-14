@@ -27,7 +27,7 @@ namespace Corporation
         public Repository(int MaxChildren, int MaxDepth, int MaxStaff)
         {
             
-            this.Board = new Department("Дирекция");
+            this.Board = new Department("Virtual Times Entertainment");
             CreateRandomCorp(MaxChildren, MaxDepth, MaxStaff);
         }
 

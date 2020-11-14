@@ -29,7 +29,7 @@ namespace WpfCorp
         {
             InitializeComponent();
 
-            myCorp = new Repository(6, 5, 8);
+            myCorp = new Repository(10, 6, 8);
             corpPresenter = new CorporationViewModel(myCorp.Board);
             DataContext = corpPresenter;
 

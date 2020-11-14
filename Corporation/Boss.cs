@@ -29,7 +29,8 @@ namespace Corporation
         {
             return this.Department.BossSalary(this.Position); 
         }
-
+ 
     }
 
+    
 }
