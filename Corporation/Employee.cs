@@ -65,7 +65,7 @@ namespace Corporation
         /// </summary>
         public uint Age { get;  set; }
 
-        public decimal Vage { get { return Salary(); } }
+        public decimal Wage { get { return Salary(); } }
 
         /// <summary>
         /// Создание сотрудника c автоматическим Id

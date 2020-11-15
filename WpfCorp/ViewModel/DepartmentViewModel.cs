@@ -74,6 +74,7 @@ namespace WpfCorp.ViewModel
             }
         }
 
+        public ReadOnlyCollection<Employee> Staff { get { return this.department.Staff; } }
         public DepartmentViewModel Parent { get { return this.parent; } }
 
 

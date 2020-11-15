@@ -39,6 +39,7 @@ namespace WpfCorp
         {
             Selected.Text = corpPresenter.SelectedItem == null ? "Ничего не выбрано" :
                corpPresenter.SelectedItem.Name;
+            Personnel.ItemsSource = corpPresenter.SelectedItem.Staff;
         }
     }
 }
