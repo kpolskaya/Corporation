@@ -162,7 +162,7 @@ namespace Corporation
                         Guid.NewGuid().ToString().Substring(0, 8), randomLevel, randomAge);
                 }
                 if (maxDepth > 1)
-                    this.Children[i].CreateRandomChildren(maxChilds - tier - 1, maxDepth - 1, maxStaff, tier + 1);
+                    this.Children[i].CreateRandomChildren(maxChilds - tier, maxDepth - 1, maxStaff, tier + 1);
             }
         }
 

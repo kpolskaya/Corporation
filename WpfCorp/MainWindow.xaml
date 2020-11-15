@@ -28,7 +28,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <TreeView ItemsSource="{Binding FirstTier}" Grid.Column="0">
+            <TreeView ItemsSource="{Binding FirstTier}" Grid.Column="0" SelectedItemChanged="TreeView_SelectedItemChanged">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
@@ -52,9 +52,10 @@
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
+            
         </Grid>
         <StatusBar Height="23" Grid.Row="2">
-            
+            <TextBlock  x:Name="Selected" />
         </StatusBar>
 
     </Grid>

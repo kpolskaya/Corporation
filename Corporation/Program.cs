@@ -12,20 +12,20 @@ namespace Corporation
         static void Main(string[] args)
         {
 
-            Repository company = new Repository(6, 5, 8);
+            Repository company = new Repository(20, 5, 8);
 
             company.Board.PrintStaffHierarchy(0);
            
-            company.SerializeDb();
+            //company.SerializeDb();
 
-            Repository clone = new Repository();
-            foreach (var item in clone.Board.Children)
-            {
-                foreach (var p in item.Staff)
-                {
-                    Console.WriteLine(p);
-                }
-            }
+            //Repository clone = new Repository();
+            //foreach (var item in clone.Board.Children)
+            //{
+            //    foreach (var p in item.Staff)
+            //    {
+            //        Console.WriteLine(p);
+            //    }
+            //}
 
             //clone.Board.PrintStaffHierarchy(0);
 

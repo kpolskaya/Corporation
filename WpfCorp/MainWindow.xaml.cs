@@ -29,14 +29,16 @@ namespace WpfCorp
         {
             InitializeComponent();
 
-            myCorp = new Repository(10, 6, 8);
+            myCorp = new Repository(11, 5, 8);
             corpPresenter = new CorporationViewModel(myCorp.Board);
             DataContext = corpPresenter;
 
+        }
 
-
-
-
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            Selected.Text = corpPresenter.SelectedItem == null ? "Ничего не выбрано" :
+               corpPresenter.SelectedItem.Name;
         }
     }
 }

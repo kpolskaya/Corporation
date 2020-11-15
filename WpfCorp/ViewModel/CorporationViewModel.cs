@@ -30,7 +30,31 @@ namespace WpfCorp.ViewModel
             
         }
 
-        public DepartmentViewModel Board { get { return board; } }
+        //public DepartmentViewModel Board { get { return board; } }
         public ReadOnlyCollection<DepartmentViewModel> FirstTier { get { return firstTier; } }
+
+        public DepartmentViewModel SelectedItem
+        {
+            get
+            {
+                return Traverse(firstTier).FirstOrDefault<DepartmentViewModel>(i => i.IsSelected);
+            }
+        }
+
+        private List<DepartmentViewModel> Traverse (ReadOnlyCollection<DepartmentViewModel> children)
+        {
+            List<DepartmentViewModel> treeViewItems = new List<DepartmentViewModel>();
+
+            foreach (var item in children)
+            {
+                treeViewItems.Add(item);
+
+                if (item.Children != null && item.Children.Count >0)
+                    treeViewItems.AddRange(Traverse(item.Children));
+            }
+
+            return treeViewItems;
+        }
+
     }
 }
