@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfCorp"
         mc:Ignorable="d"
-        Title="Вот компания какая" Height="450" Width="800">
+        Title="Вот компания какая" Height="450" Width="900">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -26,7 +26,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="3*"/>
             </Grid.ColumnDefinitions>
             <TreeView ItemsSource="{Binding FirstTier}" Grid.Column="0" SelectedItemChanged="TreeView_SelectedItemChanged" Name="CompanyTree">
                 <TreeView.ItemContainerStyle>
@@ -59,11 +59,45 @@
                         <GridViewColumn Header="Фамилия" DisplayMemberBinding="{Binding LastName}" Width="80"/>
                         <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding FirstName}" Width="60"/>
                         <GridViewColumn Header="Должность" DisplayMemberBinding="{Binding Position}" Width="80"/>
-                        <GridViewColumn Header="Зарплата" DisplayMemberBinding="{Binding Wage}"/>
-                        
+                        <GridViewColumn Header="Зарплата" DisplayMemberBinding="{Binding StringFormat=\{0: ### ##0.00\}, Path=Wage}"/>
                     </GridView>
                 </ListView.View>   
             </ListView>
+            <Grid Grid.Column="2" DataContext="{Binding ElementName=Personnel, Path=SelectedItem}">
+                <Grid.RowDefinitions>
+                    <RowDefinition/> <!--header-->
+                    <RowDefinition/> <!--LastName-->
+                    <RowDefinition/> <!--FirstName-->
+                    <RowDefinition/> <!--Position-->
+                    <RowDefinition/> <!--Age-->
+                    <RowDefinition/> <!--Buttons-->
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                
+                <Label Grid.Row="0" Grid.ColumnSpan="2" 
+                       Width="Auto" Content="Отредактировать/Добавить" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Center"
+                       FontWeight="Bold"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Фамилия:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Имя:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Имя:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Grid.Row="3" Grid.Column="0" Content="Должность:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Label Grid.Row="4" Grid.Column="0" Content="Возраст:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <Button x:Name="Modify"  Grid.Row="5" Grid.Column="0" Content="Изменить" Height="20" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button x:Name="Add"  Grid.Row="5" Grid.Column="1" Content="Добавить" Height="20" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <TextBox x:Name="LastName" Grid.Row="1" Grid.Column="1" Text="{Binding LastName}" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBox x:Name="FirstName" Grid.Row="2" Grid.Column="1" Text="{Binding FirstName}" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBox x:Name="Position" Grid.Row="3" Grid.Column="1" Text="{Binding Position, Mode=OneWay}" Width="100" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBox x:Name="Age" Grid.Row="4" Grid.Column="1" Text="{Binding Age}" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+
+            </Grid>
+           
         </Grid >
         <StatusBar Height="23" Grid.Row="2" DataContext="{Binding ElementName=CompanyTree, Path=SelectedItem }">
             <TextBlock  x:Name="Selected" Text="{Binding Name}"/>
