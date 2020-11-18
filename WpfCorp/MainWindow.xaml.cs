@@ -37,9 +37,9 @@ namespace WpfCorp
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            Selected.Text = corpPresenter.SelectedItem == null ? "Ничего не выбрано" :
-               corpPresenter.SelectedItem.Name;
-            Personnel.ItemsSource = corpPresenter.SelectedItem.Staff;
+            //Selected.Text = corpPresenter.SelectedItem == null ? "Ничего не выбрано" :
+            //   corpPresenter.SelectedItem.Name;
+            //Personnel.ItemsSource = corpPresenter.SelectedItem.Staff;
         }
     }
 }

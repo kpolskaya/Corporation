@@ -52,7 +52,7 @@
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
-            <ListView Grid.Column="1" x:Name="Personnel">
+            <ListView Grid.Column="1" x:Name="Personnel" DataContext="{Binding ElementName=CompanyTree, Path=SelectedItem}" ItemsSource="{Binding Staff}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="45"/>
@@ -64,9 +64,9 @@
                     </GridView>
                 </ListView.View>   
             </ListView>
-        </Grid>
-        <StatusBar Height="23" Grid.Row="2">
-            <TextBlock  x:Name="Selected" />
+        </Grid >
+        <StatusBar Height="23" Grid.Row="2" DataContext="{Binding ElementName=CompanyTree, Path=SelectedItem }">
+            <TextBlock  x:Name="Selected" Text="{Binding Name}"/>
         </StatusBar>
 
     </Grid>
