@@ -76,25 +76,65 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
+
+                <RadioButton x:Name="AddRadioButton" Grid.Row="0" 
+                             Grid.Column="0" GroupName="EditRecord" 
+                             Content="Добавить" IsChecked="True" 
+                             VerticalAlignment="Center" HorizontalAlignment="Center" />
                 
-                <Label Grid.Row="0" Grid.ColumnSpan="2" 
-                       Width="Auto" Content="Отредактировать/Добавить" 
-                       VerticalAlignment="Center" 
-                       HorizontalAlignment="Center"
-                       FontWeight="Bold"/>
+                <RadioButton x:Name="EditRadioButton" Grid.Row="0" 
+                             Grid.Column="1" GroupName="EditRecord" 
+                             Content="Редактировать" 
+                             VerticalAlignment="Center" HorizontalAlignment="Center" 
+                             Checked="EditChecked"/>
 
-                <Label Grid.Row="1" Grid.Column="0" Content="Фамилия:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <Label Grid.Row="2" Grid.Column="0" Content="Имя:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <Label Grid.Row="2" Grid.Column="0" Content="Имя:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <Label Grid.Row="3" Grid.Column="0" Content="Должность:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <Label Grid.Row="4" Grid.Column="0" Content="Возраст:" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                <Button x:Name="Modify"  Grid.Row="5" Grid.Column="0" Content="Изменить" Height="20" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Button x:Name="Add"  Grid.Row="5" Grid.Column="1" Content="Добавить" Height="20" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <TextBox x:Name="LastName" Grid.Row="1" Grid.Column="1" Text="{Binding LastName}" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBox x:Name="FirstName" Grid.Row="2" Grid.Column="1" Text="{Binding FirstName}" Width="120" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBox x:Name="Position" Grid.Row="3" Grid.Column="1" Text="{Binding Position, Mode=OneWay}" Width="100" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <TextBox x:Name="Age" Grid.Row="4" Grid.Column="1" Text="{Binding Age}" Width="40" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-
+                <Label Grid.Row="1" Grid.Column="0" 
+                       Content="Фамилия:" HorizontalAlignment="Right" 
+                       VerticalAlignment="Center"/>
+                
+                <Label Grid.Row="2" Grid.Column="0" 
+                       Content="Имя:" HorizontalAlignment="Right" 
+                       VerticalAlignment="Center"/>
+                
+                <Label Grid.Row="2" Grid.Column="0" 
+                       Content="Имя:" HorizontalAlignment="Right" 
+                       VerticalAlignment="Center"/>
+                
+                <Label Grid.Row="4" Grid.Column="0" 
+                       Content="Должность:" HorizontalAlignment="Right" 
+                       VerticalAlignment="Center"/>
+                
+                <Label Grid.Row="3" Grid.Column="0" 
+                       Content="Возраст:" HorizontalAlignment="Right" 
+                       VerticalAlignment="Center"/>
+                
+                <TextBox x:Name="LastName" Grid.Row="1" Grid.Column="1" 
+                         Text="{Binding LastName}" Width="120" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center"/>
+                
+                <TextBox x:Name="FirstName" Grid.Row="2" Grid.Column="1" 
+                         Text="{Binding FirstName}" Width="120" 
+                         HorizontalAlignment="Left" 
+                         VerticalAlignment="Center"/>
+                
+                <ComboBox x:Name="Position" Grid.Row="4" Grid.Column="1"
+                          Width="100" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                         IsEnabled="{Binding ElementName=AddRadioButton, Path=IsChecked}"/>
+                
+                <TextBox x:Name="Age" Grid.Row="3" Grid.Column="1" 
+                         Text="{Binding Age}" Width="40" 
+                         HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                
+                <Button x:Name="Modify"  Grid.Row="5" Grid.Column="1" 
+                        Content="Изменить" Height="20" Width="100" 
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        IsEnabled="{Binding ElementName=EditRadioButton, Path=IsChecked}"/>
+                
+                <Button x:Name="Add"  Grid.Row="5" Grid.Column="0" 
+                        Content="Добавить" Height="20" Width="100" 
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        IsEnabled="{Binding ElementName=AddRadioButton, Path=IsChecked}"/>
 
             </Grid>
            

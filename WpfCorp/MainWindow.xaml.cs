@@ -32,7 +32,7 @@ namespace WpfCorp
             myCorp = new Repository(11, 5, 8);
             corpPresenter = new CorporationViewModel(myCorp.Board);
             DataContext = corpPresenter;
-
+            Position.ItemsSource = Enum.GetValues(typeof(Level)).Cast<Level>();
         }
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -40,6 +40,11 @@ namespace WpfCorp
             //Selected.Text = corpPresenter.SelectedItem == null ? "Ничего не выбрано" :
             //   corpPresenter.SelectedItem.Name;
             //Personnel.ItemsSource = corpPresenter.SelectedItem.Staff;
+        }
+
+        private void EditChecked(object sender, RoutedEventArgs e)
+        {
+            Position.SelectedIndex = -1;
         }
     }
 }
