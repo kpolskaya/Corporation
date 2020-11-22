@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Boss.cs" />
+    <Compile Include="Person.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Department.cs" />
     <Compile Include="Intern.cs" />

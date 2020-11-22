@@ -17,7 +17,7 @@ namespace Corporation
         CEO = 80
     }
 
-    public abstract class Employee
+    public abstract class Employee : Person
     {
         public static decimal minBossSalary;
         public static decimal hourRate;
@@ -34,19 +34,7 @@ namespace Corporation
             initialHours = 190;
         }
        
-        /// <summary>
-        /// Имя
-        /// </summary>
-        public string FirstName { get; set; }
-
-        /// <summary>
-        /// Фамилия
-        /// </summary>
-        public string LastName { get; set; }
-
-        /// <summary>
-        /// Должность
-        /// </summary>
+ 
         public Level Position { get; protected set; }
 
         /// <summary>
@@ -55,17 +43,25 @@ namespace Corporation
         [JsonIgnore]
         public Department Department { get; private set; } 
 
-        /// <summary>
-        /// Табельный номер
-        /// </summary>
+       
         public uint Id { get; protected set; }
 
-        /// <summary>
-        /// Возраст
-        /// </summary>
-        public uint Age { get;  set; }
 
         public decimal Wage { get { return Salary(); } }
+
+        /// <summary>
+        /// Создание сотрудника с автоматическим ID
+        /// </summary>
+        /// <param name="Person">Человек</param>
+        /// <param name="Position">Должность</param>
+        /// <param name="Department">Отдел</param>
+        public Employee(Person Person, Level Position, Department Department) :
+            base(Person.FirstName, Person.LastName, Person.Age)
+        {
+            this.Position = Position;
+            this.Department = Department;
+            this.Id = GenerateId.Next();
+        }
 
         /// <summary>
         /// Создание сотрудника c автоматическим Id
@@ -75,15 +71,32 @@ namespace Corporation
         /// <param name="Age">Возраст</param>
         /// <param name="Position">Должность</param>
         /// <param name="Department">Отдел</param>
-        public Employee(string FirstName, string LastName, Level Position, Department Department, uint Age)
+        public Employee(string FirstName, string LastName, uint Age, Level Position, Department Department) :
+            base(FirstName, LastName, Age)
         {
-            this.FirstName = FirstName;
-            this.LastName = LastName;
             this.Position = Position;
             this.Department = Department;
-            this.Age = Age;
+            this.Id = GenerateId.Next();
         }
-                 
+
+        /// <summary>
+        /// Конструктор для создания сотрудника с существующим Id - из файла
+        /// </summary>
+        /// <param name="Id">Табельный номер</param>
+        /// <param name="FirstName">Им</param>
+        /// <param name="LastName">Фамилия</param>
+        /// <param name="Age">Возраст</param>
+        /// <param name="Position">Должжность</param>
+        /// <param name="Department">Отдел</param>
+        public Employee(uint Id, string FirstName, string LastName, uint Age, Level Position, Department Department) :
+            base(FirstName, LastName, Age)
+        {
+            this.Position = Position;
+            this.Department = Department;
+            this.Id = Id;
+            GenerateId.InitId(Id);
+        }
+
         /// <summary>
         /// Оплата труда
         /// </summary>

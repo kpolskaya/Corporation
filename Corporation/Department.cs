@@ -54,28 +54,25 @@ namespace Corporation
             return $"{this.Id, 4 : 0000} {this.Name}";
         }
 
-        public void RecruitPerson(string firstName, string lastName, Level position, uint age)
+        public void RecruitPerson(string firstName, string lastName, uint age, Level position)
         {
-            switch (position)
+            switch (position)                                                               //некрасивый switch
             {
                 case Level.Intern:
-                    this.panel.Add(new Intern(firstName, lastName, position, this, age));
+                    this.panel.Add(new Intern(firstName, lastName, age, position, this));
                     break;
                 case Level.Worker:
-                    this.panel.Add(new Worker(firstName, lastName, position, this, age, Employee.initialHours));
+                    this.panel.Add(new Worker(firstName, lastName, age, position, this, Employee.initialHours));
                     break;
                 case Level.CPO:
-                    this.panel.Add(new Boss(firstName, lastName, position, this, age));
-                    break;
+                   
                 case Level.CTO:
-                    this.panel.Add(new Boss(firstName, lastName, position, this, age));
-                    break;
+                   
                 case Level.CEO:
-                    this.panel.Add(new Boss(firstName, lastName, position, this, age));
+                    this.panel.Add(new Boss(firstName, lastName, age, position, this));
                     break;
                 default:
                     throw new Exception("Неизвестная должность");
-                    break;
             }
         }
                
@@ -108,34 +105,30 @@ namespace Corporation
             {
                 child = new Department(item.Value<uint>("Id"), item.Value<string>("Name"));
 
-                foreach (var person in item["Staff"]) // так можно было?
+                foreach (var employee in item["Staff"]) // так можно было?
                 {
-                    position = (Level)person.Value<byte>("Position");
+                    position = (Level)employee.Value<byte>("Position");
                     switch (position)
                     {
                         case Level.Intern:
-                            child.panel.Add(new Intern(person.Value<uint>("Id"), person.Value<string>("FirstName"),
-                                person.Value<string>("LastName"), position, child, person.Value<uint>("Age")));
+                            child.panel.Add(new Intern(employee.Value<uint>("Id"), employee.Value<string>("FirstName"),
+                                employee.Value<string>("LastName"), employee.Value<uint>("Age"), position, child));
                             break;
                         case Level.Worker:
-                            child.panel.Add(new Worker(person.Value<uint>("Id"), person.Value<string>("FirstName"),
-                                person.Value<string>("LastName"), position, child, person.Value<uint>("Age"), person.Value<uint>("Hours")));
+                            child.panel.Add(new Worker(employee.Value<uint>("Id"), employee.Value<string>("FirstName"),
+                                employee.Value<string>("LastName"), employee.Value<uint>("Age"), position, child, employee.Value<uint>("Hours")));
                             break;
                         case Level.CPO:
-                            child.panel.Add(new Boss(person.Value<uint>("Id"), person.Value<string>("FirstName"),
-                               person.Value<string>("LastName"), position, child, person.Value<uint>("Age")));
-                            break;
+                            
                         case Level.CTO:
-                            child.panel.Add(new Boss(person.Value<uint>("Id"), person.Value<string>("FirstName"),
-                               person.Value<string>("LastName"), position, child, person.Value<uint>("Age")));
-                            break;
+                           
                         case Level.CEO:
-                            child.panel.Add(new Boss(person.Value<uint>("Id"), person.Value<string>("FirstName"),
-                               person.Value<string>("LastName"), position, child, person.Value<uint>("Age")));
+                            child.panel.Add(new Boss(employee.Value<uint>("Id"), employee.Value<string>("FirstName"),
+                               employee.Value<string>("LastName"), employee.Value<uint>("Age"), position, child));
                             break;
                         default:
                             throw new Exception("Неизвестная должность");
-                            break;
+                            
                     }
                 }
                 IList<JToken> grandChildren = item["Children"].Children().ToList(); 
@@ -151,7 +144,7 @@ namespace Corporation
                 this.Children.Add(new Department($"Отдел {tier}-{this.Id}-{i + 1}"));
                 
                 this.Children[i].RecruitPerson(Guid.NewGuid().ToString().Substring(0, 5),
-                    Guid.NewGuid().ToString().Substring(0, 8), Level.CPO, (uint)Randomize.Next(20, 66));
+                    Guid.NewGuid().ToString().Substring(0, 8), (uint)Randomize.Next(20, 66), Level.CPO);
                
                 for (int j = 0; j < Randomize.Next(2, maxStaff < 1 ? 2 : maxStaff +1); j++)
                 {
@@ -159,7 +152,7 @@ namespace Corporation
                     uint randomAge = (uint)Randomize.Next(18, 23 * ((int)randomLevel + 1));
 
                     this.Children[i].RecruitPerson(Guid.NewGuid().ToString().Substring(0, 5), 
-                        Guid.NewGuid().ToString().Substring(0, 8), randomLevel, randomAge);
+                        Guid.NewGuid().ToString().Substring(0, 8), randomAge, randomLevel);
                 }
                 if (maxDepth > 1)
                     this.Children[i].CreateRandomChildren(maxChilds - tier, maxDepth - 1, maxStaff, tier + 1);

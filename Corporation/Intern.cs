@@ -9,18 +9,17 @@ namespace Corporation
 {
     class Intern : Employee
     {
-        public Intern(string FirstName, string LastName, Level Position, Department Department, uint Age)
-            : base(FirstName, LastName, Position, Department, Age)
+        public Intern(string FirstName, string LastName, uint Age, Level Position, Department Department)
+            : base(FirstName, LastName, Age, Position, Department)
         {
-            this.Id = GenerateId.Next();
+            
         }
 
         [JsonConstructor]
-        public Intern(uint Id, string FirstName, string LastName, Level Position, Department Department, uint Age) 
-            : base(FirstName, LastName, Position, Department, Age)
+        public Intern(uint Id, string FirstName, string LastName, uint Age, Level Position, Department Department) 
+            : base(Id, FirstName, LastName, Age, Position, Department)
         {
-            this.Id = Id;
-            GenerateId.InitId(Id);
+           
         }
 
         public override decimal Salary() { return internSalary; }
