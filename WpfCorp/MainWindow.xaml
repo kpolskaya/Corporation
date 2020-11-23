@@ -77,10 +77,15 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
+                <ComboBox x:Name="Position" Grid.Row="4" Grid.Column="1"
+                          Width="100" HorizontalAlignment="Left" VerticalAlignment="Center" 
+                         IsEnabled="{Binding ElementName=AddRadioButton, Path=IsChecked}"/>
+
                 <RadioButton x:Name="AddRadioButton" Grid.Row="0" 
                              Grid.Column="0" GroupName="EditRecord" 
                              Content="Добавить" IsChecked="True" 
-                             VerticalAlignment="Center" HorizontalAlignment="Center" />
+                             VerticalAlignment="Center" HorizontalAlignment="Center"
+                             Checked="AddChecked"/>
                 
                 <RadioButton x:Name="EditRadioButton" Grid.Row="0" 
                              Grid.Column="1" GroupName="EditRecord" 
@@ -118,9 +123,6 @@
                          HorizontalAlignment="Left" 
                          VerticalAlignment="Center"/>
                 
-                <ComboBox x:Name="Position" Grid.Row="4" Grid.Column="1"
-                          Width="100" HorizontalAlignment="Left" VerticalAlignment="Center" 
-                         IsEnabled="{Binding ElementName=AddRadioButton, Path=IsChecked}"/>
                 
                 <TextBox x:Name="Age" Grid.Row="3" Grid.Column="1" 
                          Text="{Binding Age}" Width="40" 
@@ -134,7 +136,8 @@
                 <Button x:Name="Add"  Grid.Row="5" Grid.Column="0" 
                         Content="Добавить" Height="20" Width="100" 
                         HorizontalAlignment="Center" VerticalAlignment="Center"
-                        IsEnabled="{Binding ElementName=AddRadioButton, Path=IsChecked}"/>
+                        IsEnabled="{Binding ElementName=AddRadioButton, Path=IsChecked}"
+                        PreviewMouseLeftButtonUp="AddButtonMouseLeftButtonUp"/>
 
             </Grid>
            

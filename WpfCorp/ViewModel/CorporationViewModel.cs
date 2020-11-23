@@ -16,12 +16,12 @@ namespace WpfCorp.ViewModel
     public class CorporationViewModel
     {
         DepartmentViewModel board;
-        ReadOnlyCollection<DepartmentViewModel> firstTier;
+        ObservableCollection<DepartmentViewModel> firstTier;
 
         public CorporationViewModel(Department Board)
         {
             this.board = new DepartmentViewModel (Board);
-            this.firstTier = new ReadOnlyCollection<DepartmentViewModel>(
+            this.firstTier = new ObservableCollection<DepartmentViewModel>(
                 new DepartmentViewModel[]
                 {
                     this.board
@@ -31,7 +31,7 @@ namespace WpfCorp.ViewModel
         }
 
         //public DepartmentViewModel Board { get { return board; } }
-        public ReadOnlyCollection<DepartmentViewModel> FirstTier { get { return firstTier; } }
+        public ObservableCollection<DepartmentViewModel> FirstTier { get { return firstTier; } }
 
         public DepartmentViewModel SelectedItem
         {
@@ -41,19 +41,19 @@ namespace WpfCorp.ViewModel
             }
         }
 
-        private List<DepartmentViewModel> Traverse (ReadOnlyCollection<DepartmentViewModel> children)
+        private List<DepartmentViewModel> Traverse (Collection<DepartmentViewModel> children)
         {
-            List<DepartmentViewModel> treeViewItems = new List<DepartmentViewModel>();
+            List<DepartmentViewModel> treeItems = new List<DepartmentViewModel>();
 
             foreach (var item in children)
             {
-                treeViewItems.Add(item);
+                treeItems.Add(item);
 
                 if (item.Children != null && item.Children.Count >0)
-                    treeViewItems.AddRange(Traverse(item.Children));
+                    treeItems.AddRange(Traverse(item.Children));
             }
 
-            return treeViewItems;
+            return treeItems;
         }
 
     }

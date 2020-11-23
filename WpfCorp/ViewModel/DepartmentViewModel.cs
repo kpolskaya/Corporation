@@ -11,12 +11,15 @@ namespace WpfCorp.ViewModel
 {
     public class DepartmentViewModel : INotifyPropertyChanged
     {
-        ReadOnlyCollection<DepartmentViewModel> children;
+        ObservableCollection<DepartmentViewModel> children;
         readonly Department department;
         readonly DepartmentViewModel parent;
+        
 
         bool isExpanded;
         bool isSelected;
+        
+        //ObservableCollection<EmployeeViewModel> staff;
 
         public DepartmentViewModel(Department Department) : this(Department, null)
         {
@@ -28,13 +31,19 @@ namespace WpfCorp.ViewModel
             this.department = Department;
             this.parent = Parent;
             // рекурсивно оборачиваем все нижестоящие департаменты в DepartmentViewModel класс
-            this.children = new ReadOnlyCollection<DepartmentViewModel>(
-                            (from child in this.department.Children
-                             select new DepartmentViewModel(child, this))
-                             .ToList<DepartmentViewModel>());
+            this.children = new ObservableCollection<DepartmentViewModel>(
+                            
+                (from child in this.department.Children
+                select new DepartmentViewModel(child, this))
+                .ToList<DepartmentViewModel>());
+
+            //this.staff = InitPanel();
         }
 
-        public ReadOnlyCollection<DepartmentViewModel> Children { get { return children; } }
+        public ReadOnlyObservableCollection<EmployeeViewModel> Staff { get { return new ReadOnlyObservableCollection<EmployeeViewModel>(InitPanel()); } }
+        public DepartmentViewModel Parent { get { return this.parent; } }
+
+        public ObservableCollection<DepartmentViewModel> Children { get { return children; } } //readonly?
 
         public string Name { get { return this.department.Name; } }
         public string Id { get { return this.department.Id.ToString(); } }
@@ -74,15 +83,30 @@ namespace WpfCorp.ViewModel
             }
         }
 
-        public ReadOnlyCollection<Employee> Staff { get { return this.department.Staff; } }
-        public DepartmentViewModel Parent { get { return this.parent; } }
-
+        public void RecruitPerson(string firstName, string lastName, uint age, Level position)
+        {
+            this.department.RecruitPerson(firstName, lastName, age, position);
+            this.OnPropertyChanged("Staff");
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        
+        /// <summary>
+        ///  Оборачивает всех сотрудников в EmployeeViewModel
+        /// </summary>
+        /// <returns>Возвращает коллекцию сотрудников департамента</returns>
+        private ObservableCollection<EmployeeViewModel> InitPanel() //Прикрутить сортировку
+        {
+            return new ObservableCollection<EmployeeViewModel>(
+                            
+                (from employee in this.department.Staff
+                select new EmployeeViewModel(employee))
+                .ToList<EmployeeViewModel>());
         }
     }
 }

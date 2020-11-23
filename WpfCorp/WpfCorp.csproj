@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="ViewModel\CorporationViewModel.cs" />
     <Compile Include="ViewModel\DepartmentViewModel.cs" />
+    <Compile Include="ViewModel\EmployeeViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

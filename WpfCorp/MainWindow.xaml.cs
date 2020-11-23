@@ -46,5 +46,18 @@ namespace WpfCorp
         {
             Position.SelectedIndex = -1;
         }
+
+        private void AddButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Level position = (Level)Position.SelectedValue;
+            corpPresenter.SelectedItem.RecruitPerson(FirstName.Text, LastName.Text, uint.Parse(Age.Text), position);
+            
+        }
+
+        private void AddChecked(object sender, RoutedEventArgs e)
+        {
+            //if (Position != null)
+            //    Position.SelectedIndex = 0; // когда и где ренерится?
+        }
     }
 }
