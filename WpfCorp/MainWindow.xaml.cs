@@ -24,6 +24,7 @@ namespace WpfCorp
     {
         Repository myCorp;
         CorporationViewModel corpPresenter;
+        Person currentPerson;
 
         public MainWindow()
         {
@@ -31,33 +32,71 @@ namespace WpfCorp
 
             myCorp = new Repository(11, 5, 8);
             corpPresenter = new CorporationViewModel(myCorp.Board);
+            currentPerson = new Person("", "", 0);
             DataContext = corpPresenter;
-            Position.ItemsSource = Enum.GetValues(typeof(Level)).Cast<Level>();
+            PositionChoice.ItemsSource = Enum.GetValues(typeof(Level)).Cast<Level>();
         }
 
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            //Selected.Text = corpPresenter.SelectedItem == null ? "Ничего не выбрано" :
-            //   corpPresenter.SelectedItem.Name;
-            //Personnel.ItemsSource = corpPresenter.SelectedItem.Staff;
-        }
-
-        private void EditChecked(object sender, RoutedEventArgs e)
-        {
-            Position.SelectedIndex = -1;
-        }
-
+       
         private void AddButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Level position = (Level)Position.SelectedValue;
+            Level position = (Level)PositionChoice.SelectedValue;
             corpPresenter.SelectedItem.RecruitPerson(FirstName.Text, LastName.Text, uint.Parse(Age.Text), position);
+            ClearAddForm();
             
         }
 
-        private void AddChecked(object sender, RoutedEventArgs e)
+        private void ClearButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            //if (Position != null)
-            //    Position.SelectedIndex = 0; // когда и где ренерится?
+            ClearAddForm();
+
+        }
+
+        private void CompanyTreeSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            
+        }
+
+        private void PersonnelSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (Personnel.SelectedItem != null)
+            {
+                currentPerson.FirstName = ((EmployeeViewModel)Personnel.SelectedItem).FirstName;
+                currentPerson.LastName = ((EmployeeViewModel)Personnel.SelectedItem).LastName;
+                currentPerson.Age = ((EmployeeViewModel)Personnel.SelectedItem).Age;
+            }
+            
+        }
+
+        private void ResetButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ResetEditDataForm();
+        }
+
+        private void ModifyButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ((EmployeeViewModel)Personnel.SelectedItem).ApplyNewData(NewFirstName.Text, NewLastName.Text, uint.Parse(NewAge.Text));
+        }
+
+        private void DeleteButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            corpPresenter.SelectedItem.DismissEmployee((EmployeeViewModel)Personnel.SelectedItem);
+        }
+
+        private void ResetEditDataForm() // Почему-то глючит!!!,,???
+        {
+            //NewFirstName.Text = currentPerson.FirstName;
+            //NewLastName.Text = currentPerson.LastName;
+            //NewAge.Text = currentPerson.Age.ToString();
+            
+        }
+
+        private void ClearAddForm()
+        {
+            PositionChoice.SelectedIndex = -1;
+            FirstName.Text = "";
+            LastName.Text = "";
+            Age.Text = "";
         }
     }
 }

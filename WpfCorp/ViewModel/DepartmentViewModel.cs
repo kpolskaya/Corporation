@@ -89,6 +89,12 @@ namespace WpfCorp.ViewModel
             this.OnPropertyChanged("Staff");
         }
 
+        public void DismissEmployee(EmployeeViewModel employee)
+        {
+            this.department.DismissEmployee(employee.Id);
+            this.OnPropertyChanged("Staff");
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -97,15 +103,16 @@ namespace WpfCorp.ViewModel
         }
         
         /// <summary>
-        ///  Оборачивает всех сотрудников в EmployeeViewModel
+        ///  Оборачивает всех сотрудников  этого департамента в EmployeeViewModel
         /// </summary>
-        /// <returns>Возвращает коллекцию сотрудников департамента</returns>
-        private ObservableCollection<EmployeeViewModel> InitPanel() //Прикрутить сортировку
+        /// <returns>Возвращает коллекцию сотрудников департамента, попутно отсортированную по должности</returns>
+        private ObservableCollection<EmployeeViewModel> InitPanel() 
         {
             return new ObservableCollection<EmployeeViewModel>(
                             
                 (from employee in this.department.Staff
-                select new EmployeeViewModel(employee))
+                 orderby employee.Position descending
+                 select new EmployeeViewModel(employee))
                 .ToList<EmployeeViewModel>());
         }
     }
