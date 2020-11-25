@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace WpfCorp.ViewModel
     /// также позволит работать с данными, если на верхнем уровне будет не один, а несколько департаментов
     /// (можно будет создать массив объектов - представлений департаментов и передать его как корневой элемент)
     /// </summary>
-    public class CorporationViewModel
+    public class CorporationViewModel : INotifyPropertyChanged
     {
         DepartmentViewModel board;
         ObservableCollection<DepartmentViewModel> firstTier;
@@ -28,6 +29,7 @@ namespace WpfCorp.ViewModel
                 }
                 );
             
+            
         }
 
         //public DepartmentViewModel Board { get { return board; } }
@@ -40,6 +42,8 @@ namespace WpfCorp.ViewModel
                 return Traverse(firstTier).FirstOrDefault<DepartmentViewModel>(i => i.IsSelected);
             }
         }
+
+        
 
         private List<DepartmentViewModel> Traverse (Collection<DepartmentViewModel> children)
         {
@@ -56,5 +60,23 @@ namespace WpfCorp.ViewModel
             return treeItems;
         }
 
+        public void CreateNewCorp (Department newBoard)
+        {
+            this.board = new DepartmentViewModel(newBoard);
+            this.firstTier = new ObservableCollection<DepartmentViewModel>(
+                new DepartmentViewModel[]
+                {
+                    this.board
+                }
+                );
+            OnPropertyChanged("FirstTier");
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged (string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

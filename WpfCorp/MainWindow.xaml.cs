@@ -22,18 +22,36 @@ namespace WpfCorp
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static readonly DependencyProperty CompanyProperty;
+        public CorporationViewModel corpPresenter
+        {
+            get { return (CorporationViewModel)GetValue(CompanyProperty); }
+        
+        
+            set {SetValue(CompanyProperty, value); }
+        }
+
+        static MainWindow()
+        {
+            CompanyProperty = DependencyProperty.Register(
+                "corpPresenter",
+                typeof(CorporationViewModel),
+                typeof(MainWindow));
+        }
+
         Repository myCorp;
-        CorporationViewModel corpPresenter;
+        
         //Person currentPerson;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            myCorp = new Repository(11, 5, 8);
+            myCorp = new Repository();
             corpPresenter = new CorporationViewModel(myCorp.Board);
             //currentPerson = new Person("", "", 0);
-            DataContext = corpPresenter;
+            //DataContext = corpPresenter;
+            
             PositionChoice.ItemsSource = Enum.GetValues(typeof(Level)).Cast<Level>();
         }
 
@@ -87,6 +105,12 @@ namespace WpfCorp
             FirstName.Text = "";
             LastName.Text = "";
             Age.Text = "18";
+        }
+
+        private void MenuItemGenerateClick(object sender, RoutedEventArgs e)
+        {
+            myCorp.CreateRandomCorp(10, 5, 8);
+            corpPresenter.CreateNewCorp(myCorp.Board);
         }
     }
 }
