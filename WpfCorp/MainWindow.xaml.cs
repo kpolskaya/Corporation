@@ -24,7 +24,7 @@ namespace WpfCorp
     {
         Repository myCorp;
         CorporationViewModel corpPresenter;
-        Person currentPerson;
+        //Person currentPerson;
 
         public MainWindow()
         {
@@ -32,7 +32,7 @@ namespace WpfCorp
 
             myCorp = new Repository(11, 5, 8);
             corpPresenter = new CorporationViewModel(myCorp.Board);
-            currentPerson = new Person("", "", 0);
+            //currentPerson = new Person("", "", 0);
             DataContext = corpPresenter;
             PositionChoice.ItemsSource = Enum.GetValues(typeof(Level)).Cast<Level>();
         }
@@ -54,23 +54,20 @@ namespace WpfCorp
 
         private void CompanyTreeSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            
+            //не нужна?
         }
 
         private void PersonnelSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Personnel.SelectedItem != null)
-            {
-                currentPerson.FirstName = ((EmployeeViewModel)Personnel.SelectedItem).FirstName;
-                currentPerson.LastName = ((EmployeeViewModel)Personnel.SelectedItem).LastName;
-                currentPerson.Age = ((EmployeeViewModel)Personnel.SelectedItem).Age;
-            }
+            //не нужна?
             
         }
 
         private void ResetButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ResetEditDataForm();
+            
+            ((EmployeeViewModel)Personnel.SelectedItem).Refresh(); 
+           
         }
 
         private void ModifyButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -83,20 +80,13 @@ namespace WpfCorp
             corpPresenter.SelectedItem.DismissEmployee((EmployeeViewModel)Personnel.SelectedItem);
         }
 
-        private void ResetEditDataForm() // Почему-то глючит!!!,,???
-        {
-            //NewFirstName.Text = currentPerson.FirstName;
-            //NewLastName.Text = currentPerson.LastName;
-            //NewAge.Text = currentPerson.Age.ToString();
-            
-        }
-
+       
         private void ClearAddForm()
         {
             PositionChoice.SelectedIndex = -1;
             FirstName.Text = "";
             LastName.Text = "";
-            Age.Text = "";
+            Age.Text = "18";
         }
     }
 }

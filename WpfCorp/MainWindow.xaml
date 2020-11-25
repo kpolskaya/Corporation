@@ -127,18 +127,18 @@
                             VerticalAlignment="Center"/>
 
                         <TextBox x:Name="NewLastName" Grid.Row="1" Grid.Column="1" 
-                            Text="{Binding LastName, Mode=OneWay}" Width="120" 
+                            Text="{Binding LastName, Mode=OneTime}" Width="120" 
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Center"/>
 
                         <TextBox x:Name="NewFirstName" Grid.Row="2" Grid.Column="1" 
-                            Text="{Binding FirstName, Mode=OneWay}" Width="120" 
+                            Text="{Binding FirstName, Mode=OneTime}" Width="120" 
                             HorizontalAlignment="Left" 
                             VerticalAlignment="Center"/>
 
 
                         <TextBox x:Name="NewAge" Grid.Row="3" Grid.Column="1" 
-                            Text="{Binding Age, Mode=OneWay}" Width="40" 
+                            Text="{Binding Age, Mode=OneTime}" Width="40" 
                             HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
                         <Button x:Name="Modify"  Grid.Row="4" Grid.Column="1" 

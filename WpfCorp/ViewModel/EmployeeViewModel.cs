@@ -46,10 +46,16 @@ namespace WpfCorp.ViewModel
             this.employee.Age = newAge;
             OnPropertyChanged("");
         }
+
+        public void Refresh() //маленький хак, чтобы обновить DataContext. а как надо?
+        {
+            this.IsSelected = false;
+            this.IsSelected = true;
+        }
         
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName)
+        protected virtual void OnPropertyChanged(string propertyName) // попробовать сделать необязательный параметр с дефолтным null
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
