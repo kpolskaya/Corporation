@@ -12,13 +12,13 @@ namespace Corporation
 {
     public class Repository
     {
-        static string DefoultPath;
+        static string DefaultPath;
        
         static readonly int FirstTier;
 
         static Repository()
         {
-            DefoultPath = @"db.json";
+            DefaultPath = @"db.json";
             FirstTier = 1;
         }
    

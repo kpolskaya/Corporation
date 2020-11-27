@@ -16,34 +16,36 @@ namespace WpfCorp.ViewModel
     /// </summary>
     public class CorporationViewModel : INotifyPropertyChanged
     {
-        DepartmentViewModel board;
-        ObservableCollection<DepartmentViewModel> firstTier;
+        static Repository repository;
 
-        public CorporationViewModel(Department Board)
+        static CorporationViewModel()
         {
-            this.board = new DepartmentViewModel (Board);
-            this.firstTier = new ObservableCollection<DepartmentViewModel>(
+            repository = new Repository();
+        }
+
+        DepartmentViewModel board;
+        ObservableCollection<DepartmentViewModel> rootDepartmen;
+
+        public CorporationViewModel()
+        {
+            this.board = new DepartmentViewModel (repository.Board);
+            this.rootDepartmen = new ObservableCollection<DepartmentViewModel>(
                 new DepartmentViewModel[]
                 {
                     this.board
                 }
                 );
-            
-            
         }
 
-        //public DepartmentViewModel Board { get { return board; } }
-        public ObservableCollection<DepartmentViewModel> FirstTier { get { return firstTier; } }
+        public ObservableCollection<DepartmentViewModel> RootDepartment { get { return rootDepartmen; } }
 
         public DepartmentViewModel SelectedItem
         {
             get
             {
-                return Traverse(firstTier).FirstOrDefault<DepartmentViewModel>(i => i.IsSelected);
+                return Traverse(rootDepartmen).FirstOrDefault<DepartmentViewModel>(i => i.IsSelected);
             }
         }
-
-        
 
         private List<DepartmentViewModel> Traverse (Collection<DepartmentViewModel> children)
         {
@@ -53,23 +55,24 @@ namespace WpfCorp.ViewModel
             {
                 treeItems.Add(item);
 
-                if (item.Children != null && item.Children.Count >0)
+                if (item.Children != null && item.Children.Count > 0)
                     treeItems.AddRange(Traverse(item.Children));
             }
 
             return treeItems;
         }
 
-        public void CreateNewCorp (Department newBoard)
+        public void CreateRandomCorp (int maxChildren, int maxDepth, int maxStaff)
         {
-            this.board = new DepartmentViewModel(newBoard);
-            this.firstTier = new ObservableCollection<DepartmentViewModel>(
+            repository.CreateRandomCorp(maxChildren, maxDepth, maxStaff);
+            this.board = new DepartmentViewModel(repository.Board);
+            this.rootDepartmen = new ObservableCollection<DepartmentViewModel>(
                 new DepartmentViewModel[]
                 {
                     this.board
                 }
                 );
-            OnPropertyChanged("FirstTier");
+            OnPropertyChanged("RootDepartment");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

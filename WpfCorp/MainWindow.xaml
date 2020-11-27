@@ -31,7 +31,7 @@
             </Grid.ColumnDefinitions>
             <!--почему не работет биндинг?-->
             <TreeView DataContext="{Binding ElementName=mainWindow, Path=corpPresenter, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding Path=FirstTier}" 
+                      ItemsSource="{Binding Path=RootDepartment}" 
                       Grid.Column="0"  Name="CompanyTree"
                       SelectedItemChanged="CompanyTreeSelectedItemChanged">
                 <TreeView.ItemContainerStyle>
@@ -260,7 +260,7 @@
            
         </Grid >
         <StatusBar Height="23" Grid.Row="2" DataContext="{Binding ElementName=CompanyTree, Path=SelectedItem }">
-            <TextBlock  x:Name="Selected" Text="{Binding Name}"/>
+            <TextBlock  x:Name="Selected" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
         </StatusBar>
 
     </Grid>

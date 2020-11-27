@@ -137,9 +137,9 @@ namespace Corporation
             }
         }
 
-        public void CreateRandomChildren(int maxChilds, int maxDepth, int maxStaff, int tier)
+        public void CreateRandomChildren(int maxChildren, int maxDepth, int maxStaff, int tier)
         {
-            for (int i = 0; i < Randomize.Next(maxChilds < 0 ? 0 : maxChilds+1); i++)
+            for (int i = 0; i < Randomize.Next(maxChildren < 0 ? 0 : maxChildren+1); i++)
             {
                 this.Children.Add(new Department($"Отдел {tier}-{this.Id}-{i + 1}"));
                 
@@ -155,7 +155,7 @@ namespace Corporation
                         Guid.NewGuid().ToString().Substring(0, 8), randomAge, randomLevel);
                 }
                 if (maxDepth > 1)
-                    this.Children[i].CreateRandomChildren(maxChilds - tier, maxDepth - 1, maxStaff, tier + 1);
+                    this.Children[i].CreateRandomChildren(maxChildren - 1, maxDepth - 1, maxStaff, tier + 1);
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,7 +40,7 @@ namespace WpfCorp
                 typeof(MainWindow));
         }
 
-        Repository myCorp;
+        //Repository myCorp;
         
         //Person currentPerson;
 
@@ -47,11 +48,11 @@ namespace WpfCorp
         {
             InitializeComponent();
 
-            myCorp = new Repository();
-            corpPresenter = new CorporationViewModel(myCorp.Board);
+            //myCorp = new Repository();
+            corpPresenter = new CorporationViewModel();
             //currentPerson = new Person("", "", 0);
             //DataContext = corpPresenter;
-            
+            corpPresenter.PropertyChanged += WhatsUp;
             PositionChoice.ItemsSource = Enum.GetValues(typeof(Level)).Cast<Level>();
         }
 
@@ -72,7 +73,7 @@ namespace WpfCorp
 
         private void CompanyTreeSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            //не нужна?
+            Selected.Text = corpPresenter.SelectedItem.Name; // потом это все убрать нахрен
         }
 
         private void PersonnelSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -109,8 +110,13 @@ namespace WpfCorp
 
         private void MenuItemGenerateClick(object sender, RoutedEventArgs e)
         {
-            myCorp.CreateRandomCorp(10, 5, 8);
-            corpPresenter.CreateNewCorp(myCorp.Board);
+            //myCorp.CreateRandomCorp(10, 5, 8);
+            corpPresenter.CreateRandomCorp(5, 5, 5);
+        }
+
+        private void WhatsUp(object sender, PropertyChangedEventArgs e)
+        {
+            Selected.Text = $"Изменилось поле {e.PropertyName}"; // баловство
         }
     }
 }
