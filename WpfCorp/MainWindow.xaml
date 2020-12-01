@@ -16,6 +16,7 @@
         <DockPanel Grid.Row="0" Height="Auto">
             <Menu DockPanel.Dock="Left">
                 <MenuItem Header="Файл">
+                    <MenuItem Header="Открыть" Click="MenuItemOpenClick" />
                     <MenuItem Header="Сгенерировать" Click="MenuItemGenerateClick"/>
                     <MenuItem Header="Сохранить..." Click="MenuItemSaveClick" />
                 </MenuItem>
@@ -65,7 +66,7 @@
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-
+                        <EventSetter Event="PreviewMouseLeftButtonUp" Handler="ModifyButtonMouseLeftButtonUp"/>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.View>

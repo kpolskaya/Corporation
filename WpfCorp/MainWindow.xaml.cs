@@ -106,9 +106,10 @@ namespace WpfCorp
         private void ResetButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
 
-            // работает через жопу, нужно по-другому
-            if (Personnel.SelectedItem != null)
-                ((EmployeeViewModel)Personnel.SelectedItem).Refresh();
+            // работает через жопу, а как по-другому
+            
+            //if (Personnel.SelectedItem != null) //переделано с ?
+                ((EmployeeViewModel)Personnel.SelectedItem)?.Refresh();
 
             // не работает
             //var be = BindingOperations.GetBindingBase(EditForm, DataContextProperty);
@@ -160,6 +161,16 @@ namespace WpfCorp
             {
                 corpPresenter.Save(f.FileName);
                 Selected.Text = $"Данные сохранены в файл {f.FileName}";
+            }
+        }
+
+        private void MenuItemOpenClick(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog f = new OpenFileDialog();
+            if ((bool)f.ShowDialog())
+            {
+                corpPresenter.Load(f.FileName);
+                Selected.Text = $"Данные загружены из файла {f.FileName}";
             }
         }
     }

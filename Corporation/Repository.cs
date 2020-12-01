@@ -30,8 +30,6 @@ namespace Corporation
             CreateRandomCorp(MaxChildren, MaxDepth, MaxStaff);
         }
 
-        
-
         public void CreateRandomCorp(int maxChildren, int maxDepth, int maxStaff)
         {
             this.Board = new Department("Virtual Times Entertainment");
@@ -64,7 +62,9 @@ namespace Corporation
             IList<JToken> panel = o["Staff"].Children().ToList();
             foreach (var item in panel)
             {
-                this.Board.AddEmployee(new Boss(item.Value<uint>("Id"), item.Value<string>("FirstName"), item.Value<string>("LastName"),
+                this.Board.AddEmployee(new Boss(item.Value<uint>("Id"), //если в администрации будут не только начальники - это не сработает!
+                    item.Value<string>("FirstName"), 
+                    item.Value<string>("LastName"),
                     item.Value<uint>("Age"),
                     (Level)item.Value<byte>("Position"),
                     this.Board));

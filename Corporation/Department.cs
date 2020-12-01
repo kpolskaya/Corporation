@@ -107,7 +107,7 @@ namespace Corporation
 
                 foreach (var employee in item["Staff"]) // так можно было?
                 {
-                    position = (Level)employee.Value<byte>("Position");
+                    position = (Level)employee.Value<byte>("Position"); //TODO собрать в метод и использовать его на уровне репозитория? Возможно, статический?
                     switch (position)
                     {
                         case Level.Intern:
@@ -166,7 +166,7 @@ namespace Corporation
         public void PrintHierarchy(int tier)
         {
             string indent = "";
-            for (int i = 0; i < tier; i++) //TODO избавиться от этих циклов
+            for (int i = 0; i < tier; i++) //TODO избавиться от этих циклов (конструктор строки с параметром)
             {
                 indent += "\t";
             }
@@ -197,7 +197,7 @@ namespace Corporation
         public void PrintDepartmentPanel(int tier)
         {
             string indent = "  ";
-            for (int i = 0; i < tier; i++)
+            for (int i = 0; i < tier; i++) //TODO переделать на конструктор строки
             {
                 indent += "\t";
             }

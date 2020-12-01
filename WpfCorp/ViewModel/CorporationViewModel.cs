@@ -80,6 +80,19 @@ namespace WpfCorp.ViewModel
             repository.SerializeDb(path);
         }
 
+        public void Load(string path)
+        {
+            repository.Load(path);
+            this.board = new DepartmentViewModel(repository.Board);
+            this.rootDepartmen = new ObservableCollection<DepartmentViewModel>(
+                new DepartmentViewModel[]
+                {
+                    this.board
+                }
+                );
+            OnPropertyChanged("RootDepartment");
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged (string propertyName)
