@@ -35,7 +35,7 @@ namespace Corporation
         }
        
  
-        public Level Position { get; protected set; }
+        public Level Position { get;  set; }
 
         /// <summary>
         /// Отдел (не сериализуемое свойство - для исключения циклической ссылки)

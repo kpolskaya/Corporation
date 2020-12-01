@@ -12,18 +12,71 @@ namespace WpfCorp.ViewModel
     {
         readonly Employee employee;
         bool isSelected;
-
+        
         public EmployeeViewModel(Employee Employee)
         {
             this.employee = Employee;
-        }
+         }
 
-        public string FirstName { get { return this.employee.FirstName; } private set { this.employee.FirstName = value; } }
-        public string LastName { get { return this.employee.LastName; } private set { this.employee.LastName = value; } }
-        public uint Age { get { return this.employee.Age; } private set { this.employee.Age = value; } }
-        public Level Position { get { return this.employee.Position; } }
+        public string FirstName 
+        { 
+            get 
+            { 
+                return this.employee.FirstName; 
+            } 
+            set 
+            { 
+                if (value != this.employee.FirstName)
+                {
+                    this.employee.FirstName = value;
+                    OnPropertyChanged("FirstName");
+                }
+            } 
+        }
+        public string LastName 
+        { 
+            get 
+            { 
+                return this.employee.LastName; 
+            } 
+            set 
+            { 
+                if (value != this.employee.LastName)
+                {
+                    this.employee.LastName = value;
+                    OnPropertyChanged("LastName");
+                }
+            } 
+        }
+        public uint Age 
+        { 
+            get 
+            { 
+                return this.employee.Age; 
+            } 
+            set 
+            {
+                if (value != this.employee.Age)
+                {
+                    this.employee.Age = value;
+                    OnPropertyChanged("Age");
+                }
+            } 
+        }
+        public Level Position { get { return this.employee.Position; } 
+        
+            set
+            {
+                if (value != this.employee.Position)
+                {
+                    this.employee.Position = value;
+                    OnPropertyChanged("Position");
+                }
+            }
+        }
+        
         public uint Id { get { return this.employee.Id; } }
-        public decimal Wage { get { return this.employee.Wage; } } // можно  убрать это свойство из Employee - есть же Salary()
+        public decimal Salary { get { return this.employee.Salary(); } } // можно  убрать Wage из Employee - есть же Salary()
 
         public bool IsSelected
         {
@@ -37,27 +90,26 @@ namespace WpfCorp.ViewModel
                 }
             }
         }
-        
 
-        public void ApplyNewData(string newFirstName, string newLastName, uint newAge)
-        {
-            this.employee.FirstName = newFirstName;
-            this.employee.LastName = newLastName;
-            this.employee.Age = newAge;
-            OnPropertyChanged("");
-        }
+
+        //public void ApplyNewData(string newFirstName, string newLastName, uint newAge)
+        //{
+        //    this.employee.FirstName = newFirstName;
+        //    this.employee.LastName = newLastName;
+        //    this.employee.Age = newAge;
+        //    OnPropertyChanged("FirstName");
+        //}
 
         public void Refresh() //маленький хак, чтобы обновить DataContext. а как надо?
         {
-            this.IsSelected = false;
-            this.IsSelected = true;
+            OnPropertyChanged();
         }
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName) // попробовать сделать необязательный параметр с дефолтным null
+        protected virtual void OnPropertyChanged(string PropertyNameOrDefault = null) // попробовать сделать необязательный параметр с дефолтным null
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyNameOrDefault));
         }
     }
 }

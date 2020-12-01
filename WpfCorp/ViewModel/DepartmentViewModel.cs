@@ -48,6 +48,8 @@ namespace WpfCorp.ViewModel
         public string Name { get { return this.department.Name; } }
         public string Id { get { return this.department.Id.ToString(); } }
 
+        
+
        /// <summary>
        /// Читает и устанавливает триггер объекта в соответствии с  
        /// его представлением в TreeViewItem: развернуто или свернуто

@@ -75,6 +75,11 @@ namespace WpfCorp.ViewModel
             OnPropertyChanged("RootDepartment");
         }
 
+        public void Save(string path)
+        {
+            repository.SerializeDb(path);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged (string propertyName)
