@@ -31,8 +31,8 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <!--почему не работет биндинг?-->
-            <TreeView DataContext="{Binding ElementName=mainWindow, Path=corpPresenter, UpdateSourceTrigger=PropertyChanged}"
+            
+            <TreeView DataContext="{Binding ElementName=mainWindow, Path=corpPresenter}"
                       ItemsSource="{Binding Path=RootDepartment}" 
                       Grid.Column="0"  Name="CompanyTree"
                       SelectedItemChanged="CompanyTreeSelectedItemChanged">
@@ -53,7 +53,7 @@
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                         <WrapPanel>
                             <TextBlock Text="{Binding Id}" Margin="3" />
-                            <TextBlock Text="{Binding Name}" Margin="3"/>
+                            <TextBlock Text="{Binding Name, Mode=TwoWay}" Margin="3"/>
                         </WrapPanel>
                         
                     </HierarchicalDataTemplate>
@@ -61,12 +61,12 @@
             </TreeView>
             
             <ListView Grid.Column="1" x:Name="Personnel" DataContext="{Binding ElementName=CompanyTree, 
-                Path=SelectedItem}" ItemsSource="{Binding Staff}" 
-                SelectionChanged="PersonnelSelectionChanged"><!--не знаю надо ли тут NotifyOnSourceUpdated?-->
+                    Path=SelectedItem}" ItemsSource="{Binding Staff}" 
+                    SelectionChanged="PersonnelSelectionChanged" >
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                        <EventSetter Event="PreviewMouseLeftButtonUp" Handler="ModifyButtonMouseLeftButtonUp"/>
+                        <EventSetter Event="PreviewMouseDoubleClick" Handler="ModifyButtonMouseLeftButtonUp"/>
                     </Style>
                 </ListView.ItemContainerStyle>
                 <ListView.View>

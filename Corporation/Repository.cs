@@ -39,7 +39,7 @@ namespace Corporation
                 this.Board.CreateRandomChildren(maxChildren, maxDepth, maxStaff, FirstTier);
         }
 
-        public void SerializeDb(string path)
+        public void Save(string path)
         {
             
             string jsonString = JsonConvert.SerializeObject(Board, Formatting.Indented); 

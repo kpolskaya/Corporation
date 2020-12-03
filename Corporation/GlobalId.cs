@@ -10,19 +10,19 @@ namespace Corporation
     /// <summary>
     /// Генератор уникальных ID в singleton классе
     /// </summary>
-    public sealed class GenerateId
+    public sealed class GlobalId
     {
-        static GenerateId()
+        static GlobalId()
         {
 
         }
 
-        private GenerateId()
+        private GlobalId()
         {
 
         }
 
-        private static readonly GenerateId id = new GenerateId();
+        private static readonly GlobalId id = new GlobalId();
 
         public static uint Next()
         {

@@ -31,7 +31,7 @@ namespace Corporation
         public Department(string Name)
         {
             this.Name = Name;
-            this.Id = GenerateId.Next();
+            this.Id = GlobalId.Next();
             
             this.Children = new ObservableCollection<Department>();
             this.panel = new ObservableCollection<Employee>();
@@ -42,7 +42,7 @@ namespace Corporation
         {
             this.Name = Name;
             this.Id = Id;
-            GenerateId.InitId(Id);
+            GlobalId.InitId(Id);
             this.Children = new ObservableCollection<Department>();
             this.panel = new ObservableCollection<Employee>();
             this.Staff = new ReadOnlyObservableCollection<Employee>(panel);
@@ -64,11 +64,8 @@ namespace Corporation
                 case Level.Worker:
                     this.panel.Add(new Worker(firstName, lastName, age, position, this, Employee.initialHours));
                     break;
-                case Level.CPO:
-                   
-                case Level.CTO:
-                   
-                case Level.CEO:
+
+                case Level.CPO: case Level.CTO: case Level.CEO:
                     this.panel.Add(new Boss(firstName, lastName, age, position, this));
                     break;
                 default:
@@ -116,19 +113,15 @@ namespace Corporation
                             break;
                         case Level.Worker:
                             child.panel.Add(new Worker(employee.Value<uint>("Id"), employee.Value<string>("FirstName"),
-                                employee.Value<string>("LastName"), employee.Value<uint>("Age"), position, child, employee.Value<uint>("Hours")));
+                                employee.Value<string>("LastName"), employee.Value<uint>("Age"), 
+                                position, child, employee.Value<uint>("Hours")));
                             break;
-                        case Level.CPO:
-                            
-                        case Level.CTO:
-                           
-                        case Level.CEO:
+                        case Level.CPO: case Level.CTO:  case Level.CEO:
                             child.panel.Add(new Boss(employee.Value<uint>("Id"), employee.Value<string>("FirstName"),
                                employee.Value<string>("LastName"), employee.Value<uint>("Age"), position, child));
                             break;
                         default:
                             throw new Exception("Неизвестная должность");
-                            
                     }
                 }
                 IList<JToken> grandChildren = item["Children"].Children().ToList(); 
@@ -219,7 +212,6 @@ namespace Corporation
             {
                 salaryBasis += item.TotalSalary();
             }
-
             return salaryBasis * Employee.bossSalaryProportion > Employee.minBossSalary ? 
                    salaryBasis * Employee.bossSalaryProportion : Employee.minBossSalary;
         }

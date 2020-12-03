@@ -11,8 +11,6 @@ namespace WpfCorp.ViewModel
 {
     /// <summary>
     /// Дополнительная обертка для департамента - нужна для специфических методов на уровне корпорации,
-    /// также позволит работать с данными, если на верхнем уровне будет не один, а несколько департаментов
-    /// (можно будет создать массив объектов - представлений департаментов и передать его как корневой элемент)
     /// </summary>
     public class CorporationViewModel : INotifyPropertyChanged
     {
@@ -77,7 +75,7 @@ namespace WpfCorp.ViewModel
 
         public void Save(string path)
         {
-            repository.SerializeDb(path);
+            repository.Save(path);
         }
 
         public void Load(string path)

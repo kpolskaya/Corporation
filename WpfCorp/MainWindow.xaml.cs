@@ -127,7 +127,7 @@ namespace WpfCorp
         private void DeleteButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (Personnel.SelectedItem != null)
-                corpPresenter.SelectedItem.DismissEmployee((EmployeeViewModel)Personnel.SelectedItem);
+                corpPresenter.SelectedItem?.DismissEmployee((EmployeeViewModel)Personnel.SelectedItem);
         }
 
        

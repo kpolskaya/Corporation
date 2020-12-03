@@ -45,7 +45,7 @@ namespace WpfCorp.ViewModel
 
         public ObservableCollection<DepartmentViewModel> Children { get { return children; } } //readonly?
 
-        public string Name { get { return this.department.Name; } }
+        public string Name { get { return this.department.Name; } set { this.Name = value; } }
         public string Id { get { return this.department.Id.ToString(); } }
 
         

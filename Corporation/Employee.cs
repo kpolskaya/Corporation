@@ -60,7 +60,7 @@ namespace Corporation
         {
             this.Position = Position;
             this.Department = Department;
-            this.Id = GenerateId.Next();
+            this.Id = GlobalId.Next();
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Corporation
         {
             this.Position = Position;
             this.Department = Department;
-            this.Id = GenerateId.Next();
+            this.Id = GlobalId.Next();
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace Corporation
             this.Position = Position;
             this.Department = Department;
             this.Id = Id;
-            GenerateId.InitId(Id);
+            GlobalId.InitId(Id);
         }
 
         /// <summary>

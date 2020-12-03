@@ -54,7 +54,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Employee.cs" />
-    <Compile Include="GenerateId.cs" />
+    <Compile Include="GlobalId.cs" />
     <Compile Include="Worker.cs" />
   </ItemGroup>
   <ItemGroup>
