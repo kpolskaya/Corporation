@@ -173,5 +173,15 @@ namespace WpfCorp
                 Selected.Text = $"Данные загружены из файла {f.FileName}";
             }
         }
+
+        private void DeleteDepartmentMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            corpPresenter.DeleteSelection();
+        }
+
+        private void AddDepartmentMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            corpPresenter.CreateDepartment();
+        }
     }
 }

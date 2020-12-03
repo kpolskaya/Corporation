@@ -45,7 +45,15 @@ namespace WpfCorp.ViewModel
 
         public ObservableCollection<DepartmentViewModel> Children { get { return children; } } //readonly?
 
-        public string Name { get { return this.department.Name; } set { this.Name = value; } }
+        public string Name { get { return this.department.Name; } 
+            set {
+                if (value != this.department.Name)
+                {
+                    this.department.Name = value;
+                    OnPropertyChanged("Name");
+                } 
+            } 
+        }
         public string Id { get { return this.department.Id.ToString(); } }
 
         
@@ -89,6 +97,25 @@ namespace WpfCorp.ViewModel
         {
             this.department.RecruitPerson(firstName, lastName, age, position);
             this.OnPropertyChanged("Staff");
+        }
+
+        internal void CreateDepartment() 
+        {
+            Department newDepartment = new Department("Новый департамент");
+            this.department.Children.Add(newDepartment);
+            DepartmentViewModel newDepartmentVM = new DepartmentViewModel(newDepartment, this);
+            this.children.Add(newDepartmentVM);
+            if (!IsExpanded)
+                this.IsExpanded = true;
+            OnPropertyChanged("IsExpanded");
+            OnPropertyChanged("Children");
+        }
+
+        internal void Remove(DepartmentViewModel selectedItem)
+        {
+            this.department.Children.Remove(selectedItem.department);
+            this.children.Remove(selectedItem);
+            OnPropertyChanged("Children");
         }
 
         public void DismissEmployee(EmployeeViewModel employee)

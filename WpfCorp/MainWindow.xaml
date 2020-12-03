@@ -31,34 +31,47 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            
-            <TreeView DataContext="{Binding ElementName=mainWindow, Path=corpPresenter}"
-                      ItemsSource="{Binding Path=RootDepartment}" 
-                      Grid.Column="0"  Name="CompanyTree"
-                      SelectedItemChanged="CompanyTreeSelectedItemChanged">
-                <TreeView.ItemContainerStyle>
-                    <Style TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                        <Setter Property="FontWeight" Value="Normal"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="FontWeight" Value="Bold"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TreeView.ItemContainerStyle>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                        <WrapPanel>
-                            <TextBlock Text="{Binding Id}" Margin="3" />
-                            <TextBlock Text="{Binding Name, Mode=TwoWay}" Margin="3"/>
-                        </WrapPanel>
-                        
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
+                <TreeView DataContext="{Binding ElementName=mainWindow, Path=corpPresenter}"
+                      ItemsSource="{Binding Path=RootDepartment}" 
+                      Grid.Row="0"  Name="CompanyTree"
+                      SelectedItemChanged="CompanyTreeSelectedItemChanged">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                            <Setter Property="FontWeight" Value="Normal"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="FontWeight" Value="Bold"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <WrapPanel>
+                                <TextBlock Text="{Binding Id}" Margin="3" />
+                                <TextBlock Text="{Binding Name, Mode=TwoWay}" Margin="3"/>
+                            </WrapPanel>
+
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+                <StackPanel Grid.Row="1" DataContext="{Binding ElementName=CompanyTree, Path=SelectedItem}">
+                    <TextBox x:Name="NewDepartmentName" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"/>
+                    <Button x:Name="DeleteDepartment" Content="Удалить отдел" PreviewMouseLeftButtonUp="DeleteDepartmentMouseLeftButtonUp" />
+                    <Button x:Name="AddDepartment" Content="Создать отдел" PreviewMouseLeftButtonUp="AddDepartmentMouseLeftButtonUp" />
+                </StackPanel>
+
+            </Grid>
+            
             
             <ListView Grid.Column="1" x:Name="Personnel" DataContext="{Binding ElementName=CompanyTree, 
                     Path=SelectedItem}" ItemsSource="{Binding Staff}" 

@@ -97,5 +97,17 @@ namespace WpfCorp.ViewModel
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public void DeleteSelection()
+        {
+            this.SelectedItem.Parent?.Remove(SelectedItem);
+            //OnPropertyChanged("SelectedItem");
+        }
+
+        internal void CreateDepartment()
+        {
+            this.SelectedItem?.CreateDepartment();
+            //OnPropertyChanged("");
+        }
     }
 }

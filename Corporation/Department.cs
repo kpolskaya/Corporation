@@ -21,7 +21,7 @@ namespace Corporation
             Randomize = new Random();
         }
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public uint Id { get; private set; }
 
         public ObservableCollection<Department> Children { get; set; }
