@@ -66,7 +66,13 @@ namespace WpfCorp
             PositionChoice.ItemsSource = Enum.GetValues(typeof(Level)).Cast<Level>();
         }
 
-       
+        private void DataWindow_Closing(object sender, CancelEventArgs e)
+        {
+            
+            Application.Current.Shutdown();
+        }
+
+
         private void AddButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (corpPresenter.SelectedItem == null)
@@ -81,9 +87,18 @@ namespace WpfCorp
             }
 
             Level position = (Level)PositionChoice.SelectedValue;
-            corpPresenter.SelectedItem.RecruitPerson(FirstName.Text, LastName.Text, uint.Parse(Age.Text), position);
+            try
+            {
+                corpPresenter.SelectedItem.RecruitPerson(FirstName.Text, LastName.Text, uint.Parse(Age.Text), position);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+           
             ClearAddForm();
-            
         }
 
         private void ClearButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -105,15 +120,7 @@ namespace WpfCorp
 
         private void ResetButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-
-            // работает через жопу, а как по-другому
-            
-            //if (Personnel.SelectedItem != null) //переделано с ?
-                ((EmployeeViewModel)Personnel.SelectedItem)?.Refresh();
-
-            // не работает
-            //var be = BindingOperations.GetBindingBase(EditForm, DataContextProperty);
-            //EditForm.SetBinding(DataContextProperty, be);
+            ((EmployeeViewModel)Personnel.SelectedItem)?.Refresh();
 
         }
 
@@ -127,7 +134,16 @@ namespace WpfCorp
         private void DeleteButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (Personnel.SelectedItem != null)
-                corpPresenter.SelectedItem?.DismissEmployee((EmployeeViewModel)Personnel.SelectedItem);
+                try
+                {
+                    corpPresenter.SelectedItem?.DismissEmployee((EmployeeViewModel)Personnel.SelectedItem);
+                }
+                catch (Exception ex)
+                {
+
+                    MessageBox.Show(ex.Message);
+                }
+                
         }
 
        
@@ -159,8 +175,15 @@ namespace WpfCorp
             SaveFileDialog f = new SaveFileDialog();
             if ((bool)f.ShowDialog())
             {
-                corpPresenter.Save(f.FileName);
-                Selected.Text = $"Данные сохранены в файл {f.FileName}";
+                try
+                {
+                    corpPresenter.Save(f.FileName);
+                    Selected.Text = $"Данные сохранены в файл {f.FileName}";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
 
@@ -169,8 +192,16 @@ namespace WpfCorp
             OpenFileDialog f = new OpenFileDialog();
             if ((bool)f.ShowDialog())
             {
-                corpPresenter.Load(f.FileName);
-                Selected.Text = $"Данные загружены из файла {f.FileName}";
+                try
+                {
+                    corpPresenter.Load(f.FileName);
+                    Selected.Text = $"Данные загружены из файла {f.FileName}";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                
             }
         }
 

@@ -22,7 +22,7 @@ namespace Corporation
             FirstTier = 1;
         }
    
-        public Department Board { get; set; }
+        public Administration Board { get; set; }
 
         public Repository(int MaxChildren, int MaxDepth, int MaxStaff)
         {
@@ -32,9 +32,9 @@ namespace Corporation
 
         public void CreateRandomCorp(int maxChildren, int maxDepth, int maxStaff)
         {
-            this.Board = new Department("Virtual Times Entertainment");
-            this.Board.AddEmployee(new Boss("Лев", "Мышкин", 27, Level.CEO, this.Board)); // Как запретить добавлять кого угодно без валидации?
-            this.Board.AddEmployee(new Boss("Ипполит", "Терентьев", 20, Level.CTO, this.Board));
+            this.Board = new Administration("Virtual Times Entertainment");
+            this.Board.AddEmployee(new Boss("Лев", "Мышкин", 27, Level.Director, this.Board)); 
+            this.Board.AddEmployee(new Boss("Ипполит", "Терентьев", 20, Level.Deputy, this.Board));
             if (maxDepth > 0)
                 this.Board.CreateRandomChildren(maxChildren, maxDepth, maxStaff, FirstTier);
         }
@@ -49,7 +49,7 @@ namespace Corporation
 
         public Repository()
         {
-            this.Board = new Department("Новый департамент");
+            this.Board = new Administration("Новый департамент");
         }
 
          public void Load(string path)
@@ -57,7 +57,7 @@ namespace Corporation
             string jsonString = File.ReadAllText(path, Encoding.UTF8);
             JObject o = JObject.Parse(jsonString);
 
-            this.Board = new Department(o.Value<uint>("Id"), o.Value<string>("Name"));
+            this.Board = new Administration(o.Value<uint>("Id"), o.Value<string>("Name"));
 
             IList<JToken> panel = o["Staff"].Children().ToList();
             foreach (var item in panel)

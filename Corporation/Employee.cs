@@ -12,9 +12,9 @@ namespace Corporation
     {
         Intern = 0,
         Worker = 1,
-        CPO = 40,
-        CTO = 70,
-        CEO = 80
+        Product_Manager = 40,
+        Deputy = 70,
+        Director = 80
     }
 
     public abstract class Employee : Person
@@ -34,35 +34,16 @@ namespace Corporation
             initialHours = 190;
         }
        
- 
-        public Level Position { get;  set; }
+         public Level Position { get;  set; }
 
         /// <summary>
         /// Отдел (не сериализуемое свойство - для исключения циклической ссылки)
         /// </summary>
         [JsonIgnore]
         public Department Department { get; private set; } 
-
        
         public uint Id { get; protected set; }
-
-
-        public decimal Wage { get { return Salary(); } }
-
-        /// <summary>
-        /// Создание сотрудника с автоматическим ID
-        /// </summary>
-        /// <param name="Person">Человек</param>
-        /// <param name="Position">Должность</param>
-        /// <param name="Department">Отдел</param>
-        public Employee(Person Person, Level Position, Department Department) :
-            base(Person.FirstName, Person.LastName, Person.Age)
-        {
-            this.Position = Position;
-            this.Department = Department;
-            this.Id = GlobalId.Next();
-        }
-
+      
         /// <summary>
         /// Создание сотрудника c автоматическим Id
         /// </summary>
@@ -83,7 +64,7 @@ namespace Corporation
         /// Конструктор для создания сотрудника с существующим Id - из файла
         /// </summary>
         /// <param name="Id">Табельный номер</param>
-        /// <param name="FirstName">Им</param>
+        /// <param name="FirstName">Имя</param>
         /// <param name="LastName">Фамилия</param>
         /// <param name="Age">Возраст</param>
         /// <param name="Position">Должжность</param>

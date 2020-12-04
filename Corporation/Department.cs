@@ -3,11 +3,8 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Dynamic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Corporation
 {   
@@ -24,10 +21,12 @@ namespace Corporation
         public string Name { get; set; }
         public uint Id { get; private set; }
 
-        public ObservableCollection<Department> Children { get; set; }
+        public ObservableCollection<Department> Children { get; private set; }
 
-        public ReadOnlyObservableCollection<Employee> Staff { get; private set; } 
-        
+        public ReadOnlyObservableCollection<Employee> Staff { get; private set; }
+
+        private ObservableCollection<Employee> panel;
+
         public Department(string Name)
         {
             this.Name = Name;
@@ -48,7 +47,6 @@ namespace Corporation
             this.Staff = new ReadOnlyObservableCollection<Employee>(panel);
         }
 
-
         public override string ToString()
         {
             return $"{this.Id, 4 : 0000} {this.Name}";
@@ -56,7 +54,9 @@ namespace Corporation
 
         public void RecruitPerson(string firstName, string lastName, uint age, Level position)
         {
-            switch (position)                                                               //некрасивый switch
+            if (!PositionAllowed(position))
+                throw new Exception("Недопустимая должность");
+            switch (position)                                                               
             {
                 case Level.Intern:
                     this.panel.Add(new Intern(firstName, lastName, age, position, this));
@@ -65,7 +65,7 @@ namespace Corporation
                     this.panel.Add(new Worker(firstName, lastName, age, position, this, Employee.initialHours));
                     break;
 
-                case Level.CPO: case Level.CTO: case Level.CEO:
+                case Level.Product_Manager: case Level.Deputy: case Level.Director:
                     this.panel.Add(new Boss(firstName, lastName, age, position, this));
                     break;
                 default:
@@ -81,16 +81,20 @@ namespace Corporation
             }
             catch (Exception)
             {
-                throw;
+                throw new Exception("Сотрудника с таким Id в отделе не существует");
             }
         }
 
         public void AddEmployee (Employee employee)
         {
-            if (employee.Department != null && employee.Department == this)
+            
+            if (employee.Department != null 
+                && employee.Department == this 
+                && PositionAllowed(employee.Position)) //может здесь эта проверка на должность не нцжна?
+                
                 this.panel.Add(employee);
             else
-                throw new Exception("Добавляемый сотрудник не принадлежит данному департаменту");
+                throw new Exception("Недопустимый отдел или должность");
         }
 
         public void RestoreChildren(IList<JToken> children)
@@ -116,7 +120,7 @@ namespace Corporation
                                 employee.Value<string>("LastName"), employee.Value<uint>("Age"), 
                                 position, child, employee.Value<uint>("Hours")));
                             break;
-                        case Level.CPO: case Level.CTO:  case Level.CEO:
+                        case Level.Product_Manager: case Level.Deputy:  case Level.Director:
                             child.panel.Add(new Boss(employee.Value<uint>("Id"), employee.Value<string>("FirstName"),
                                employee.Value<string>("LastName"), employee.Value<uint>("Age"), position, child));
                             break;
@@ -134,10 +138,10 @@ namespace Corporation
         {
             for (int i = 0; i < Randomize.Next(maxChildren < 0 ? 0 : maxChildren+1); i++)
             {
-                this.Children.Add(new Department($"Отдел {tier}-{this.Id}-{i + 1}"));
+                this.Children.Add(new Department(NameChild(i+1)));
                 
                 this.Children[i].RecruitPerson(Guid.NewGuid().ToString().Substring(0, 5),
-                    Guid.NewGuid().ToString().Substring(0, 8), (uint)Randomize.Next(20, 66), Level.CPO);
+                    Guid.NewGuid().ToString().Substring(0, 8), (uint)Randomize.Next(20, 66), Level.Product_Manager);
                
                 for (int j = 0; j < Randomize.Next(2, maxStaff < 1 ? 2 : maxStaff +1); j++)
                 {
@@ -150,6 +154,11 @@ namespace Corporation
                 if (maxDepth > 1)
                     this.Children[i].CreateRandomChildren(maxChildren - 1, maxDepth - 1, maxStaff, tier + 1);
             }
+        }
+
+        protected virtual string NameChild(int suffix)
+        {
+            return $"{this.Name} {suffix}.";
         }
 
         /// <summary>
@@ -204,7 +213,7 @@ namespace Corporation
             Console.WriteLine();
         }
 
-        public decimal BossSalary(Level lvl) //TODO проверка уровня
+        public decimal BossSalary(Level lvl) //TODO проверка уровня if lvl < XXX throw...
         {
             decimal salaryBasis = SubalternSalary(lvl); 
 
@@ -241,7 +250,7 @@ namespace Corporation
         /// Вся зарплата только этого департамента ниже босса указанного уровня
         /// </summary>
         /// <returns></returns>
-        private decimal SubalternSalary( Level lvl)  
+        private decimal SubalternSalary( Level lvl) 
         {
             decimal salary = 0;
 
@@ -253,6 +262,9 @@ namespace Corporation
             return salary;
         }
 
-        private ObservableCollection<Employee> panel;
+        protected virtual bool PositionAllowed(Level lvl)
+        {
+            return (lvl < Level.Deputy);
+        }
     }
 }

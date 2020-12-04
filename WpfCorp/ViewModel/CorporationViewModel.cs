@@ -45,7 +45,7 @@ namespace WpfCorp.ViewModel
             }
         }
 
-        private List<DepartmentViewModel> Traverse (Collection<DepartmentViewModel> children)
+        private static List<DepartmentViewModel> Traverse (Collection<DepartmentViewModel> children)
         {
             List<DepartmentViewModel> treeItems = new List<DepartmentViewModel>();
 
@@ -104,7 +104,7 @@ namespace WpfCorp.ViewModel
             //OnPropertyChanged("SelectedItem");
         }
 
-        internal void CreateDepartment()
+        public void CreateDepartment()
         {
             this.SelectedItem?.CreateDepartment();
             //OnPropertyChanged("");
