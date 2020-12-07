@@ -25,7 +25,7 @@ namespace Corporation
             return $"Отдел {suffix}.";
         }
 
-        protected override bool PositionAllowed(Level lvl)
+        public override bool PositionAllowed(Level lvl)
         {
             return lvl > Level.Product_Manager;
         }

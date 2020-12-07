@@ -43,15 +43,10 @@ namespace Corporation
         public Department Department { get; private set; } 
        
         public uint Id { get; protected set; }
-      
+
         /// <summary>
         /// Создание сотрудника c автоматическим Id
         /// </summary>
-        /// <param name="FirstName">Имя</param>
-        /// <param name="LastName">Фамилия</param>
-        /// <param name="Age">Возраст</param>
-        /// <param name="Position">Должность</param>
-        /// <param name="Department">Отдел</param>
         public Employee(string FirstName, string LastName, uint Age, Level Position, Department Department) :
             base(FirstName, LastName, Age)
         {
@@ -60,15 +55,15 @@ namespace Corporation
             this.Id = GlobalId.Next();
         }
 
+        public Employee(Person Person, Level Position, Department Department) :
+           this(Person.FirstName, Person.LastName, Person.Age, Position, Department)
+        {
+
+        }
+
         /// <summary>
         /// Конструктор для создания сотрудника с существующим Id - из файла
         /// </summary>
-        /// <param name="Id">Табельный номер</param>
-        /// <param name="FirstName">Имя</param>
-        /// <param name="LastName">Фамилия</param>
-        /// <param name="Age">Возраст</param>
-        /// <param name="Position">Должжность</param>
-        /// <param name="Department">Отдел</param>
         public Employee(uint Id, string FirstName, string LastName, uint Age, Level Position, Department Department) :
             base(FirstName, LastName, Age)
         {
@@ -76,6 +71,12 @@ namespace Corporation
             this.Department = Department;
             this.Id = Id;
             GlobalId.InitId(Id);
+        }
+
+        public Employee(uint Id, Person Person, Level Position, Department Department) :
+            this(Id, Person.FirstName, Person.LastName, Person.Age, Position, Department)
+        {
+
         }
 
         /// <summary>

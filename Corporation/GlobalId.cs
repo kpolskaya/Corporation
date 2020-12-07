@@ -21,9 +21,10 @@ namespace Corporation
         {
 
         }
-
+        private uint lastValue;
+        
         private static readonly GlobalId id = new GlobalId();
-
+        
         public static uint Next()
         {
             return ++id.lastValue;
@@ -37,6 +38,6 @@ namespace Corporation
         }
 
 
-        private uint lastValue;
+        
     }
 }

@@ -19,6 +19,12 @@ namespace Corporation
             this.Hours = Hours;
            
         }
+
+        public Worker(Person Person, Level Position, Department Department, uint Hours)
+            : base(Person, Position, Department)
+        {
+            this.Hours = Hours;
+        }
         
         [JsonConstructor]
         public Worker(uint Id, string FirstName, string LastName, uint Age, Level Position, Department Department, uint Hours)

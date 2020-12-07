@@ -17,6 +17,12 @@ namespace Corporation
             
         }
 
+        public Boss(Person Person, Level Position, Department Department)
+            : base(Person, Position, Department)
+        {
+
+        }
+
         [JsonConstructor]
         public Boss(uint Id, string FirstName, string LastName, uint Age, Level Position, Department Department)
             : base(Id, FirstName, LastName, Age, Position, Department)

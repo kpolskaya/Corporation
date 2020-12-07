@@ -52,6 +52,30 @@ namespace Corporation
             return $"{this.Id, 4 : 0000} {this.Name}";
         }
 
+        public void RecruitPerson(Person person, Level position)
+        {
+            if (!PositionAllowed(position))
+                throw new Exception("Недопустимая должность");
+            switch (position)
+            {
+                case Level.Intern:
+                    this.panel.Add(new Intern(person, position, this));
+                    break;
+                case Level.Worker:
+                    this.panel.Add(new Worker(person, position, this, Employee.initialHours));
+                    break;
+
+                case Level.Product_Manager:
+                case Level.Deputy:
+                case Level.Director:
+                    this.panel.Add(new Boss(person, position, this));
+                    break;
+                default:
+                    throw new Exception("Неизвестная должность");
+            }
+
+        }
+        
         public void RecruitPerson(string firstName, string lastName, uint age, Level position)
         {
             if (!PositionAllowed(position))
@@ -106,9 +130,9 @@ namespace Corporation
             {
                 child = new Department(item.Value<uint>("Id"), item.Value<string>("Name"));
 
-                foreach (var employee in item["Staff"]) // так можно было?
+                foreach (var employee in item["Staff"]) 
                 {
-                    position = (Level)employee.Value<byte>("Position"); //TODO собрать в метод и использовать его на уровне репозитория? Возможно, статический?
+                    position = (Level)employee.Value<byte>("Position"); 
                     switch (position)
                     {
                         case Level.Intern:
@@ -128,13 +152,13 @@ namespace Corporation
                             throw new Exception("Неизвестная должность");
                     }
                 }
-                IList<JToken> grandChildren = item["Children"].Children().ToList(); 
-                child.RestoreChildren(grandChildren);
+                IList<JToken> descendants = item["Children"].Children().ToList(); 
+                child.RestoreChildren(descendants);
                 this.Children.Add(child);
             }
         }
 
-        public void CreateRandomChildren(int maxChildren, int maxDepth, int maxStaff, int tier)
+        public void CreateRandomChildren(int maxChildren, int maxDepth, int maxStaff)
         {
             for (int i = 0; i < Randomize.Next(maxChildren < 0 ? 0 : maxChildren+1); i++)
             {
@@ -152,65 +176,13 @@ namespace Corporation
                         Guid.NewGuid().ToString().Substring(0, 8), randomAge, randomLevel);
                 }
                 if (maxDepth > 1)
-                    this.Children[i].CreateRandomChildren(maxChildren - 1, maxDepth - 1, maxStaff, tier + 1);
+                    this.Children[i].CreateRandomChildren(maxChildren - 1, maxDepth - 1, maxStaff);
             }
         }
 
         protected virtual string NameChild(int suffix)
         {
             return $"{this.Name} {suffix}.";
-        }
-
-        /// <summary>
-        /// Рекурсивно выводит структуру департаментов
-        /// </summary>
-        /// <param name="tier">Отступ, с которого нужно начинать печать</param>
-        public void PrintHierarchy(int tier)
-        {
-            string indent = "";
-            for (int i = 0; i < tier; i++) //TODO избавиться от этих циклов (конструктор строки с параметром)
-            {
-                indent += "\t";
-            }
-            Console.WriteLine(indent + this);
-            tier++;
-            foreach (var item in this.Children)
-            {
-                item.PrintHierarchy(tier);
-            }
-        }
-
-        public void PrintStaffHierarchy(int tier)
-        {
-            string indent = "";
-            for (int i = 0; i < tier; i++)
-            {
-                indent += "\t";
-            }
-            Console.WriteLine(indent + this);
-            PrintDepartmentPanel(tier);
-            tier++;
-            foreach (var item in this.Children)
-            {
-                item.PrintStaffHierarchy(tier);
-            }
-        }
-
-        public void PrintDepartmentPanel(int tier)
-        {
-            string indent = "  ";
-            for (int i = 0; i < tier; i++) //TODO переделать на конструктор строки
-            {
-                indent += "\t";
-            }
-            var sortedPanel = from p in this.Staff //не panel - потому что идея убрать все эти методы печати в расширение класса
-                              orderby p.Position descending
-                              select p;
-            foreach (var p in sortedPanel)
-            {
-                Console.WriteLine(indent + p);
-            }
-            Console.WriteLine();
         }
 
         public decimal BossSalary(Level lvl) //TODO проверка уровня if lvl < XXX throw...
@@ -262,7 +234,7 @@ namespace Corporation
             return salary;
         }
 
-        protected virtual bool PositionAllowed(Level lvl)
+        public virtual bool PositionAllowed(Level lvl)
         {
             return (lvl < Level.Deputy);
         }

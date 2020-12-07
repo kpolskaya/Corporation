@@ -14,20 +14,9 @@ namespace Corporation
 
             Repository company = new Repository(10, 5, 8);
 
-            company.Board.PrintStaffHierarchy(0);
+            company.Board.PrintStaffHierarchy();
            
-            //company.SerializeDb();
-
-            //Repository clone = new Repository();
-            //foreach (var item in clone.Board.Children)
-            //{
-            //    foreach (var p in item.Staff)
-            //    {
-            //        Console.WriteLine(p);
-            //    }
-            //}
-
-            //clone.Board.PrintStaffHierarchy(0);
+            
 
             Console.ReadKey();
             

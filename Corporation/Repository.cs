@@ -14,15 +14,17 @@ namespace Corporation
     {
         static string DefaultPath;
        
-        static readonly int FirstTier;
-
         static Repository()
         {
             DefaultPath = @"db.json";
-            FirstTier = 1;
         }
    
-        public Administration Board { get; set; }
+        public Department Board { get; set; }
+
+        public Repository()
+        {
+            this.Board = new Administration("Новый департамент");
+        }
 
         public Repository(int MaxChildren, int MaxDepth, int MaxStaff)
         {
@@ -36,7 +38,7 @@ namespace Corporation
             this.Board.AddEmployee(new Boss("Лев", "Мышкин", 27, Level.Director, this.Board)); 
             this.Board.AddEmployee(new Boss("Ипполит", "Терентьев", 20, Level.Deputy, this.Board));
             if (maxDepth > 0)
-                this.Board.CreateRandomChildren(maxChildren, maxDepth, maxStaff, FirstTier);
+                this.Board.CreateRandomChildren(maxChildren, maxDepth, maxStaff);
         }
 
         public void Save(string path)
@@ -44,17 +46,12 @@ namespace Corporation
             
             string jsonString = JsonConvert.SerializeObject(Board, Formatting.Indented); 
 
-            File.WriteAllText(path, jsonString, Encoding.UTF8);
-        }
-
-        public Repository()
-        {
-            this.Board = new Administration("Новый департамент");
+            File.WriteAllText(path, jsonString, Encoding.UTF8); 
         }
 
          public void Load(string path)
          {
-            string jsonString = File.ReadAllText(path, Encoding.UTF8);
+            string jsonString = File.ReadAllText(path, Encoding.UTF8); 
             JObject o = JObject.Parse(jsonString);
 
             this.Board = new Administration(o.Value<uint>("Id"), o.Value<string>("Name"));
@@ -62,16 +59,15 @@ namespace Corporation
             IList<JToken> panel = o["Staff"].Children().ToList();
             foreach (var item in panel)
             {
-                this.Board.AddEmployee(new Boss(item.Value<uint>("Id"), //если в администрации будут не только начальники - это не сработает!
+                this.Board.AddEmployee(new Boss(item.Value<uint>("Id"), 
                     item.Value<string>("FirstName"), 
                     item.Value<string>("LastName"),
                     item.Value<uint>("Age"),
                     (Level)item.Value<byte>("Position"),
                     this.Board));
             }
-
-            IList<JToken> grandChildren = o["Children"].Children().ToList();
-            this.Board.RestoreChildren(grandChildren);
+            IList<JToken> descendants = o["Children"].Children().ToList();
+            this.Board.RestoreChildren(descendants);
          }
     }
-    }
+}

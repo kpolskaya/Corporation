@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Administration.cs" />
     <Compile Include="Boss.cs" />
+    <Compile Include="DepartmentExtention.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Department.cs" />
