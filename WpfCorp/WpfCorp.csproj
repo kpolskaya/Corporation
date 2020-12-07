@@ -55,6 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Validation\AgeValidationRule.cs" />
+    <Compile Include="Validation\NameValidationRule.cs" />
     <Compile Include="ViewModel\CorporationViewModel.cs" />
     <Compile Include="ViewModel\DepartmentViewModel.cs" />
     <Compile Include="ViewModel\EmployeeViewModel.cs" />

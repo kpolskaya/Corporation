@@ -3,10 +3,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfCorp"
+        xmlns:local="clr-namespace:WpfCorp" 
+        xmlns:c="clr-namespace:WpfCorp.Validation"
+        xmlns:e="clr-namespace:Corporation;assembly=Corporation"
         mc:Ignorable="d"
         Title="Вот компания какая" Height="450" Width="900"
         Name="mainWindow">
+    <Window.Resources>
+        <e:Person x:Key="person"/>
+        <ControlTemplate x:Key="validationTemplate">
+            <DockPanel>
+                <TextBlock Foreground="Red" FontSize="20">!</TextBlock>
+                <AdornedElementPlaceholder/>
+            </DockPanel>
+        </ControlTemplate>
+
+        <Style x:Key="textBoxInError" TargetType="{x:Type TextBox}">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip"
+                            Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                            Path=(Validation.Errors)/ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -39,8 +62,7 @@
 
                 <TreeView DataContext="{Binding ElementName=mainWindow, Path=corpPresenter}"
                       ItemsSource="{Binding Path=RootDepartment}" 
-                      Grid.Row="0"  Name="CompanyTree"
-                      SelectedItemChanged="CompanyTreeSelectedItemChanged">
+                      Grid.Row="0"  Name="CompanyTree">
                     <TreeView.ItemContainerStyle>
                         <Style TargetType="{x:Type TreeViewItem}">
                             <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
@@ -74,8 +96,7 @@
             
             
             <ListView Grid.Column="1" x:Name="Personnel" DataContext="{Binding ElementName=CompanyTree, 
-                    Path=SelectedItem}" ItemsSource="{Binding Staff}" 
-                    SelectionChanged="PersonnelSelectionChanged" >
+                    Path=SelectedItem}" ItemsSource="{Binding Staff}" >
                 <ListView.ItemContainerStyle>
                     <Style TargetType="{x:Type ListViewItem}">
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
@@ -84,11 +105,12 @@
                 </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="45"/>
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="35"/>
                         <GridViewColumn Header="Фамилия" DisplayMemberBinding="{Binding LastName}" Width="80"/>
                         <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding FirstName}" Width="60"/>
                         <GridViewColumn Header="Должность" DisplayMemberBinding="{Binding Position}" Width="80"/>
                         <GridViewColumn Header="Зарплата" DisplayMemberBinding="{Binding StringFormat=\{0: ### ##0.00\}, Path=Salary}"/>
+                        <GridViewColumn Header="Возраст" DisplayMemberBinding="{Binding Age}"/>
                     </GridView>
                 </ListView.View>   
             </ListView>
@@ -107,26 +129,12 @@
                             <RowDefinition/>
                             <!--Edit buttons-->
                             <RowDefinition/>
-                            <!--Delete Button-->
+                            <!--Delete button-->
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-
-                        
-
-                        <!--<RadioButton x:Name="AddRadioButton" Grid.Row="0" 
-                             Grid.Column="0" GroupName="EditRecord" 
-                             Content="Добавить" IsChecked="True" 
-                             VerticalAlignment="Center" HorizontalAlignment="Center"
-                             Checked="AddChecked"/>
-
-                        <RadioButton x:Name="EditRadioButton" Grid.Row="0" 
-                             Grid.Column="1" GroupName="EditRecord" 
-                             Content="Редактировать" 
-                             VerticalAlignment="Center" HorizontalAlignment="Center" 
-                             Checked="EditChecked"/>-->
 
                         <Label Grid.Row="1" Grid.Column="0" 
                             Content="Фамилия:" HorizontalAlignment="Right" 
@@ -233,20 +241,58 @@
                             VerticalAlignment="Center"/>
 
                         <TextBox x:Name="LastName" Grid.Row="1" Grid.Column="1" 
-                            Width="120" 
-                            HorizontalAlignment="Left" 
-                            VerticalAlignment="Center"/>
+                                 Width="120" 
+                                 HorizontalAlignment="Left" 
+                                 VerticalAlignment="Center"
+                                 Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                 Style="{StaticResource textBoxInError}">
+                            <TextBox.Text>
+                                <Binding Path="LastName" Source="{StaticResource person}"
+                                         UpdateSourceTrigger="Default">
+                                    <Binding.ValidationRules>
+                                        <c:NameValidationRule></c:NameValidationRule>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                            
+                        </TextBox>
 
                         <TextBox x:Name="FirstName" Grid.Row="2" Grid.Column="1" 
-                            Width="120" 
-                            HorizontalAlignment="Left" 
-                            VerticalAlignment="Center"/>
+                                 Width="120" 
+                                 HorizontalAlignment="Left" 
+                                 VerticalAlignment="Center"
+                                 Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                 Style="{StaticResource textBoxInError}">
+                            <TextBox.Text>
+                                <Binding Path="FirstName" Source="{StaticResource person}"
+                                         UpdateSourceTrigger="Default">
+                                    <Binding.ValidationRules>
+                                        <c:NameValidationRule></c:NameValidationRule>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                                
+                        </TextBox>
 
 
                         <TextBox x:Name="Age" Grid.Row="3" Grid.Column="1" 
-                            Width="40" Text="18"
-                            HorizontalAlignment="Left" VerticalAlignment="Center"
-                                 TextChanged="AgeTextChanged"/>
+                                 Width="40" 
+                                 HorizontalAlignment="Left" VerticalAlignment="Center"
+                                 Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                 Style="{StaticResource textBoxInError}" >
+
+                            <TextBox.Text>
+                                <Binding Path="Age" Source="{StaticResource person}"
+                                         UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <c:AgeValidationRule Min="14" Max="130"></c:AgeValidationRule>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+                            
+                            
+                                
 
                         <Button x:Name="Clear"  Grid.Row="5" Grid.Column="1" 
                             Content="Очистить" Height="20" Width="100" 

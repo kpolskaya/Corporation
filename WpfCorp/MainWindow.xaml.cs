@@ -39,6 +39,15 @@ namespace WpfCorp
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static readonly DependencyProperty PersonProperty;
+        public Person person;
+        //{
+        //    get { return (Person)GetValue(PersonProperty); }
+
+        //    set { SetValue(PersonProperty, value); }
+        //}
+
+
         public static readonly DependencyProperty CompanyProperty;
         public CorporationViewModel corpPresenter
         {
@@ -54,6 +63,11 @@ namespace WpfCorp
                 "corpPresenter",
                 typeof(CorporationViewModel),
                 typeof(MainWindow));
+
+            //PersonProperty = DependencyProperty.Register(
+            //    "person",
+            //    typeof(Person),
+            //    typeof(MainWindow));
         }
 
         
@@ -62,16 +76,10 @@ namespace WpfCorp
             InitializeComponent();
 
             corpPresenter = new CorporationViewModel();
-            corpPresenter.PropertyChanged += WhatsUp;
+            person = (Person)this.FindResource("person");
+            
             PositionChoice.ItemsSource = Enum.GetValues(typeof(Level)).Cast<Level>();
         }
-
-        private void DataWindow_Closing(object sender, CancelEventArgs e)
-        {
-            
-            Application.Current.Shutdown();
-        }
-
 
         private void AddButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -80,16 +88,17 @@ namespace WpfCorp
                 MessageBox.Show("Не выбран отдел");
                 return;
             }
-            if (PositionChoice.SelectedIndex < 0 || FirstName.Text == "" || LastName.Text == "")
-            {
-                MessageBox.Show("Не все поля заполнены");
-                return;
-            }
+            //if (PositionChoice.SelectedIndex < 0 || FirstName.Text == "" || LastName.Text == "")
+            //{
+            //    MessageBox.Show("Не все поля заполнены");
+            //    return;
+            //}
 
             Level position = (Level)PositionChoice.SelectedValue;
+
             try
             {
-                corpPresenter.SelectedItem.RecruitPerson(FirstName.Text, LastName.Text, uint.Parse(Age.Text), position);
+                corpPresenter.SelectedItem.RecruitPerson(person.FirstName, person.LastName, person.Age, position);
 
             }
             catch (Exception ex)
@@ -106,18 +115,7 @@ namespace WpfCorp
             ClearAddForm();
 
         }
-
-        private void CompanyTreeSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            Selected.Text = corpPresenter.SelectedItem.Name; // потом это все убрать нахрен
-        }
-
-        private void PersonnelSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //не нужна?
-            
-        }
-
+         
         private void ResetButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ((EmployeeViewModel)Personnel.SelectedItem)?.Refresh();
@@ -140,18 +138,15 @@ namespace WpfCorp
                 }
                 catch (Exception ex)
                 {
-
                     MessageBox.Show(ex.Message);
                 }
-                
         }
-
        
         private void ClearAddForm()
         {
             PositionChoice.SelectedIndex = -1;
-            FirstName.Text = "";
-            LastName.Text = "";
+            FirstName.Clear();
+            LastName.Clear();
             Age.Text = "18";
         }
 
@@ -159,12 +154,7 @@ namespace WpfCorp
         {
             corpPresenter.CreateRandomCorp(5, 5, 5);
         }
-
-        private void WhatsUp(object sender, PropertyChangedEventArgs e)
-        {
-            Selected.Text = $"Изменилось поле {e.PropertyName}"; // баловство
-        }
-
+                
         private void AgeTextChanged(object sender, TextChangedEventArgs e)
         {
             ((TextBox)sender).OnlyDigits();

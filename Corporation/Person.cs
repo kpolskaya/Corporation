@@ -25,5 +25,10 @@ namespace Corporation
             this.Age = Age;
 
         }
+
+        public Person()
+        {
+
+        }
     }
 }
