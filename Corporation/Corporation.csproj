@@ -49,6 +49,7 @@
     <Compile Include="Administration.cs" />
     <Compile Include="Boss.cs" />
     <Compile Include="DepartmentExtention.cs" />
+    <Compile Include="Naming.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Repository.cs" />
     <Compile Include="Department.cs" />
@@ -62,6 +63,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Names\fnames_f.txt" />
+    <Content Include="Names\lnames.txt" />
+    <Content Include="Names\fnames_m.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
