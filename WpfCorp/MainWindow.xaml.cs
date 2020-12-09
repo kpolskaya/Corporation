@@ -39,15 +39,8 @@ namespace WpfCorp
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static readonly DependencyProperty PersonProperty;
         public Person person;
-        //{
-        //    get { return (Person)GetValue(PersonProperty); }
-
-        //    set { SetValue(PersonProperty, value); }
-        //}
-
-
+        
         public static readonly DependencyProperty CompanyProperty;
         public CorporationViewModel corpPresenter
         {
@@ -63,11 +56,6 @@ namespace WpfCorp
                 "corpPresenter",
                 typeof(CorporationViewModel),
                 typeof(MainWindow));
-
-            //PersonProperty = DependencyProperty.Register(
-            //    "person",
-            //    typeof(Person),
-            //    typeof(MainWindow));
         }
 
         
@@ -98,7 +86,7 @@ namespace WpfCorp
 
             try
             {
-                corpPresenter.SelectedItem.RecruitPerson(person.FirstName, person.LastName, person.Age, position);
+                corpPresenter.SelectedItem.RecruitPerson(person, position);
 
             }
             catch (Exception ex)
@@ -191,7 +179,6 @@ namespace WpfCorp
                 {
                     MessageBox.Show(ex.Message);
                 }
-                
             }
         }
 

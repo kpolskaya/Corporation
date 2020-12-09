@@ -8,7 +8,6 @@ using System.Text;
 
 namespace Corporation
 {   
-
     public class Department
     {
         static Random Randomize;
@@ -64,33 +63,10 @@ namespace Corporation
                 case Level.Worker:
                     this.panel.Add(new Worker(person, position, this, Employee.initialHours));
                     break;
-
                 case Level.Product_Manager:
                 case Level.Deputy:
                 case Level.Director:
                     this.panel.Add(new Boss(person, position, this));
-                    break;
-                default:
-                    throw new Exception("Неизвестная должность");
-            }
-
-        }
-        
-        public void RecruitPerson(string firstName, string lastName, uint age, Level position)
-        {
-            if (!PositionAllowed(position))
-                throw new Exception("Недопустимая должность");
-            switch (position)                                                               
-            {
-                case Level.Intern:
-                    this.panel.Add(new Intern(firstName, lastName, age, position, this));
-                    break;
-                case Level.Worker:
-                    this.panel.Add(new Worker(firstName, lastName, age, position, this, Employee.initialHours));
-                    break;
-
-                case Level.Product_Manager: case Level.Deputy: case Level.Director:
-                    this.panel.Add(new Boss(firstName, lastName, age, position, this));
                     break;
                 default:
                     throw new Exception("Неизвестная должность");
@@ -108,53 +84,46 @@ namespace Corporation
                 throw new Exception("Сотрудника с таким Id в отделе не существует");
             }
         }
-
-        public void AddEmployee (Employee employee)
+  
+        public void Restore(IList<JToken> staff, IList<JToken> children)
         {
-            
-            if (employee.Department != null 
-                && employee.Department == this 
-                && PositionAllowed(employee.Position)) //может здесь эта проверка на должность не нцжна?
-                
-                this.panel.Add(employee);
-            else
-                throw new Exception("Недопустимый отдел или должность");
-        }
+            foreach (var employee in staff)
+            {
+                Level position = (Level)employee.Value<byte>("Position");
 
-        public void RestoreChildren(IList<JToken> children)
-        {
-            Department child;
-            Level position;
-           
+                Person person = new Person  (employee.Value<string>("FirstName"),
+                                            employee.Value<string>("LastName"), 
+                                            employee.Value<uint>("Age"));
+                switch (position)
+                {
+                    case Level.Intern:
+                        this.panel.Add(new Intern(employee.Value<uint>("Id"), person, 
+                            position, this));
+                        break;
+
+                    case Level.Worker:
+                        this.panel.Add(new Worker(employee.Value<uint>("Id"), person,
+                            position, this, employee.Value<uint>("Hours")));
+                        break;
+
+                    case Level.Product_Manager:
+                    case Level.Deputy:
+                    case Level.Director:
+                        this.panel.Add(new Boss(employee.Value<uint>("Id"), person, 
+                            position, this));
+                        break;
+
+                    default:
+                        throw new Exception("Неизвестная должность");
+                }
+            }
             foreach (var item in children)
             {
-                child = new Department(item.Value<uint>("Id"), item.Value<string>("Name"));
-
-                foreach (var employee in item["Staff"]) 
-                {
-                    position = (Level)employee.Value<byte>("Position"); 
-                    switch (position)
-                    {
-                        case Level.Intern:
-                            child.panel.Add(new Intern(employee.Value<uint>("Id"), employee.Value<string>("FirstName"),
-                                employee.Value<string>("LastName"), employee.Value<uint>("Age"), position, child));
-                            break;
-                        case Level.Worker:
-                            child.panel.Add(new Worker(employee.Value<uint>("Id"), employee.Value<string>("FirstName"),
-                                employee.Value<string>("LastName"), employee.Value<uint>("Age"), 
-                                position, child, employee.Value<uint>("Hours")));
-                            break;
-                        case Level.Product_Manager: case Level.Deputy:  case Level.Director:
-                            child.panel.Add(new Boss(employee.Value<uint>("Id"), employee.Value<string>("FirstName"),
-                               employee.Value<string>("LastName"), employee.Value<uint>("Age"), position, child));
-                            break;
-                        default:
-                            throw new Exception("Неизвестная должность");
-                    }
-                }
-                IList<JToken> descendants = item["Children"].Children().ToList(); 
-                child.RestoreChildren(descendants);
+                Department child = new Department(item.Value<uint>("Id"), item.Value<string>("Name"));
                 this.Children.Add(child);
+                IList<JToken> descendants = item["Children"].Children().ToList();
+                IList<JToken> panel = item["Staff"].Children().ToList();
+                child.Restore(panel, descendants);
             }
         }
 
@@ -164,29 +133,49 @@ namespace Corporation
             {
                 this.Children.Add(new Department(NameChild(i+1)));
                 
-                this.Children[i].RecruitPerson(Guid.NewGuid().ToString().Substring(0, 5),
-                    Guid.NewGuid().ToString().Substring(0, 8), (uint)Randomize.Next(20, 66), Level.Product_Manager);
+                this.Children[i].RecruitPerson(
+                    
+                    new Person(Guid.NewGuid().ToString().Substring(0, 5),
+                    Guid.NewGuid().ToString().Substring(0, 8), (uint)Randomize.Next(20, 66)), 
+                    Level.Product_Manager);
                
                 for (int j = 0; j < Randomize.Next(2, maxStaff < 1 ? 2 : maxStaff +1); j++)
                 {
                     Level randomLevel = (Level)Randomize.Next(0, (int)Level.Worker + 1);
                     uint randomAge = (uint)Randomize.Next(18, 23 * ((int)randomLevel + 1));
 
-                    this.Children[i].RecruitPerson(Guid.NewGuid().ToString().Substring(0, 5), 
-                        Guid.NewGuid().ToString().Substring(0, 8), randomAge, randomLevel);
+                    this.Children[i].RecruitPerson(
+
+                        new Person(Guid.NewGuid().ToString().Substring(0, 5), 
+                        Guid.NewGuid().ToString().Substring(0, 8), 
+                        randomAge), randomLevel);
                 }
                 if (maxDepth > 1)
                     this.Children[i].CreateRandomChildren(maxChildren - 1, maxDepth - 1, maxStaff);
             }
         }
-
+        
+        /// <summary>
+        /// Создает наименование отдела, добавляя в конец 
+        /// его порядковый номер
+        /// </summary>
+        /// <param name="suffix">Порядковый номер</param>
+        /// <returns></returns>
         protected virtual string NameChild(int suffix)
         {
             return $"{this.Name} {suffix}.";
         }
-
-        public decimal BossSalary(Level lvl) //TODO проверка уровня if lvl < XXX throw...
+        
+        /// <summary>
+        /// Расчитывает заработную плату босса
+        /// </summary>
+        /// <param name="lvl">уровень босса</param>
+        /// <returns>Зарплата босса или null, если задан уровень ниже уровня босса</returns>
+        public Nullable<decimal> GetBossSalaryOrNull(Level lvl) 
         {
+            if (lvl < Level.Product_Manager)
+                return null;
+            
             decimal salaryBasis = SubalternSalary(lvl); 
 
             foreach (var item in this.Children)

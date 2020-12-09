@@ -18,21 +18,21 @@ namespace Corporation
         }
 
         public Boss(Person Person, Level Position, Department Department)
-            : base(Person, Position, Department)
+        : base(Person, Position, Department)
         {
 
         }
 
         [JsonConstructor]
-        public Boss(uint Id, string FirstName, string LastName, uint Age, Level Position, Department Department)
-            : base(Id, FirstName, LastName, Age, Position, Department)
+        public Boss(uint Id, Person Person, Level Position, Department Department)
+        : base(Id, Person, Position, Department)
         {
            
         }
 
         public override decimal Salary()
         {
-            return this.Department.BossSalary(this.Position); 
+            return (decimal)this.Department.GetBossSalaryOrNull(this.Position); 
         }
  
     }

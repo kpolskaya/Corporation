@@ -93,9 +93,9 @@ namespace WpfCorp.ViewModel
             }
         }
 
-        public void RecruitPerson(string firstName, string lastName, uint age, Level position)
+        public void RecruitPerson(Person person, Level position)
         {
-            this.department.RecruitPerson(firstName, lastName, age, position);
+            this.department.RecruitPerson(person, position);
             this.OnPropertyChanged("Staff");
         }
 

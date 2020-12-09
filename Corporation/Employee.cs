@@ -47,16 +47,16 @@ namespace Corporation
         /// <summary>
         /// Создание сотрудника c автоматическим Id
         /// </summary>
-        public Employee(string FirstName, string LastName, uint Age, Level Position, Department Department) :
-            base(FirstName, LastName, Age)
+        public Employee(string FirstName, string LastName, uint Age, Level Position, Department Department) 
+        : base(FirstName, LastName, Age)
         {
             this.Position = Position;
             this.Department = Department;
             this.Id = GlobalId.Next();
         }
 
-        public Employee(Person Person, Level Position, Department Department) :
-           this(Person.FirstName, Person.LastName, Person.Age, Position, Department)
+        public Employee(Person Person, Level Position, Department Department) 
+        : this(Person.FirstName, Person.LastName, Person.Age, Position, Department)
         {
 
         }
@@ -64,8 +64,8 @@ namespace Corporation
         /// <summary>
         /// Конструктор для создания сотрудника с существующим Id - из файла
         /// </summary>
-        public Employee(uint Id, string FirstName, string LastName, uint Age, Level Position, Department Department) :
-            base(FirstName, LastName, Age)
+        public Employee(uint Id, string FirstName, string LastName, uint Age, Level Position, Department Department) 
+        : base(FirstName, LastName, Age)
         {
             this.Position = Position;
             this.Department = Department;
@@ -73,8 +73,8 @@ namespace Corporation
             GlobalId.InitId(Id);
         }
 
-        public Employee(uint Id, Person Person, Level Position, Department Department) :
-            this(Id, Person.FirstName, Person.LastName, Person.Age, Position, Department)
+        public Employee(uint Id, Person Person, Level Position, Department Department) 
+        : this(Id, Person.FirstName, Person.LastName, Person.Age, Position, Department)
         {
 
         }

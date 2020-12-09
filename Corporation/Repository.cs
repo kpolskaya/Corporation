@@ -35,8 +35,8 @@ namespace Corporation
         public void CreateRandomCorp(int maxChildren, int maxDepth, int maxStaff)
         {
             this.Board = new Administration("Virtual Times Entertainment");
-            this.Board.AddEmployee(new Boss("Лев", "Мышкин", 27, Level.Director, this.Board)); 
-            this.Board.AddEmployee(new Boss("Ипполит", "Терентьев", 20, Level.Deputy, this.Board));
+            this.Board.RecruitPerson(new Person("Лев", "Мышкин", 27), Level.Director); 
+            this.Board.RecruitPerson(new Person("Ипполит", "Терентьев", 20), Level.Deputy);
             if (maxDepth > 0)
                 this.Board.CreateRandomChildren(maxChildren, maxDepth, maxStaff);
         }
@@ -49,25 +49,17 @@ namespace Corporation
             File.WriteAllText(path, jsonString, Encoding.UTF8); 
         }
 
-         public void Load(string path)
-         {
-            string jsonString = File.ReadAllText(path, Encoding.UTF8); 
+        public void Load(string path)
+        {
+            string jsonString = File.ReadAllText(path, Encoding.UTF8);
             JObject o = JObject.Parse(jsonString);
 
             this.Board = new Administration(o.Value<uint>("Id"), o.Value<string>("Name"));
 
             IList<JToken> panel = o["Staff"].Children().ToList();
-            foreach (var item in panel)
-            {
-                this.Board.AddEmployee(new Boss(item.Value<uint>("Id"), 
-                    item.Value<string>("FirstName"), 
-                    item.Value<string>("LastName"),
-                    item.Value<uint>("Age"),
-                    (Level)item.Value<byte>("Position"),
-                    this.Board));
-            }
             IList<JToken> descendants = o["Children"].Children().ToList();
-            this.Board.RestoreChildren(descendants);
-         }
+            this.Board.Restore(panel, descendants);
+        }
+                
     }
 }
