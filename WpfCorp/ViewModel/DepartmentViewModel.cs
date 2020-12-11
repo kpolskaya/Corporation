@@ -9,18 +9,18 @@ using Corporation;
 
 namespace WpfCorp.ViewModel
 {
+    /// <summary>
+    /// Обертка для класса Departament
+    /// </summary>
     public class DepartmentViewModel : INotifyPropertyChanged
     {
         ObservableCollection<DepartmentViewModel> children;
         readonly Department department;
         readonly DepartmentViewModel parent;
         
-
         bool isExpanded;
         bool isSelected;
         
-        //ObservableCollection<EmployeeViewModel> staff;
-
         public DepartmentViewModel(Department Department) : this(Department, null)
         {
 
@@ -37,13 +37,12 @@ namespace WpfCorp.ViewModel
                 select new DepartmentViewModel(child, this))
                 .ToList<DepartmentViewModel>());
 
-            //this.staff = InitPanel();
         }
 
         public ReadOnlyObservableCollection<EmployeeViewModel> Staff { get { return new ReadOnlyObservableCollection<EmployeeViewModel>(InitPanel()); } }
         public DepartmentViewModel Parent { get { return this.parent; } }
 
-        public ObservableCollection<DepartmentViewModel> Children { get { return children; } } //readonly?
+        public ObservableCollection<DepartmentViewModel> Children { get { return children; } }
 
         public string Name { get { return this.department.Name; } 
             set {
@@ -56,25 +55,25 @@ namespace WpfCorp.ViewModel
         }
         public string Id { get { return this.department.Id.ToString(); } }
 
-        
-
        /// <summary>
        /// Читает и устанавливает триггер объекта в соответствии с  
        /// его представлением в TreeViewItem: развернуто или свернуто
        /// </summary>
        public bool IsExpanded
-        {
+       {
             get { return this.isExpanded; }
             set
             {
                 if (value != this.isExpanded)
+                { 
                     this.isExpanded = value;
-                // дальше нужно рекурсивно развернуть все узлы наверх
-                if (this.isExpanded && this.parent != null)
-                    this.parent.IsExpanded = true;
-
+                    // дальше нужно рекурсивно развернуть все узлы наверх
+                    if (this.isExpanded && this.parent != null)
+                        this.parent.IsExpanded = true;
+                    OnPropertyChanged("IsExpanded");
+                }
             }
-        }
+       }
 
         /// <summary>
         /// Читает и устанавливает триггер объекта, в соответствии с 
@@ -99,7 +98,7 @@ namespace WpfCorp.ViewModel
             this.OnPropertyChanged("Staff");
         }
 
-        internal void CreateDepartment() 
+        public void CreateDepartment() 
         {
             Department newDepartment = new Department("Новый департамент");
             this.department.Children.Add(newDepartment);
@@ -107,14 +106,14 @@ namespace WpfCorp.ViewModel
             this.children.Add(newDepartmentVM);
             if (!IsExpanded)
                 this.IsExpanded = true;
-            OnPropertyChanged("IsExpanded");
             OnPropertyChanged("Children");
         }
 
-        internal void Remove(DepartmentViewModel selectedItem)
+        public void Remove(DepartmentViewModel selectedItem)
         {
             this.department.Children.Remove(selectedItem.department);
             this.children.Remove(selectedItem);
+            this.IsExpanded = true;
             OnPropertyChanged("Children");
         }
 

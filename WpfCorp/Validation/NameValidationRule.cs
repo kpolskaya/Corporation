@@ -21,7 +21,7 @@ namespace WpfCorp.Validation
                 return new ValidationResult(false, "Поле не может быть пустым");
 
             if (((string)value).Any(c => !char.IsLetter(c)))
-                return new ValidationResult(false, "В имени допускаются только буквы"); //что сомнительно
+                return new ValidationResult(false, "Недопустимые символы"); //что сомнительно
 
             return ValidationResult.ValidResult;
         }

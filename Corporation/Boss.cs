@@ -10,14 +10,7 @@ namespace Corporation
 {
     class Boss : Employee
     {
-        
-        public Boss(string FirstName, string LastName, uint Age, Level Position, Department Department)
-        : base(FirstName, LastName, Age, Position, Department)
-        {
-            
-        }
-
-        public Boss(Person Person, Level Position, Department Department)
+         public Boss(Person Person, Level Position, Department Department)
         : base(Person, Position, Department)
         {
 

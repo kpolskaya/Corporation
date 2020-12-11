@@ -76,8 +76,7 @@ namespace WpfCorp.ViewModel
         }
         
         public uint Id { get { return this.employee.Id; } }
-        public decimal Salary { get { return this.employee.Salary(); } } // можно  убрать Wage из Employee - есть же Salary()
-
+        public decimal Salary { get { return this.employee.Salary(); } } 
         public bool IsSelected
         {
             get { return this.isSelected; }
@@ -91,15 +90,6 @@ namespace WpfCorp.ViewModel
             }
         }
 
-
-        //public void ApplyNewData(string newFirstName, string newLastName, uint newAge)
-        //{
-        //    this.employee.FirstName = newFirstName;
-        //    this.employee.LastName = newLastName;
-        //    this.employee.Age = newAge;
-        //    OnPropertyChanged("FirstName");
-        //}
-
         public void Refresh() //маленький хак, чтобы обновить DataContext. а как надо?
         {
             OnPropertyChanged();
@@ -107,7 +97,7 @@ namespace WpfCorp.ViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string PropertyNameOrDefault = null) // попробовать сделать необязательный параметр с дефолтным null
+        protected virtual void OnPropertyChanged(string PropertyNameOrDefault = null) 
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyNameOrDefault));
         }

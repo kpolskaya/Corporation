@@ -19,7 +19,12 @@ namespace Corporation
         {
 
         }
-
+        /// <summary>
+        /// Создает наименование отдела с номером
+        /// его порядковый номер
+        /// </summary>
+        /// <param name="suffix">Порядковый номер</param>
+        /// <returns></returns>
         protected override string NameChild(int suffix)
         {
             return $"Отдел {suffix}.";

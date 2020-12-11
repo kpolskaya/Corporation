@@ -76,11 +76,11 @@ namespace WpfCorp
                 MessageBox.Show("Не выбран отдел");
                 return;
             }
-            //if (PositionChoice.SelectedIndex < 0 || FirstName.Text == "" || LastName.Text == "")
-            //{
-            //    MessageBox.Show("Не все поля заполнены");
-            //    return;
-            //}
+            if (PositionChoice.SelectedIndex < 0 || FirstName.Text == "" || LastName.Text == "")
+            {
+                MessageBox.Show("Не все поля заполнены");
+                return;
+            }
 
             Level position = (Level)PositionChoice.SelectedValue;
 
@@ -133,14 +133,14 @@ namespace WpfCorp
         private void ClearAddForm()
         {
             PositionChoice.SelectedIndex = -1;
-            FirstName.Clear();
-            LastName.Clear();
+            FirstName.Text ="";
+            LastName.Text = "";
             Age.Text = "18";
         }
 
         private void MenuItemGenerateClick(object sender, RoutedEventArgs e)
         {
-            corpPresenter.CreateRandomCorp(5, 5, 5);
+            corpPresenter.CreateRandomCorp(5, 5, 10);
         }
                 
         private void AgeTextChanged(object sender, TextChangedEventArgs e)

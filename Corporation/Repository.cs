@@ -12,13 +12,7 @@ namespace Corporation
 {
     public class Repository
     {
-        static string DefaultPath;
-       
-        static Repository()
-        {
-            DefaultPath = @"db.json";
-        }
-   
+          
         public Department Board { get; set; }
 
         public Repository()
@@ -26,7 +20,7 @@ namespace Corporation
             this.Board = new Administration("Новый департамент");
         }
 
-        public Repository(int MaxChildren, int MaxDepth, int MaxStaff)
+        public Repository(int MaxChildren, int MaxDepth, int MaxStaff) //удалить
         {
 
             CreateRandomCorp(MaxChildren, MaxDepth, MaxStaff);

@@ -12,13 +12,6 @@ namespace Corporation
 
         public uint Hours { get; set; }
 
-        public Worker(string FirstName, string LastName, uint Age, Level Position, Department Department, uint Hours)
-        : base(FirstName, LastName, Age, Position, Department)
-
-        {
-            this.Hours = Hours;
-        }
-
         public Worker(Person Person, Level Position, Department Department, uint Hours)
         : base(Person, Position, Department)
         {

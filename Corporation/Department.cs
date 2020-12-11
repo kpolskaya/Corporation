@@ -129,26 +129,28 @@ namespace Corporation
 
         public void CreateRandomChildren(int maxChildren, int maxDepth, int maxStaff)
         {
+            string[] randomName;
+
             for (int i = 0; i < Randomize.Next(maxChildren < 0 ? 0 : maxChildren+1); i++)
             {
                 this.Children.Add(new Department(NameChild(i+1)));
+                randomName = RandomNames.Next();
                 
                 this.Children[i].RecruitPerson(
                     
-                    new Person(Guid.NewGuid().ToString().Substring(0, 5),
-                    Guid.NewGuid().ToString().Substring(0, 8), (uint)Randomize.Next(20, 66)), 
+                    new Person(randomName[0], randomName[1], 
+                    (uint)Randomize.Next(25, 66)), 
                     Level.Product_Manager);
                
                 for (int j = 0; j < Randomize.Next(2, maxStaff < 1 ? 2 : maxStaff +1); j++)
                 {
+                    randomName = RandomNames.Next();
                     Level randomLevel = (Level)Randomize.Next(0, (int)Level.Worker + 1);
                     uint randomAge = (uint)Randomize.Next(18, 23 * ((int)randomLevel + 1));
 
                     this.Children[i].RecruitPerson(
 
-                        new Person(Guid.NewGuid().ToString().Substring(0, 5), 
-                        Guid.NewGuid().ToString().Substring(0, 8), 
-                        randomAge), randomLevel);
+                        new Person(randomName[0], randomName[1], randomAge), randomLevel);
                 }
                 if (maxDepth > 1)
                     this.Children[i].CreateRandomChildren(maxChildren - 1, maxDepth - 1, maxStaff);

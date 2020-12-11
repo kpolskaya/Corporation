@@ -27,13 +27,13 @@ namespace WpfCorp.Validation
                 if (((string)value).Length > 0)
                     age = int.Parse((string)value);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return new ValidationResult(false, $"Недопустимые символы или {ex.Message}");
+                return new ValidationResult(false, $"Недопустимые символы!");
             }
 
             if (age < Min || age > Max)
-                return new ValidationResult(false, $"Возраст должен быть в диапазоне от {Min} до {Max}");
+                return new ValidationResult(false, $"от {Min} до {Max}!");
 
             return ValidationResult.ValidResult;
 
