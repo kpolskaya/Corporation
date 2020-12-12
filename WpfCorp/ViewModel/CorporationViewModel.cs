@@ -41,20 +41,26 @@ namespace WpfCorp.ViewModel
         {
             get
             {
-                return Traverse(rootDepartmen).FirstOrDefault<DepartmentViewModel>(i => i.IsSelected);
+                return Flatten(rootDepartmen).FirstOrDefault<DepartmentViewModel>(i => i.IsSelected);
             }
         }
 
-        private static List<DepartmentViewModel> Traverse (Collection<DepartmentViewModel> children)
+        /// <summary>
+        /// Собирает все департаменты из 
+        /// иерархической структуры в однин список
+        /// </summary>
+        /// <param name="root">Корневая коллекция</param>
+        /// <returns>Список всех департаменов</returns>
+        private static List<DepartmentViewModel> Flatten (Collection<DepartmentViewModel> root)
         {
             List<DepartmentViewModel> treeItems = new List<DepartmentViewModel>();
 
-            foreach (var item in children)
+            foreach (var item in root)
             {
                 treeItems.Add(item);
 
                 if (item.Children != null && item.Children.Count > 0)
-                    treeItems.AddRange(Traverse(item.Children));
+                    treeItems.AddRange(Flatten(item.Children));
             }
 
             return treeItems;
@@ -101,13 +107,13 @@ namespace WpfCorp.ViewModel
         public void DeleteSelection()
         {
             this.SelectedItem.Parent?.Remove(SelectedItem);
-            //OnPropertyChanged("SelectedItem");
+            
         }
 
         public void CreateDepartment()
         {
             this.SelectedItem?.CreateDepartment();
-            //OnPropertyChanged("");
+            
         }
     }
 }

@@ -25,7 +25,7 @@ namespace Corporation
         public static decimal bossSalaryProportion;
         public static uint initialHours;
 
-        static Employee() // TODO запретить создание работников с несоответствующей типу позицией! И вообще убрать отсюда эти статические члены в репо или департамент
+        static Employee() // TODO запретить создание работников с несоответствующей типу позицией - проверить еще раз
         {
             minBossSalary = 1300m;
             hourRate = 12m;

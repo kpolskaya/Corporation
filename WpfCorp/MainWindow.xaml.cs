@@ -20,29 +20,15 @@ using WpfCorp.ViewModel;
 
 namespace WpfCorp
 {
-    public static class TextBoxExtension
-    {
-        public static void OnlyDigits(this TextBox input, int length = 3)
-        {
-            bool notADigit = Regex.IsMatch(input.Text, "[^0-9]");
-
-            if (notADigit || input.Text.Length > length)
-            {
-                input.Text = input.Text.Remove(input.Text.Length - 1);
-                input.SelectionStart = input.Text.Length;
-            }
-        }
-    }
-
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Person person;
+        public PersonViewModel personView { get; }
         
-        public static readonly DependencyProperty CompanyProperty;
-        public CorporationViewModel corpPresenter
+        static readonly DependencyProperty CompanyProperty;
+        CorporationViewModel corpPresenter
         {
             get { return (CorporationViewModel)GetValue(CompanyProperty); }
         
@@ -57,28 +43,29 @@ namespace WpfCorp
                 typeof(CorporationViewModel),
                 typeof(MainWindow));
         }
-
         
         public MainWindow()
         {
             InitializeComponent();
 
             corpPresenter = new CorporationViewModel();
-            person = (Person)this.FindResource("person");
-            
+            personView = (PersonViewModel)this.FindResource("personView");
             PositionChoice.ItemsSource = Enum.GetValues(typeof(Level)).Cast<Level>();
         }
 
         private void AddButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+
+            if (AddFormInError())
+                return;
             if (corpPresenter.SelectedItem == null)
             {
-                MessageBox.Show("Не выбран отдел");
+                MessageBox.Show("Не выбран отдел!");
                 return;
             }
-            if (PositionChoice.SelectedIndex < 0 || FirstName.Text == "" || LastName.Text == "")
+            if (PositionChoice.SelectedIndex < 0 )
             {
-                MessageBox.Show("Не все поля заполнены");
+                MessageBox.Show("Не выбрана должность!");
                 return;
             }
 
@@ -86,7 +73,7 @@ namespace WpfCorp
 
             try
             {
-                corpPresenter.SelectedItem.RecruitPerson(person, position);
+                corpPresenter.SelectedItem.RecruitPerson(personView.Person, position);
 
             }
             catch (Exception ex)
@@ -95,12 +82,12 @@ namespace WpfCorp
                 return;
             }
            
-            ClearAddForm();
+            ResetAddForm();
         }
 
         private void ClearButtonMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ClearAddForm();
+            ResetAddForm();
 
         }
          
@@ -130,24 +117,13 @@ namespace WpfCorp
                 }
         }
        
-        private void ClearAddForm()
-        {
-            PositionChoice.SelectedIndex = -1;
-            FirstName.Text ="";
-            LastName.Text = "";
-            Age.Text = "18";
-        }
-
+       
         private void MenuItemGenerateClick(object sender, RoutedEventArgs e)
         {
             corpPresenter.CreateRandomCorp(5, 5, 10);
         }
                 
-        private void AgeTextChanged(object sender, TextChangedEventArgs e)
-        {
-            ((TextBox)sender).OnlyDigits();
-        }
-
+       
         private void MenuItemSaveClick(object sender, RoutedEventArgs e)
         {
             SaveFileDialog f = new SaveFileDialog();
@@ -156,7 +132,7 @@ namespace WpfCorp
                 try
                 {
                     corpPresenter.Save(f.FileName);
-                    Selected.Text = $"Данные сохранены в файл {f.FileName}";
+                    StatusMessage.Text = $"Данные сохранены в файл {f.FileName} в " + DateTime.Now.ToShortTimeString();
                 }
                 catch (Exception ex)
                 {
@@ -173,7 +149,7 @@ namespace WpfCorp
                 try
                 {
                     corpPresenter.Load(f.FileName);
-                    Selected.Text = $"Данные загружены из файла {f.FileName}";
+                    StatusMessage.Text = $"Данные загружены из файла {f.FileName} в " + DateTime.Now.ToShortTimeString();
                 }
                 catch (Exception ex)
                 {
@@ -190,6 +166,24 @@ namespace WpfCorp
         private void AddDepartmentMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             corpPresenter.CreateDepartment();
+        }
+
+        private bool AddFormInError()
+        {
+            return (System.Windows.Controls.Validation.GetHasError(FirstName) ||
+                    System.Windows.Controls.Validation.GetHasError(LastName) ||
+                    System.Windows.Controls.Validation.GetHasError(Age));
+        }
+
+        private void ResetAddForm()
+        {
+            personView.SetDefaults();
+            PositionChoice.SelectedIndex = -1;
+
+        }
+        private void AgeTextChanged(object sender, TextChangedEventArgs e)
+        {
+            ((TextBox)sender).OnlyDigits();
         }
     }
 }

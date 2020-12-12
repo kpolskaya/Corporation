@@ -13,14 +13,16 @@ namespace Corporation
         public Intern(Person Person, Level Position, Department Department)
         : base(Person, Position, Department)
         {
-
+            if (Position != Level.Intern)
+                throw new Exception("Должность не соответствует типу сотрудника");
         }
 
         [JsonConstructor]
         public Intern(uint Id, Person Person, Level Position, Department Department) 
         : base(Id, Person, Position, Department)
         {
-           
+            if (Position != Level.Intern)
+                throw new Exception("Должность не соответствует типу сотрудника");
         }
 
         public override decimal Salary() { return internSalary; }

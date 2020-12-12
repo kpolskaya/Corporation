@@ -15,6 +15,8 @@ namespace Corporation
         public Worker(Person Person, Level Position, Department Department, uint Hours)
         : base(Person, Position, Department)
         {
+            if (Position != Level.Worker)
+                throw new Exception("Должность не соответствует типу сотрудника");
             this.Hours = Hours;
         }
         
@@ -22,6 +24,8 @@ namespace Corporation
         public Worker(uint Id, Person Person, Level Position, Department Department, uint Hours)
         : base(Id, Person, Position, Department)
         {
+            if (Position != Level.Worker)
+                throw new Exception("Должность не соответствует типу сотрудника");
             this.Hours = Hours;
         }
 

@@ -5,21 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfCorp" 
         xmlns:c="clr-namespace:WpfCorp.Validation"
-        xmlns:e="clr-namespace:Corporation;assembly=Corporation"
+        xmlns:e="clr-namespace:WpfCorp.ViewModel"
         mc:Ignorable="d"
         Title="Вот компания какая" Height="450" Width="980"
         Name="mainWindow">
     <Window.Resources>
-        <e:Person x:Key="person"/>
+        <e:PersonViewModel x:Key="personView"/>
         <ControlTemplate x:Key="validationTemplate">
-            <StackPanel>
+            <WrapPanel>
                 <AdornedElementPlaceholder/>
                 <!--<TextBlock >!</TextBlock>-->
-                <TextBlock Foreground="Red" FontSize="10" 
-                           HorizontalAlignment="Left"
-                           Text="{Binding [0].ErrorContent}"/>
+                <TextBlock Foreground="Red" FontSize="15" 
+                           Margin="5" 
+                           Text="!"/>
 
-            </StackPanel>
+            </WrapPanel>
         </ControlTemplate>
 
         <Style x:Key="textBoxInError" TargetType="{x:Type TextBox}">
@@ -28,7 +28,7 @@
                     <Setter Property="ToolTip"
                             Value="{Binding RelativeSource={x:Static RelativeSource.Self},
                             Path=(Validation.Errors)[0].ErrorContent}"/>
-                    <!--<Setter Property="BorderBrush" Value="Red"/>-->
+                    <Setter Property="BorderBrush" Value="Red"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -99,8 +99,10 @@
                                  Grid.Column="1"
                                  Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </Grid>
-                    <Button x:Name="DeleteDepartment" Content="Удалить отдел" PreviewMouseLeftButtonUp="DeleteDepartmentMouseLeftButtonUp" />
-                    <Button x:Name="AddDepartment" Content="Создать отдел" PreviewMouseLeftButtonUp="AddDepartmentMouseLeftButtonUp" />
+                    <Button x:Name="DeleteDepartment" Content="Удалить отдел" 
+                            PreviewMouseLeftButtonUp="DeleteDepartmentMouseLeftButtonUp" />
+                    <Button x:Name="AddDepartment" Content="Создать отдел" 
+                            PreviewMouseLeftButtonUp="AddDepartmentMouseLeftButtonUp" />
                 </StackPanel>
 
             </Grid>
@@ -117,8 +119,8 @@
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="40"/>
-                        <GridViewColumn Header="Фамилия" DisplayMemberBinding="{Binding LastName}" Width="100"/>
                         <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding FirstName}" Width="80"/>
+                        <GridViewColumn Header="Фамилия" DisplayMemberBinding="{Binding LastName}" Width="100"/>
                         <GridViewColumn Header="Должность" DisplayMemberBinding="{Binding Position}" Width="110"/>
                         <GridViewColumn Header="Зарплата" DisplayMemberBinding="{Binding StringFormat=\{0: ### ##0.00\}, Path=Salary}"/>
                         <GridViewColumn Header="Возраст" DisplayMemberBinding="{Binding Age}"/>
@@ -132,9 +134,9 @@
                             <RowDefinition/>
                             <!--header-->
                             <RowDefinition/>
-                            <!--LastName-->
-                            <RowDefinition/>
                             <!--FirstName-->
+                            <RowDefinition/>
+                            <!--LastName-->
                             <RowDefinition/>
                             <!--Age-->
                             <RowDefinition/>
@@ -148,34 +150,58 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Row="0" Grid.ColumnSpan="2" 
-                                Text="Измените данные сотрудника выбранного отдела"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center" 
-                                MaxWidth="200" Height="Auto"
-                                TextWrapping="Wrap" 
-                                TextAlignment="Center"/>
+                                   Text="Измените данные сотрудника выбранного отдела"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" 
+                                   MaxWidth="200" Height="Auto"
+                                   TextWrapping="Wrap" 
+                                   TextAlignment="Center"/>
 
-                        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
                             
                             <Label Content="Фамилия:" 
                                    VerticalAlignment="Center"/>
-                            
+
                             <TextBox x:Name="NewLastName"  
-                                     Text="{Binding LastName,UpdateSourceTrigger=Explicit}" Width="120" 
+                                     Width="120" 
                                      HorizontalAlignment="Center" 
-                                     VerticalAlignment="Center"/>
-                            
+                                     VerticalAlignment="Center"
+                                     Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                     Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="LastName" 
+                                             UpdateSourceTrigger="Explicit">
+                                        <Binding.ValidationRules>
+                                            <c:NameValidationRule ValidationStep="RawProposedValue"></c:NameValidationRule>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+                                
+                            </TextBox>
+
                         </StackPanel>
 
-                        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                        <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                             
                             <Label Content="Имя:" 
                                    VerticalAlignment="Center"/>
 
                             <TextBox x:Name="NewFirstName" 
-                                     Text="{Binding FirstName,UpdateSourceTrigger=Explicit}" Width="120" 
+                                     Width="120" 
                                      HorizontalAlignment="Center" 
-                                     VerticalAlignment="Center"/>
+                                     VerticalAlignment="Center"
+                                     Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                     Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="FirstName" 
+                                             UpdateSourceTrigger="Explicit">
+                                        <Binding.ValidationRules>
+                                            <c:NameValidationRule ValidationStep="RawProposedValue"></c:NameValidationRule>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+
+                            </TextBox>
                         </StackPanel>
 
                         <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
@@ -184,26 +210,39 @@
                                VerticalAlignment="Center"/>
                             
                             <TextBox x:Name="NewAge"  
-                                     Text="{Binding Age,UpdateSourceTrigger=Explicit}" Width="40" 
-                                     HorizontalAlignment="Center" VerticalAlignment="Center"
-                                     TextChanged="AgeTextChanged"/>
-                            
+                                     Width="120" 
+                                     HorizontalAlignment="Center" 
+                                     VerticalAlignment="Center"
+                                     Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                     Style="{StaticResource textBoxInError}">
+                                <TextBox.Text>
+                                    <Binding Path="Age" 
+                                             UpdateSourceTrigger="Explicit">
+                                        <Binding.ValidationRules>
+                                            <c:AgeValidationRule Min ="12" Max="130" 
+                                                                 ValidationStep="RawProposedValue">
+                                            </c:AgeValidationRule>
+                                        </Binding.ValidationRules>
+                                    </Binding>
+                                </TextBox.Text>
+
+                            </TextBox>
                         </StackPanel>
 
                         <Button x:Name="Modify"  Grid.Row="4" Grid.Column="1" 
-                            Content="Сохранить" Height="20" Width="100" 
-                            HorizontalAlignment="Center" VerticalAlignment="Center"
-                            PreviewMouseLeftButtonUp="ModifyButtonMouseLeftButtonUp"/>
+                                Content="Сохранить" Height="20" Width="100" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                PreviewMouseLeftButtonUp="ModifyButtonMouseLeftButtonUp"/>
 
                         <Button x:Name="Reset"  Grid.Row="4" Grid.Column="0" 
-                            Content="Сбросить" Height="20" Width="100" 
-                            HorizontalAlignment="Center" VerticalAlignment="Center"
-                            PreviewMouseLeftButtonUp="ResetButtonMouseLeftButtonUp"/>
+                                Content="Сбросить" Height="20" Width="100" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center"
+                                PreviewMouseLeftButtonUp="ResetButtonMouseLeftButtonUp"/>
 
                         <Button x:Name="Delete" Grid.Row="5" Grid.ColumnSpan="2"
                                 Content="Удалить" Height="20" Width="100"
                                 HorizontalAlignment="Center" VerticalAlignment="Center"
-                                 PreviewMouseLeftButtonUp="DeleteButtonMouseLeftButtonUp"/>
+                                PreviewMouseLeftButtonUp="DeleteButtonMouseLeftButtonUp"/>
 
                     </Grid>
                 </TabItem>
@@ -213,9 +252,9 @@
                             <RowDefinition Height="Auto"/>
                             <!--header-->
                             <RowDefinition/>
-                            <!--LastName-->
-                            <RowDefinition/>
                             <!--FirstName-->
+                            <RowDefinition/>
+                            <!--LastName-->
                             <RowDefinition/>
                             <!--Age-->
                             <RowDefinition/>
@@ -227,14 +266,14 @@
                             <ColumnDefinition/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                       
+
                         <TextBlock Grid.Row="0" Grid.ColumnSpan="2" 
-                                Text="Введите данные нового сотрудника выбранного отдела"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center" 
-                                MaxWidth="200" Height="Auto"
-                                TextWrapping="Wrap" 
-                                TextAlignment="Center"/>
+                                    Text="Введите данные нового сотрудника выбранного отдела"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" 
+                                    MaxWidth="200" Height="Auto"
+                                    TextWrapping="Wrap" 
+                                    TextAlignment="Center"/>
 
                         <StackPanel Grid.Row="4" Grid.ColumnSpan="2">
 
@@ -247,21 +286,20 @@
 
                         </StackPanel>
                         
-                        <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
+                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
 
                             <Label Content="Фамилия:" 
                                    VerticalAlignment="Center"/>
 
                             <TextBox x:Name="LastName"  
                                      Width="120" HorizontalAlignment="Center" 
-                                     VerticalAlignment="Center"
                                      Validation.ErrorTemplate="{StaticResource validationTemplate}"
                                      Style="{StaticResource textBoxInError}">
                                 <TextBox.Text>
-                                    <Binding Path="LastName" Source="{StaticResource person}"
-                                             UpdateSourceTrigger="Default">
+                                    <Binding Path="LastName" Source="{StaticResource personView}"
+                                             UpdateSourceTrigger="PropertyChanged">
                                         <Binding.ValidationRules>
-                                            <c:NameValidationRule></c:NameValidationRule>
+                                            <c:NameValidationRule ValidationStep="RawProposedValue"></c:NameValidationRule>
                                         </Binding.ValidationRules>
                                     </Binding>
                                 </TextBox.Text>
@@ -270,7 +308,7 @@
 
                         </StackPanel>
 
-                        <StackPanel Grid.Row="2" Grid.ColumnSpan="2">
+                        <StackPanel Grid.Row="1" Grid.ColumnSpan="2">
                             
                             <Label Content="Имя:" 
                                    VerticalAlignment="Center"/>
@@ -281,8 +319,8 @@
                                      Validation.ErrorTemplate="{StaticResource validationTemplate}"
                                      Style="{StaticResource textBoxInError}">
                                 <TextBox.Text>
-                                    <Binding Path="FirstName" Source="{StaticResource person}"
-                                         UpdateSourceTrigger="Default">
+                                    <Binding Path="FirstName" Source="{StaticResource personView}"
+                                         UpdateSourceTrigger="PropertyChanged">
                                         <Binding.ValidationRules>
                                             <c:NameValidationRule></c:NameValidationRule>
                                         </Binding.ValidationRules>
@@ -302,13 +340,17 @@
                                      HorizontalAlignment="Center" 
                                      VerticalAlignment="Center"
                                      Validation.ErrorTemplate="{StaticResource validationTemplate}"
-                                     Style="{StaticResource textBoxInError}" >
+                                     Style="{StaticResource textBoxInError}" 
+                                     TextChanged="AgeTextChanged">
 
                                 <TextBox.Text>
-                                    <Binding Path="Age" Source="{StaticResource person}"
-                                         UpdateSourceTrigger="PropertyChanged">
+                                    <Binding Path="Age" Source="{StaticResource personView}"
+                                             UpdateSourceTrigger="PropertyChanged">
                                         <Binding.ValidationRules>
-                                            <c:AgeValidationRule Min="14" Max="130" ValidationStep="RawProposedValue"></c:AgeValidationRule>
+                                            <c:AgeValidationRule Min="14" Max="130" 
+                                                                 ValidationStep="RawProposedValue">
+                                                
+                                            </c:AgeValidationRule>
                                         </Binding.ValidationRules>
                                     </Binding>
                                 </TextBox.Text>
@@ -330,16 +372,14 @@
                     </Grid>
                 </TabItem>
             </TabControl>
-            
            
         </Grid >
         <StatusBar Height="Auto" Grid.Row="2" DataContext="{Binding ElementName=CompanyTree, Path=SelectedItem }">
             <WrapPanel>
-                <TextBlock  Text="Id: " Margin="0" />
-                <TextBlock x:Name="Selected" Text="{Binding Id}"/>
-                
+                <TextBlock  Text="ID: " />
+                <TextBlock  Text="{Binding Id}" Width="50"/>
+                <TextBlock x:Name="StatusMessage"/>
             </WrapPanel>
-            
         </StatusBar>
 
     </Grid>
