@@ -10,17 +10,17 @@ using System.IO;
 
 namespace Corporation
 {
-    public class Repository
+    public class Company
     {
           
         public Department Board { get; set; }
 
-        public Repository()
+        public Company()
         {
             this.Board = new Administration("Новый департамент");
         }
 
-        public Repository(int MaxChildren, int MaxDepth, int MaxStaff) //удалить
+        public Company(int MaxChildren, int MaxDepth, int MaxStaff) //удалить
         {
 
             CreateRandomCorp(MaxChildren, MaxDepth, MaxStaff);

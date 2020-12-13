@@ -65,14 +65,14 @@ namespace WpfCorp.ViewModel
         }
         public Level Position { get { return this.employee.Position; } 
         
-            set
-            {
-                if (value != this.employee.Position)
-                {
-                    this.employee.Position = value;
-                    OnPropertyChanged("Position");
-                }
-            }
+            //set
+            //{
+            //    if (value != this.employee.Position)
+            //    {
+            //        this.employee.Position = value;
+            //        OnPropertyChanged("Position");
+            //    }
+            //}
         }
         
         public uint Id { get { return this.employee.Id; } }
@@ -90,7 +90,7 @@ namespace WpfCorp.ViewModel
             }
         }
 
-        public void Refresh() //маленький хак, чтобы обновить DataContext. а как надо?
+        public void Refresh() 
         {
             OnPropertyChanged();
         }

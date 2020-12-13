@@ -208,13 +208,14 @@
                             
                             <Label Content="Возраст:" 
                                VerticalAlignment="Center"/>
-                            
+
                             <TextBox x:Name="NewAge"  
-                                     Width="120" 
+                                     Width="40" 
                                      HorizontalAlignment="Center" 
                                      VerticalAlignment="Center"
                                      Validation.ErrorTemplate="{StaticResource validationTemplate}"
-                                     Style="{StaticResource textBoxInError}">
+                                     Style="{StaticResource textBoxInError}"
+                                     TextChanged="AgeTextChanged">
                                 <TextBox.Text>
                                     <Binding Path="Age" 
                                              UpdateSourceTrigger="Explicit">

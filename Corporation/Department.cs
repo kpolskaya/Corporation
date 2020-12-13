@@ -24,7 +24,7 @@ namespace Corporation
 
         public ReadOnlyObservableCollection<Employee> Staff { get; private set; }
 
-        private ObservableCollection<Employee> panel;
+        private ObservableCollection<Employee> staff;
 
         public Department(string Name)
         {
@@ -32,8 +32,8 @@ namespace Corporation
             this.Id = GlobalId.Next();
             
             this.Children = new ObservableCollection<Department>();
-            this.panel = new ObservableCollection<Employee>();
-            this.Staff = new ReadOnlyObservableCollection<Employee>(panel);
+            this.staff = new ObservableCollection<Employee>();
+            this.Staff = new ReadOnlyObservableCollection<Employee>(staff);
         }
         [JsonConstructor]
         public Department(uint Id, string Name)
@@ -42,8 +42,8 @@ namespace Corporation
             this.Id = Id;
             GlobalId.InitId(Id);
             this.Children = new ObservableCollection<Department>();
-            this.panel = new ObservableCollection<Employee>();
-            this.Staff = new ReadOnlyObservableCollection<Employee>(panel);
+            this.staff = new ObservableCollection<Employee>();
+            this.Staff = new ReadOnlyObservableCollection<Employee>(staff);
         }
 
         public override string ToString()
@@ -58,15 +58,15 @@ namespace Corporation
             switch (position)
             {
                 case Level.Intern:
-                    this.panel.Add(new Intern(person, position, this));
+                    this.staff.Add(new Intern(person, position, this));
                     break;
                 case Level.Worker:
-                    this.panel.Add(new Worker(person, position, this, Employee.initialHours));
+                    this.staff.Add(new Worker(person, position, this, Employee.initialHours));
                     break;
                 case Level.Product_Manager:
                 case Level.Deputy:
                 case Level.Director:
-                    this.panel.Add(new Boss(person, position, this));
+                    this.staff.Add(new Boss(person, position, this));
                     break;
                 default:
                     throw new Exception("Неизвестная должность");
@@ -77,7 +77,7 @@ namespace Corporation
         {
             try
             {
-                this.panel.Remove(this.panel.First(p => p.Id == id));
+                this.staff.Remove(this.staff.First(p => p.Id == id));
             }
             catch (Exception)
             {
@@ -97,19 +97,19 @@ namespace Corporation
                 switch (position)
                 {
                     case Level.Intern:
-                        this.panel.Add(new Intern(employee.Value<uint>("Id"), person, 
+                        this.staff.Add(new Intern(employee.Value<uint>("Id"), person, 
                             position, this));
                         break;
 
                     case Level.Worker:
-                        this.panel.Add(new Worker(employee.Value<uint>("Id"), person,
+                        this.staff.Add(new Worker(employee.Value<uint>("Id"), person,
                             position, this, employee.Value<uint>("Hours")));
                         break;
 
                     case Level.Product_Manager:
                     case Level.Deputy:
                     case Level.Director:
-                        this.panel.Add(new Boss(employee.Value<uint>("Id"), person, 
+                        this.staff.Add(new Boss(employee.Value<uint>("Id"), person, 
                             position, this));
                         break;
 
@@ -195,7 +195,7 @@ namespace Corporation
         public decimal TotalSalary()
         {
             decimal total = 0;
-            foreach (var item in this.panel)
+            foreach (var item in this.staff)
             {
                 total += item.Salary();
             }
@@ -217,7 +217,7 @@ namespace Corporation
         {
             decimal salary = 0;
 
-            foreach (var item in this.panel)
+            foreach (var item in this.staff)
             {
                 if (item.Position < lvl)
                     salary += item.Salary();

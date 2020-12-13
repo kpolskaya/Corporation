@@ -51,7 +51,7 @@
     <Compile Include="DepartmentExtention.cs" />
     <Compile Include="RandomNames.cs" />
     <Compile Include="Person.cs" />
-    <Compile Include="Repository.cs" />
+    <Compile Include="Company.cs" />
     <Compile Include="Department.cs" />
     <Compile Include="Intern.cs" />
     <Compile Include="Program.cs" />
@@ -65,10 +65,5 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="Names\fnames_f.txt" />
-    <Content Include="Names\lnames.txt" />
-    <Content Include="Names\fnames_m.txt" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

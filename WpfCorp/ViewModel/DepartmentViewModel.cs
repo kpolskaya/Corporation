@@ -53,7 +53,7 @@ namespace WpfCorp.ViewModel
                 } 
             } 
         }
-        public string Id { get { return this.department.Id.ToString(); } }
+        public string Id { get { return this.department.Id.ToString("0000000"); } }
 
        /// <summary>
        /// Читает и устанавливает триггер объекта в соответствии с  

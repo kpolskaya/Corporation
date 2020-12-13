@@ -14,11 +14,11 @@ namespace WpfCorp.ViewModel
     /// </summary>
     public class CorporationViewModel : INotifyPropertyChanged
     {
-        static Repository repository;
+        static Company company;
 
         static CorporationViewModel()
         {
-            repository = new Repository();
+            company = new Company();
         }
 
         DepartmentViewModel board;
@@ -26,11 +26,12 @@ namespace WpfCorp.ViewModel
 
         public CorporationViewModel()
         {
-            this.board = new DepartmentViewModel (repository.Board);
+            this.board = new DepartmentViewModel (company.Board);
             this.rootDepartmen = new ObservableCollection<DepartmentViewModel>(
                 new DepartmentViewModel[]
                 {
                     this.board
+
                 }
                 );
         }
@@ -68,8 +69,8 @@ namespace WpfCorp.ViewModel
 
         public void CreateRandomCorp (int maxChildren, int maxDepth, int maxStaff)
         {
-            repository.CreateRandomCorp(maxChildren, maxDepth, maxStaff);
-            this.board = new DepartmentViewModel(repository.Board);
+            company.CreateRandomCorp(maxChildren, maxDepth, maxStaff);
+            this.board = new DepartmentViewModel(company.Board);
             this.rootDepartmen = new ObservableCollection<DepartmentViewModel>(
                 new DepartmentViewModel[]
                 {
@@ -81,13 +82,13 @@ namespace WpfCorp.ViewModel
 
         public void Save(string path)
         {
-            repository.Save(path);
+            company.Save(path);
         }
 
         public void Load(string path)
         {
-            repository.Load(path);
-            this.board = new DepartmentViewModel(repository.Board);
+            company.Load(path);
+            this.board = new DepartmentViewModel(company.Board);
             this.rootDepartmen = new ObservableCollection<DepartmentViewModel>(
                 new DepartmentViewModel[]
                 {

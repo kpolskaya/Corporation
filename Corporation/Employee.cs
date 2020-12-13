@@ -27,14 +27,14 @@ namespace Corporation
 
         static Employee() // TODO запретить создание работников с несоответствующей типу позицией - проверить еще раз
         {
-            minBossSalary = 1300m;
+            minBossSalary = 2300m;
             hourRate = 12m;
             internSalary = 500m;
             bossSalaryProportion = 0.15m;
-            initialHours = 190;
+            initialHours = 165;
         }
        
-         public Level Position { get;  set; }
+         public Level Position { get;  private set; }
 
         /// <summary>
         /// Отдел (не сериализуемое свойство - для исключения циклической ссылки)
@@ -64,7 +64,7 @@ namespace Corporation
         /// <summary>
         /// Конструктор для создания сотрудника с существующим Id - из файла
         /// </summary>
-        public Employee(uint Id, string FirstName, string LastName, uint Age, Level Position, Department Department) 
+        public Employee(uint Id, string FirstName, string LastName, uint Age, Level Position, Department Department) //убрать?
         : base(FirstName, LastName, Age)
         {
             this.Position = Position;

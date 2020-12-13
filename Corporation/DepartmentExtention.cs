@@ -15,7 +15,7 @@ namespace Corporation
             tier++;
             foreach (var item in dep.Children)
             {
-                item.PrintHierarchy(tier);
+               item.PrintHierarchy(tier);
             }
         }
 
