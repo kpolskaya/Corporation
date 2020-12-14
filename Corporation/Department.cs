@@ -161,7 +161,7 @@ namespace Corporation
                         randomLevel);
                 }
                 if (maxDepth > 1)
-                    this.Children[i].CreateRandom(maxChildren - 1, maxDepth - 1, maxStaff);
+                    this.Children[i].CreateRandom(maxChildren - 1, maxDepth - 1, maxStaff); //на каждом следующем уровне уменьшаем глубину и макс. количество детей
             }
         }
         
