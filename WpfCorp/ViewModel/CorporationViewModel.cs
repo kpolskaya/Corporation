@@ -69,7 +69,7 @@ namespace WpfCorp.ViewModel
 
         public void CreateRandomCorp (int maxChildren, int maxDepth, int maxStaff)
         {
-            company.CreateRandomCorp(maxChildren, maxDepth, maxStaff);
+            company.CreateRandom(maxChildren, maxDepth, maxStaff);
             this.board = new DepartmentViewModel(company.Board);
             this.rootDepartmen = new ObservableCollection<DepartmentViewModel>(
                 new DepartmentViewModel[]

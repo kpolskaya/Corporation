@@ -27,7 +27,7 @@ namespace Corporation
 
         public override decimal Salary()
         {
-            return (decimal)this.Department.GetBossSalaryOrNull(this.Position); 
+            return this.Department.GetBossSalary(this.Position); 
         }
  
     }

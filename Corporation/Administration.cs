@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Corporation
 {
+    /// <summary>
+    /// Класс для административного департамента самого верхнего уровня
+    /// </summary>
     public class Administration : Department
     {
         public Administration(string Name)

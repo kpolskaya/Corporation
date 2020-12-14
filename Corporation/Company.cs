@@ -10,9 +10,12 @@ using System.IO;
 
 namespace Corporation
 {
+    /// <summary>
+    /// Класс для работы со всей компанией
+    /// </summary>
     public class Company
     {
-          
+        //Департамент самого верхнего уровня  
         public Department Board { get; set; }
 
         public Company()
@@ -20,19 +23,20 @@ namespace Corporation
             this.Board = new Administration("Новый департамент");
         }
 
-        public Company(int MaxChildren, int MaxDepth, int MaxStaff) //удалить
-        {
-
-            CreateRandomCorp(MaxChildren, MaxDepth, MaxStaff);
-        }
-
-        public void CreateRandomCorp(int maxChildren, int maxDepth, int maxStaff)
+        /// <summary>
+        /// Создает новую компанию с сотрудниками случайным образом 
+        /// </summary>
+        /// <param name="maxChildren">Максимальное количество дочерних департаментов на первом уровне</param>
+        /// <param name="maxDepth">Максимальная вложенность департаментов</param>
+        /// <param name="maxStaff">Максимальное количество сотрудников в каждом департаменте (не считая начальников)</param>
+        public void CreateRandom(int maxChildren, int maxDepth, int maxStaff)
         {
             this.Board = new Administration("Virtual Times Entertainment");
-            this.Board.RecruitPerson(new Person("Лев", "Мышкин", 27), Level.Director); 
-            this.Board.RecruitPerson(new Person("Ипполит", "Терентьев", 20), Level.Deputy);
+            
+            this.Board.RecruitPerson(RandomPerson.Next(31, 70), Level.Director); 
+            this.Board.RecruitPerson(RandomPerson.Next(31, 70), Level.Deputy);
             if (maxDepth > 0)
-                this.Board.CreateRandomChildren(maxChildren, maxDepth, maxStaff);
+                this.Board.CreateRandom(maxChildren, maxDepth, maxStaff);
         }
 
         public void Save(string path)
@@ -54,6 +58,7 @@ namespace Corporation
             IList<JToken> descendants = o["Children"].Children().ToList();
             this.Board.Restore(panel, descendants);
         }
+        
                 
     }
 }

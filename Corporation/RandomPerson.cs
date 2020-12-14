@@ -6,14 +6,18 @@ using System.Threading.Tasks;
 
 namespace Corporation
 {
-    public static class RandomNames
+    /// <summary>
+    /// Содержит методы для создания случайного персонажа
+    /// как экземпляра класса Person
+    /// </summary>
+    public static class RandomPerson
     {
         static string[] firstNamesM;
         static string[] firstNamesF;
         static string[] lastNames;
         static Random r;
 
-        static RandomNames()
+        static RandomPerson()
         {
             r = new Random();
             lastNames = new string[]
@@ -479,7 +483,7 @@ namespace Corporation
             };
         }
  
-        public static String[] Next()
+        private static String[] GetNames()
         {
             
             string[] names = new string[2];
@@ -500,8 +504,19 @@ namespace Corporation
 
             return names;
         }
-
-
+        /// <summary>
+        /// Генерирует случайного человека
+        /// </summary>
+        /// <param name="MinAge">минимально возможный возраст</param>
+        /// <param name="MaxAge">максимально возможный возраст</param>
+        /// <returns>экземпляр класса Person со случайными данными</returns>
+        public static Person Next(uint MinAge = 25, uint MaxAge = 65)
+        {
+            if (MinAge > MaxAge)
+                MinAge = MaxAge;
+            string[] names = GetNames();
+            return new Person(names[0], names[1], (uint)r.Next((int)MinAge, (int)MaxAge + 1));
+        }
 
 
 

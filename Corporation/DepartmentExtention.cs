@@ -6,24 +6,39 @@ using System.Threading.Tasks;
 
 namespace Corporation
 {
+    /// <summary>
+    /// Расширение класса Department для вывода информации
+    /// в консоль
+    /// </summary>
     public static class DepartmentExtention
     {
-        public static void PrintHierarchy(this Department dep, int tier = 0)
+        /// <summary>
+        /// Выводит в консоль всю иерархическую структуру,
+        /// начиная с заданного департамента (без сотрудников)
+        /// </summary>
+        /// <param name="d">Корневой департамент</param>
+        /// <param name="tier">Уровень в иерерхии - задает начальный отступ</param>
+        public static void PrintHierarchy(this Department d, int tier = 0)
         {
             string indent = new string('\t', tier);
-            Console.WriteLine(indent + dep);
+            Console.WriteLine(indent + d);
             tier++;
-            foreach (var item in dep.Children)
+            foreach (var item in d.Children)
             {
                item.PrintHierarchy(tier);
             }
         }
 
-        public static void PrintDepartmentPanel(this Department dep, int tier = 0)
+        /// <summary>
+        /// Выводит в консоль список сотрудников департамента
+        /// </summary>
+        /// <param name="d">Департамент</param>
+        /// <param name="tier">Уровень департамента в иерархии - задает отступ</param>
+        public static void PrintDepartmentPanel(this Department d, int tier = 0)
         {
             string indent = "  " + new string('\t', tier);
            
-            var sortedPanel = from p in dep.Staff 
+            var sortedPanel = from p in d.Staff 
                               orderby p.Position descending
                               select p;
             foreach (var p in sortedPanel)
@@ -33,14 +48,20 @@ namespace Corporation
             Console.WriteLine();
         }
 
-        public static void PrintStaffHierarchy(this Department dep, int tier = 0)
+        /// <summary>
+        /// Выводит в консоль всю иерархическую структуру
+        /// включая сотрудников департаментов, начиная с заданного департамента
+        /// </summary>
+        /// <param name="d">Департамент</param>
+        /// <param name="tier">Уровень в иерерхии - задает начальный отступ</param>
+        public static void PrintStaffHierarchy(this Department d, int tier = 0)
         {
             string indent = new string('\t', tier);
             
-            Console.WriteLine(indent + dep);
-            dep.PrintDepartmentPanel(tier);
+            Console.WriteLine(indent + d);
+            d.PrintDepartmentPanel(tier);
             tier++;
-            foreach (var item in dep.Children)
+            foreach (var item in d.Children)
             {
                 item.PrintStaffHierarchy(tier);
             }

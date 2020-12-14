@@ -8,6 +8,9 @@ using System.Text;
 
 namespace Corporation
 {   
+    /// <summary>
+    /// Класс для департаментов общего назначения
+    /// </summary>
     public class Department
     {
         static Random Randomize;
@@ -85,6 +88,12 @@ namespace Corporation
             }
         }
   
+        /// <summary>
+        ///  Восстановление иерархической структуры компании начиная с данного департамента
+        ///  из предварительно прочитанного и обработанного json-формата 
+        /// </summary>
+        /// <param name="staff">персонал этого департамента</param>
+        /// <param name="children">дочерние департаменты</param>
         public void Restore(IList<JToken> staff, IList<JToken> children)
         {
             foreach (var employee in staff)
@@ -127,33 +136,32 @@ namespace Corporation
             }
         }
 
-        public void CreateRandomChildren(int maxChildren, int maxDepth, int maxStaff)
+        /// <summary>
+        /// Создает случайную иерархическую структуру компании
+        /// и наполняет ее случайными людьми
+        /// </summary>
+        /// <param name="maxChildren"></param>
+        /// <param name="maxDepth"></param>
+        /// <param name="maxStaff"></param>
+        public void CreateRandom(int maxChildren, int maxDepth, int maxStaff)
         {
-            string[] randomName;
 
             for (int i = 0; i < Randomize.Next(maxChildren < 0 ? 0 : maxChildren+1); i++)
             {
                 this.Children.Add(new Department(NameChild(i+1)));
-                randomName = RandomNames.Next();
-                
-                this.Children[i].RecruitPerson(
-                    
-                    new Person(randomName[0], randomName[1], 
-                    (uint)Randomize.Next(25, 66)), 
-                    Level.Product_Manager);
+               
+                this.Children[i].RecruitPerson( RandomPerson.Next(), Level.Product_Manager);
                
                 for (int j = 0; j < Randomize.Next(2, maxStaff < 1 ? 2 : maxStaff +1); j++)
                 {
-                    randomName = RandomNames.Next();
                     Level randomLevel = (Level)Randomize.Next(0, (int)Level.Worker + 1);
-                    uint randomAge = (uint)Randomize.Next(18, 23 * ((int)randomLevel + 1));
-
+                    
                     this.Children[i].RecruitPerson(
-
-                        new Person(randomName[0], randomName[1], randomAge), randomLevel);
+                        RandomPerson.Next(18 + (uint)randomLevel * 2, 25 * ((uint)randomLevel +1)), 
+                        randomLevel);
                 }
                 if (maxDepth > 1)
-                    this.Children[i].CreateRandomChildren(maxChildren - 1, maxDepth - 1, maxStaff);
+                    this.Children[i].CreateRandom(maxChildren - 1, maxDepth - 1, maxStaff);
             }
         }
         
@@ -172,11 +180,11 @@ namespace Corporation
         /// Расчитывает заработную плату босса
         /// </summary>
         /// <param name="lvl">уровень босса</param>
-        /// <returns>Зарплата босса или null, если задан уровень ниже уровня босса</returns>
-        public Nullable<decimal> GetBossSalaryOrNull(Level lvl) 
+        /// <returns>Зарплата босса. Исключения - задан уровень ниже уровня босса</returns>
+        public decimal GetBossSalary(Level lvl) 
         {
             if (lvl < Level.Product_Manager)
-                return null;
+                throw new Exception($"Для позиции {lvl}  данный метод неприменим");
             
             decimal salaryBasis = SubalternSalary(lvl); 
 

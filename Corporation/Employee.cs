@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 namespace Corporation
 {
    
+    /// <summary>
+    /// Должности сотрудников
+    /// </summary>
     public enum Level : byte
     {
         Intern = 0,
@@ -17,15 +20,18 @@ namespace Corporation
         Director = 80
     }
 
+    /// <summary>
+    /// Базовый абстракнтный класс для сотрудников
+    /// </summary>
     public abstract class Employee : Person
     {
-        public static decimal minBossSalary;
-        public static decimal hourRate;
-        public static decimal internSalary;
-        public static decimal bossSalaryProportion;
-        public static uint initialHours;
+        public static decimal minBossSalary;        //минимальный оклад начальника
+        public static decimal hourRate;             //часовая ставка работника
+        public static decimal internSalary;         //оклад интерна
+        public static decimal bossSalaryProportion; //доля от суммы зарплат нижестоящих сотрудников, составляющая оклад начальника
+        public static uint initialHours;            //стандартная часовая загрузка работника
 
-        static Employee() // TODO запретить создание работников с несоответствующей типу позицией - проверить еще раз
+        static Employee()
         {
             minBossSalary = 2300m;
             hourRate = 12m;
@@ -54,29 +60,28 @@ namespace Corporation
             this.Department = Department;
             this.Id = GlobalId.Next();
         }
-
+        /// <summary>
+        /// Создание сотрудника c автоматическим Id
+        /// </summary>
         public Employee(Person Person, Level Position, Department Department) 
         : this(Person.FirstName, Person.LastName, Person.Age, Position, Department)
         {
 
         }
-
         /// <summary>
-        /// Конструктор для создания сотрудника с существующим Id - из файла
+        /// Создание сотрудника с существующим ID (при десериализации)
         /// </summary>
-        public Employee(uint Id, string FirstName, string LastName, uint Age, Level Position, Department Department) //убрать?
-        : base(FirstName, LastName, Age)
+        /// <param name="Id"></param>
+        /// <param name="Person"></param>
+        /// <param name="Position"></param>
+        /// <param name="Department"></param>
+        public Employee(uint Id, Person Person, Level Position, Department Department) 
+        : base(Person.FirstName, Person.LastName, Person.Age)
         {
             this.Position = Position;
             this.Department = Department;
             this.Id = Id;
             GlobalId.InitId(Id);
-        }
-
-        public Employee(uint Id, Person Person, Level Position, Department Department) 
-        : this(Id, Person.FirstName, Person.LastName, Person.Age, Position, Department)
-        {
-
         }
 
         /// <summary>

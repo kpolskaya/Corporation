@@ -8,6 +8,10 @@ using System.Windows.Controls;
 
 namespace WpfCorp
 {
+    /// <summary>
+    /// Расширение для TextBox, позволяющее вводить
+    /// только цифровую строку заданной длины
+    /// </summary>
     public static class TextBoxExtension
     {
         public static void OnlyDigits(this TextBox input, int length = 3)
