@@ -220,7 +220,7 @@
                                     <Binding Path="Age" 
                                              UpdateSourceTrigger="Explicit">
                                         <Binding.ValidationRules>
-                                            <c:AgeValidationRule Min ="12" Max="130" 
+                                            <c:AgeValidationRule Min ="14" Max="130" 
                                                                  ValidationStep="RawProposedValue">
                                             </c:AgeValidationRule>
                                         </Binding.ValidationRules>

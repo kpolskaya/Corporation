@@ -53,20 +53,12 @@ namespace Corporation
         /// <summary>
         /// Создание сотрудника c автоматическим Id
         /// </summary>
-        public Employee(string FirstName, string LastName, uint Age, Level Position, Department Department) 
-        : base(FirstName, LastName, Age)
+        public Employee(Person Person, Level Position, Department Department) 
+        : base(Person.FirstName, Person.LastName, Person.Age)
         {
             this.Position = Position;
             this.Department = Department;
             this.Id = GlobalId.Next();
-        }
-        /// <summary>
-        /// Создание сотрудника c автоматическим Id
-        /// </summary>
-        public Employee(Person Person, Level Position, Department Department) 
-        : this(Person.FirstName, Person.LastName, Person.Age, Position, Department)
-        {
-
         }
         /// <summary>
         /// Создание сотрудника с существующим ID (при десериализации)

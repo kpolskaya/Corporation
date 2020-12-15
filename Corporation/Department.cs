@@ -140,9 +140,9 @@ namespace Corporation
         /// Создает случайную иерархическую структуру компании
         /// и наполняет ее случайными людьми
         /// </summary>
-        /// <param name="maxChildren"></param>
-        /// <param name="maxDepth"></param>
-        /// <param name="maxStaff"></param>
+        /// <param name="maxChildren">Максимальное количество детей на этом уровне</param>
+        /// <param name="maxDepth">Максимальный уровень вложенности</param>
+        /// <param name="maxStaff">Максимальное количество сотрудников в отделе</param>
         public void CreateRandom(int maxChildren, int maxDepth, int maxStaff)
         {
 
@@ -154,11 +154,11 @@ namespace Corporation
                
                 for (int j = 0; j < Randomize.Next(2, maxStaff < 1 ? 2 : maxStaff +1); j++)
                 {
-                    Level randomLevel = (Level)Randomize.Next(0, (int)Level.Worker + 1);
+                    Level randomLevel = (Level)Randomize.Next(0, (int)Level.Worker + 1); // случайно определяем интерн или работник
                     
                     this.Children[i].RecruitPerson(
                         RandomPerson.Next(18 + (uint)randomLevel * 2, 25 * ((uint)randomLevel +1)), 
-                        randomLevel);
+                        randomLevel); // интерны от 18 до 24 лет, работники от 20 до 49 лет
                 }
                 if (maxDepth > 1)
                     this.Children[i].CreateRandom(maxChildren - 1, maxDepth - 1, maxStaff); //на каждом следующем уровне уменьшаем глубину и макс. количество детей

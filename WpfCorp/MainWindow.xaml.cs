@@ -25,10 +25,10 @@ namespace WpfCorp
     /// </summary>
     public partial class MainWindow : Window
     {
-        public PersonViewModel personView { get; }
+        public PersonViewModel personView { get; }  //подключается как ресурс для временного хранения данных сотрудника
         
-        static readonly DependencyProperty CompanyProperty;
-        CorporationViewModel corpPresenter
+        static readonly DependencyProperty CompanyProperty; 
+        CorporationViewModel corpPresenter //представление компании
         {
             get { return (CorporationViewModel)GetValue(CompanyProperty); }
         
