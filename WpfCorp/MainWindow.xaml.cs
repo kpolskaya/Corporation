@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Corporation;
+using CompanyLib;
 using Microsoft.Win32;
 using WpfCorp.ViewModel;
 

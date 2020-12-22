@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel;
-using Corporation;
+using CompanyLib;
 
 namespace WpfCorp.ViewModel
 {
