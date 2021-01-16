@@ -185,5 +185,11 @@ namespace WpfCorp
         {
             ((TextBox)sender).OnlyDigits();
         }
+
+        private void GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
+        {
+            //  вызов соответствующего метода сортировки
+
+        }
     }
 }

@@ -118,7 +118,11 @@
                 </ListView.ItemContainerStyle>
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" Width="40"/>
+                        <GridViewColumn  DisplayMemberBinding="{Binding Id}" Width="40">
+                            <GridViewColumn.Header >
+                                <GridViewColumnHeader Content="Id" Name="Id" Click="GridViewColumnHeader_Click" />
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
                         <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding FirstName}" Width="80"/>
                         <GridViewColumn Header="Фамилия" DisplayMemberBinding="{Binding LastName}" Width="100"/>
                         <GridViewColumn Header="Должность" DisplayMemberBinding="{Binding Position}" Width="110"/>
