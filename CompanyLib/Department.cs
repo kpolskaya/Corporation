@@ -136,6 +136,11 @@ namespace CompanyLib
             }
         }
 
+        public void SortStaff(EmployeeComparer.SortBy field)
+        {
+            this.staff.Sort();
+        }
+
         /// <summary>
         /// Создает случайную иерархическую структуру компании
         /// и наполняет ее случайными людьми

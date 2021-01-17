@@ -23,7 +23,7 @@ namespace CompanyLib
     /// <summary>
     /// Базовый абстракнтный класс для сотрудников
     /// </summary>
-    public abstract class Employee : Person
+    public abstract class Employee : Person, IComparable<Employee>
     {
         public static decimal minBossSalary;        //минимальный оклад начальника
         public static decimal hourRate;             //часовая ставка работника
@@ -84,6 +84,11 @@ namespace CompanyLib
         public override string ToString()
         {
             return $"{this.Id,5: 00000}\t{this.FirstName,-10}{this.LastName,-15}{this.Age,3}\t{this.Position.ToString(),-15}\t{this.Salary(),10: $### ##0.00}";
+        }
+
+        public int CompareTo(Employee other)
+        {
+            return this.CompareTo(other);
         }
     }
    

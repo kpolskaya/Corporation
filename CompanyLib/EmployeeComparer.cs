@@ -26,6 +26,11 @@ namespace CompanyLib
 
         private SortBy compareField;
 
+        public EmployeeComparer()
+        {
+            this.compareField = SortBy.Id;
+        }
+
         public EmployeeComparer (SortBy Field)
         {
             this.compareField = Field;

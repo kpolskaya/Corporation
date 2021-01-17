@@ -143,5 +143,16 @@ namespace WpfCorp.ViewModel
                  select new EmployeeViewModel(employee))
                 .ToList<EmployeeViewModel>());
         }
+
+        public ObservableCollection<EmployeeViewModel> SortedPanel(EmployeeComparer.SortBy field)
+        {
+            this.department.SortStaff(field);
+            panel.Sort(new EmployeeComparer(field));
+            return new ObservableCollection<EmployeeViewModel>(
+                (from employee in this.department.Staff
+                 select new EmployeeViewModel(employee))
+                .ToList<EmployeeViewModel>()
+                );
+        }
     }
 }
