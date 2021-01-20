@@ -18,6 +18,11 @@ namespace WpfCorp.ViewModel
         readonly Department department;
         readonly DepartmentViewModel parent;
         
+        /// <summary>
+        /// Kлюч сортировки сотрудников (по умолчанию будет Position)
+        /// </summary>
+        public EmployeeComparer.SortBy KeyField;
+        
         bool isExpanded;
         bool isSelected;
         
@@ -30,6 +35,7 @@ namespace WpfCorp.ViewModel
         {
             this.department = Department;
             this.parent = Parent;
+            this.KeyField = EmployeeComparer.SortBy.Position;
             // рекурсивно оборачиваем все нижестоящие департаменты в DepartmentViewModel класс
             this.children = new ObservableCollection<DepartmentViewModel>(
                             
@@ -39,7 +45,7 @@ namespace WpfCorp.ViewModel
 
         }
 
-        public ReadOnlyObservableCollection<EmployeeViewModel> Staff { get { return new ReadOnlyObservableCollection<EmployeeViewModel>(InitPanel()); } }
+        public List<EmployeeViewModel> Staff { get { return SortedPanel(); } }
         public DepartmentViewModel Parent { get { return this.parent; } }
 
         public ObservableCollection<DepartmentViewModel> Children { get { return children; } }
@@ -129,30 +135,54 @@ namespace WpfCorp.ViewModel
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        
+
+        /// <summary>
+        /// Назначает поле сортировки и инициирует процесс сортировки
+        /// </summary>
+        /// <param name="tag">Название поля</param>
+        public void SortPanel(string tag)
+        {
+            switch (tag)
+            {
+                case "Id":
+                   this.KeyField = EmployeeComparer.SortBy.Id;
+                    break;
+                case "FirstName":
+                    this.KeyField = EmployeeComparer.SortBy.FirstName;
+                    break;
+                case "LastName":
+                    this.KeyField = EmployeeComparer.SortBy.LastName;
+                    break;
+                case "Position":
+                    this.KeyField = EmployeeComparer.SortBy.Position;
+                    break;
+                case "Salary":
+                    this.KeyField = EmployeeComparer.SortBy.Salary;
+                    break;
+                case "Age":
+                    this.KeyField = EmployeeComparer.SortBy.Age;
+                    break;
+                default:
+                    this.KeyField = EmployeeComparer.SortBy.Position;
+                    break;
+            }
+            OnPropertyChanged("Staff");
+        }
         /// <summary>
         ///  Оборачивает всех сотрудников  этого департамента в EmployeeViewModel
         /// </summary>
-        /// <returns>Возвращает коллекцию сотрудников департамента, попутно отсортированную по должности</returns>
-        private ObservableCollection<EmployeeViewModel> InitPanel() 
+        /// <returns>Возвращает список сотрудников департамента, 
+        /// попутно отсортированный по текущему значению ключа сортировки
+        private List<EmployeeViewModel> SortedPanel()
         {
-            return new ObservableCollection<EmployeeViewModel>(
-                            
-                (from employee in this.department.Staff
-                 orderby employee.Position descending
-                 select new EmployeeViewModel(employee))
-                .ToList<EmployeeViewModel>());
-        }
-
-        public ObservableCollection<EmployeeViewModel> SortedPanel(EmployeeComparer.SortBy field)
-        {
-            this.department.SortStaff(field);
-            panel.Sort(new EmployeeComparer(field));
-            return new ObservableCollection<EmployeeViewModel>(
-                (from employee in this.department.Staff
-                 select new EmployeeViewModel(employee))
-                .ToList<EmployeeViewModel>()
-                );
+            
+            List<EmployeeViewModel> sortedList = 
+                new List<EmployeeViewModel>(
+                from employee in this.department.Staff
+                select new EmployeeViewModel(employee));
+            
+            sortedList.Sort(new EmployeeComparer(this.KeyField));
+            return sortedList;
         }
     }
 }

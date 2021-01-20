@@ -188,8 +188,8 @@ namespace WpfCorp
 
         private void GridViewColumnHeader_Click(object sender, RoutedEventArgs e)
         {
-            //  вызов соответствующего метода сортировки
-
+            corpPresenter.SelectedItem?.SortPanel((sender as GridViewColumnHeader).Tag.ToString());
+            
         }
     }
 }

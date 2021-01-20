@@ -13,6 +13,7 @@ namespace CompanyLib
     /// </summary>
     public class Department
     {
+        
         static Random Randomize;
 
         static Department()
@@ -136,11 +137,7 @@ namespace CompanyLib
             }
         }
 
-        public void SortStaff(EmployeeComparer.SortBy field)
-        {
-            this.staff.Sort();
-        }
-
+        
         /// <summary>
         /// Создает случайную иерархическую структуру компании
         /// и наполняет ее случайными людьми

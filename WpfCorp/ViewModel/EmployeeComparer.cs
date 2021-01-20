@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CompanyLib;
 
-namespace CompanyLib
+namespace WpfCorp.ViewModel
 {
     /// <summary>
-    /// Класс, предоставляющий метод для сравнения сотрудников
+    /// Класс, предоставляющий метод для сравнения представления сотрудников
     /// </summary>
-    public class EmployeeComparer : IComparer<Employee>
+    public class EmployeeComparer : IComparer<EmployeeViewModel>
     {
         /// <summary>
         /// Перечислитель полей для сортировки
@@ -28,10 +29,10 @@ namespace CompanyLib
 
         public EmployeeComparer()
         {
-            this.compareField = SortBy.Id;
+            this.compareField = SortBy.Position;
         }
 
-        public EmployeeComparer (SortBy Field)
+        public EmployeeComparer(SortBy Field)
         {
             this.compareField = Field;
         }
@@ -39,10 +40,10 @@ namespace CompanyLib
         /// <summary>
         /// Метод сравнения сотрудников в зависимости от выбанного поля для сортировки
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">Предоставление первого сотрудника</param>
+        /// <param name="y">Представление второго сотрудника</param>
         /// <returns></returns>
-        public int Compare(Employee x, Employee y)
+        public int Compare(EmployeeViewModel x, EmployeeViewModel y)
         {
             switch (compareField)
             {
@@ -57,17 +58,20 @@ namespace CompanyLib
 
                 case SortBy.Age:
                     return x.Age.CompareTo(y.Age);
-                case SortBy.Position:
-                    return x.Position.CompareTo(y.Position);
+               
                 case SortBy.Salary:
-                    decimal xSalary = x.Salary();
-                    decimal ySalary = y.Salary();
-                    return xSalary.CompareTo(ySalary);
+                    return x.Salary.CompareTo(y.Salary);
+               
+                case SortBy.Position:
                 default:
-                    break;
-
+                    {
+                        if (x.Position > y.Position)
+                            return -1;
+                        else if (x.Position < y.Position)
+                            return 1;
+                        else return 0;
+                    }
             }
-            return x.Id.CompareTo(y.Id);
         }
     }
 }

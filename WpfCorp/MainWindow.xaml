@@ -120,14 +120,46 @@
                     <GridView>
                         <GridViewColumn  DisplayMemberBinding="{Binding Id}" Width="40">
                             <GridViewColumn.Header >
-                                <GridViewColumnHeader Content="Id" Name="Id" Click="GridViewColumnHeader_Click" />
+                                <GridViewColumnHeader Content="Id" Tag="Id" 
+                                                      Click="GridViewColumnHeader_Click" 
+                                                      ToolTip="Нажмите для сортировки"/>
                             </GridViewColumn.Header>
                         </GridViewColumn>
-                        <GridViewColumn Header="Имя" DisplayMemberBinding="{Binding FirstName}" Width="80"/>
-                        <GridViewColumn Header="Фамилия" DisplayMemberBinding="{Binding LastName}" Width="100"/>
-                        <GridViewColumn Header="Должность" DisplayMemberBinding="{Binding Position}" Width="110"/>
-                        <GridViewColumn Header="Зарплата" DisplayMemberBinding="{Binding StringFormat=\{0: ### ##0.00\}, Path=Salary}"/>
-                        <GridViewColumn Header="Возраст" DisplayMemberBinding="{Binding Age}"/>
+                        <GridViewColumn DisplayMemberBinding="{Binding FirstName}" Width="80">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Имя" Tag="FirstName" 
+                                                      Click="GridViewColumnHeader_Click" 
+                                                      ToolTip="Нажмите для сортировки"/>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding LastName}" Width="100">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Фамилия" Tag="LastName" 
+                                                      Click="GridViewColumnHeader_Click" 
+                                                      ToolTip="Нажмите для сортировки"/>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Position}" Width="110">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Должность" Tag="Position" 
+                                                      Click="GridViewColumnHeader_Click" 
+                                                      ToolTip="Нажмите для сортировки"/>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding StringFormat=\{0: ### ##0.00\}, Path=Salary}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Зарплата" Tag="Salary" 
+                                                      Click="GridViewColumnHeader_Click" 
+                                                      ToolTip="Нажмите для сортировки"/>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn DisplayMemberBinding="{Binding Age}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Возраст" Tag="Age" 
+                                                      Click="GridViewColumnHeader_Click" 
+                                                      ToolTip="Нажмите для сортировки"/>
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
                     </GridView>
                 </ListView.View>   
             </ListView>
