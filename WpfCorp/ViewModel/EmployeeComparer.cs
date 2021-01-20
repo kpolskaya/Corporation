@@ -65,11 +65,7 @@ namespace WpfCorp.ViewModel
                 case SortBy.Position:
                 default:
                     {
-                        if (x.Position > y.Position)
-                            return -1;
-                        else if (x.Position < y.Position)
-                            return 1;
-                        else return 0;
+                        return y.Position.CompareTo(x.Position);
                     }
             }
         }
