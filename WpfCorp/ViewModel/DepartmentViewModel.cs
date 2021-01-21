@@ -142,30 +142,32 @@ namespace WpfCorp.ViewModel
         /// <param name="tag">Название поля</param>
         public void SortPanel(string tag)
         {
-            switch (tag)
-            {
-                case "Id":
-                   this.KeyField = EmployeeComparer.SortBy.Id;
-                    break;
-                case "FirstName":
-                    this.KeyField = EmployeeComparer.SortBy.FirstName;
-                    break;
-                case "LastName":
-                    this.KeyField = EmployeeComparer.SortBy.LastName;
-                    break;
-                case "Position":
-                    this.KeyField = EmployeeComparer.SortBy.Position;
-                    break;
-                case "Salary":
-                    this.KeyField = EmployeeComparer.SortBy.Salary;
-                    break;
-                case "Age":
-                    this.KeyField = EmployeeComparer.SortBy.Age;
-                    break;
-                default:
-                    this.KeyField = EmployeeComparer.SortBy.Position;
-                    break;
-            }
+            //switch (tag)
+            //{
+            //    case "Id":
+            //       this.KeyField = EmployeeComparer.SortBy.Id;
+            //        break;
+            //    case "FirstName":
+            //        this.KeyField = EmployeeComparer.SortBy.FirstName;
+            //        break;
+            //    case "LastName":
+            //        this.KeyField = EmployeeComparer.SortBy.LastName;
+            //        break;
+            //    case "Position":
+            //        this.KeyField = EmployeeComparer.SortBy.Position;
+            //        break;
+            //    case "Salary":
+            //        this.KeyField = EmployeeComparer.SortBy.Salary;
+            //        break;
+            //    case "Age":
+            //        this.KeyField = EmployeeComparer.SortBy.Age;
+            //        break;
+            //    default:
+            //        this.KeyField = EmployeeComparer.SortBy.Position;
+            //        break;
+            //}
+
+            this.KeyField = (EmployeeComparer.SortBy)Enum.Parse(typeof(EmployeeComparer.SortBy), tag);
             OnPropertyChanged("Staff");
         }
         /// <summary>
